@@ -49,3 +49,21 @@ When I pass on a figure I have checked, I want the person receiving it to see ho
 **Role:** R-2 Desk Checker
 
 When I finish one check and start another, I want the previous working out of the way, so I do not mix the two up.
+
+## J-9 Keep a running total aside while I work out each part
+
+**Role:** R-2 Desk Checker
+
+When I need the sum of several figures that each take their own working out, I want to keep a running total aside while I work out the next one, so I can reach the overall figure without writing the part totals down and adding them up again.
+
+## J-10 Enter figures from paper without looking away from it
+
+**Role:** R-2 Desk Checker
+
+When I am entering figures from a paper document, I want to keep my eyes on the page, so I do not lose my place or skip a line.
+
+## J-11 Read figures without misreading a digit
+
+**Role:** R-1 Everyday Calculator User and R-2 Desk Checker
+
+When I read a figure in harsh light or with weak eyesight, I want the digits large and clear enough to read at a glance, so I do not misread one and act on the wrong number.
