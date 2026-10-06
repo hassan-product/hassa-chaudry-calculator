@@ -3,21 +3,22 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 // Emptying the tape cannot be undone, so it takes two presses with no dialog (Decision 11).
 // The first only relabels the control. It reverts when focus leaves or any other key is pressed,
 // and never on a timer, so nobody is rushed.
-export function useEmptyTapeConfirm(lines: number, emptyTape: () => void) {
+// During the fault every input but C and Escape does nothing, so `disabled` stops even the first press.
+export function useEmptyTapeConfirm(lines: number, emptyTape: () => void, disabled = false) {
   const [armed, setArmed] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const reset = useCallback(() => setArmed(false), [])
 
   const press = useCallback(() => {
-    if (lines === 0) return
+    if (lines === 0 || disabled) return
     if (!armed) {
       setArmed(true)
       return
     }
     setArmed(false)
     emptyTape()
-  }, [armed, emptyTape, lines])
+  }, [armed, disabled, emptyTape, lines])
 
   useEffect(() => {
     if (!armed) return
@@ -29,7 +30,7 @@ export function useEmptyTapeConfirm(lines: number, emptyTape: () => void) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [armed])
 
-  if (armed && lines === 0) setArmed(false)
+  if (armed && (lines === 0 || disabled)) setArmed(false)
 
   return { armed, label: armed ? 'Press again to empty' : 'Empty tape', press, reset, buttonRef }
 }

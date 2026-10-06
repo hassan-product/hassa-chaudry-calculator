@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { initial, readout, step, type Engine, type Event } from '../domain/engine'
 import { lineText } from '../domain/tape'
 import type { KeyId } from '../shared/keys'
@@ -131,6 +131,31 @@ export function toView(m: Model): ViewModel {
   }
 }
 
+const BARE_FAULT: ViewModel = {
+  display: { text: FAULT_TEXT, spoken: FAULT_TEXT },
+  expression: { text: '', spoken: '' },
+  message: null,
+  memory: null,
+  error: true,
+  fault: true,
+  tape: [],
+}
+
+// The view is built during render, above the error boundary, so a throw here would take the
+// whole page down. Instead it becomes the fault; if even the tape and memory cannot be shown,
+// the fault shows without them. Both are still held, and come back once C or Escape works.
+export function safeView(m: Model): ViewModel {
+  try {
+    return toView(m)
+  } catch {
+    try {
+      return toView({ ...m, fault: true })
+    } catch {
+      return BARE_FAULT
+    }
+  }
+}
+
 export function useCalculator() {
   const [model, setModel] = useState<Model>(INITIAL_MODEL)
 
@@ -143,6 +168,10 @@ export function useCalculator() {
   // For a render failure caught by the error boundary in ui/App.
   const reportFault = useCallback(() => setModel((m) => ({ ...m, notice: null, fault: true })), [])
 
-  const view = useMemo(() => toView(model), [model])
+  const view = useMemo(() => safeView(model), [model])
+  // If the view could only be drawn as the fault, the fault's rules apply too: only C and Escape.
+  useEffect(() => {
+    if (view.fault && !model.fault) reportFault()
+  }, [view.fault, model.fault, reportFault])
   return { view, dispatch, press, recall, emptyTape, dismissMessage, reportFault }
 }
