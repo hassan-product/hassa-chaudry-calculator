@@ -1,0 +1,3 @@
+# cmd.exe needs CRLF line endings in batch files; the shell script needs LF.
+*.bat text eol=crlf
+*.command text eol=lf
