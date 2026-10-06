@@ -32,7 +32,7 @@ src/
 | Layer | What belongs here | What it may import |
 |---|---|---|
 | `domain` | The engine (a pure reducer over a discriminated union of states), typing and paste rules, arithmetic, memory, display formatting, tape-line building. Every value is a `Decimal` from the one configured clone. | `domain`, `shared`, and `decimal.js` (only from `domain/decimal.ts`) |
-| `app` | Hooks that hold engine state and the in-memory tape. They turn browser events (keys, paste) into engine events, turn engine output into a view model of strings, and keep the empty-tape confirmation. | `app`, `domain`, `shared`, `react` |
+| `app` | Hooks that hold the engine state, which includes the tape and memory. They turn browser events (keys, paste) into engine events, turn engine output into a view model of strings, and keep the empty-tape confirmation. | `app`, `domain`, `shared`, `react` |
 | `ui` | Components that render the view model and report presses back to hooks. Also CSS Modules and design tokens. | `ui`, `app`, `shared`, `react`, `react-dom`, `*.module.css`, `tokens.css` |
 | `shared` | Type definitions and constant tables only: error and notice codes with their text, the view-model types, the key identifiers. | nothing |
 | `main.tsx` | Mounting the app. | `ui`, `react-dom`, `react` |
@@ -156,6 +156,7 @@ flowchart TB
     paste --> entry
     arithmetic --> value & decimal & result
     format --> value & decimal
+    engine --> format
     tape --> format
     value --> decimal
     entry --> result
@@ -167,7 +168,7 @@ flowchart TB
 
 ## Engine states
 
-The engine is a pure function `step(state, event) → { state, tapeLine?, notice? }`. In the diagram:
+The engine is a pure function `step(state, event) → { state, notice? }`. Its state is `{ calc, memory, tape }`: `calc` is one of the states in the diagram. The tape is append-only and built by the engine, so a finished calculation or a memory change returns a state whose tape has one more line. `engine.ts` also exports `readout(state)`, which uses `format.ts` to give the display, expression line and M indicator as strings. In the diagram:
 
 - A `≈` is a flag on the running value. It is set when a step is rounded at 34 digits, when the result is cut for display, or when an operand already carried one (Decision 3). A new calculation clears it.
 - **▶ tape** marks the transitions that write a calculation line. **▶ memory line** marks those that write a memory line.
@@ -256,13 +257,13 @@ stateDiagram-v2
 
 ## Memory
 
-Memory lives in the domain, in `domain/memory.ts`. It is part of the engine's state (`{ calc, memory }`) but separate from the calculator states in the diagram, so C and Escape reset `calc` and leave `memory` alone.
+Memory lives in the domain, in `domain/memory.ts`. It is part of the engine's state (`{ calc, memory, tape }`) but separate from the calculator states in the diagram, so C and Escape reset `calc` and leave `memory` alone.
 
 - **Shape.** Memory is `null` (empty) or a `Value`: a 34-digit `Decimal` with its ≈ flag. MC sets it to `null`. A total of 0 is still a `Value`, so the M indicator shows `M 0`.
 - **M+ and M−** take the value showing in the current state. That is the typed figure, the recalled value, the running result or the result, and on a fresh calculator the 0 showing. They add or subtract it with the same `arithmetic.ts` used for calculations, returning `Result<Value, CalcError>`. If the step fails ("Number too large" or "Number too small"), the engine enters the error state and memory is unchanged. ≈ is the OR of the old memory flag and the value's flag, so it stays until MC.
-- **Tape lines.** On success the engine returns a `tapeLine` of kind `memory`, next to the unchanged calculator state. The line carries the operation, the value and the new total, and is formatted by `tape.ts` as `M+ 40, memory 95`. The line's recall value is the new total, so recalling it brings back the memory total.
+- **Tape lines.** On success the engine appends a tape line of kind `memory` and leaves the calculator state unchanged. The line carries the operation, the value and the new total, and is formatted by `tape.ts` as `M+ 40, memory 95`. The line's recall value is the new total, so recalling it brings back the memory total.
 - **MR** is the same event as recalling a tape line, with memory as the source. It fails quietly (does nothing) when memory is empty.
-- **No storage.** Memory is held in React state inside `useCalculator`, next to the tape. Nothing is written to `localStorage`, `sessionStorage`, IndexedDB or cookies, and nothing is sent anywhere. Fitness function 5 covers memory as it covers the tape.
+- **No storage.** The engine state, memory and tape included, is held in React state inside `useCalculator`. Nothing is written to `localStorage`, `sessionStorage`, IndexedDB or cookies, and nothing is sent anywhere. Fitness function 5 covers memory as it covers the tape.
 
 ## Error model
 
@@ -285,7 +286,8 @@ type State =
   | { kind: 'ready' } | { kind: 'entering'; /* … */ } | { kind: 'recalled'; /* … */ }
   | { kind: 'pending'; /* … */ } | { kind: 'result'; /* … */ }
   | { kind: 'error'; error: CalcError }
-type StepOutput = { state: State; tapeLine?: TapeLine; notice?: NoticeCode }
+type Engine = { calc: State; memory: Value | null; tape: readonly TapeLine[] }
+type StepOutput = { state: Engine; notice?: NoticeCode }
 ```
 
 **Errors are values.** Arithmetic returns `Result<Value, CalcError>`. A failed step becomes the `error` state. No domain function throws.
@@ -302,7 +304,7 @@ decimal.js does throw on a malformed string. Because only `domain/decimal.ts` to
 - `useCalculator` wraps each call to the engine and catches the exception.
 - A React error boundary in `ui/App.tsx` catches render failures.
 - Either one switches the view model to a *fault*, which shows `FAULT_TEXT` and is announced like an error. Only C and Escape act on it: they reset the engine to `Ready` and keep the tape and memory.
-- A fault is not an engine state, because the engine is what failed. It lives in the app hook, next to the tape.
+- A fault is not an engine state, because the engine is what failed. It lives in the app hook, beside the engine state.
 
 **The UI cannot render a raw error.**
 - `ui` may not import `domain` (rule 5), so it never sees `CalcError`, `Decimal` or an `Error` object.

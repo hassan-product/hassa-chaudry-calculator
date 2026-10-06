@@ -31,8 +31,8 @@ flowchart TB
     k1("Browser event<br/>keydown or paste,<br/>or a click on a Keypad key")
     k2["app · useKeyboard / usePaste<br/>reads event.key (event.code only for the<br/>numpad point); Ctrl, Cmd and Alt ignored;<br/>Enter or Space on a focused control<br/>activates that control instead"]
     k3["app · useCalculator<br/>calls engine.step(state, event)"]
-    k4["domain · engine.step<br/>a pure function, never throws<br/>returns { state, tapeLine?, notice? }"]
-    k5["app · useCalculator<br/>keeps the new state and memory,<br/>appends tapeLine to the tape,<br/>holds notice until the next event"]
+    k4["domain · engine.step<br/>a pure function, never throws<br/>returns { state, notice? };<br/>the state holds the tape and memory"]
+    k5["app · useCalculator<br/>keeps the new state, tape and<br/>memory included; holds notice<br/>until the next event"]
     k6["app → shared/view.ts<br/>a view model of display strings,<br/>made by format.ts"]
     k7["ui · Display, Tape, Keypad, Announcer<br/>render the view model;<br/>display changes are announced politely"]
     kf["Fault, held in useCalculator, not an engine state<br/>A throw from the engine, or a render failure caught<br/>by the error boundary in ui/App, shows FAULT_TEXT,<br/>announced like an error. Only C or Escape act:<br/>engine back to Ready, tape and memory kept."]
