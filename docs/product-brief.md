@@ -16,6 +16,20 @@ The person checking money figures would otherwise use a spreadsheet. This calcul
 
 We make no claim about how any spreadsheet handles arithmetic. The case for switching rests only on the above.
 
+## Why there is both a tape and memory
+
+They do different jobs.
+
+- **The tape** is the record of everything that happened. It shows where a number came from, and lets you bring any earlier result back.
+- **Memory** holds one running total that you are building. For example, you work out the totals of three invoices one at a time, add each into memory with M+, and read the sum back with MR without retyping any of them.
+
+Recalling tape lines one by one can reach the same total, but it takes more steps, and it is easy to miss one.
+
+Memory was first taken off the table for two reasons. Both are now answered:
+
+1. **"Recalling a tape line does the same job."** It does not. Recall brings back one value, while memory keeps adding.
+2. **"A stored value nobody can see is hidden state."** It no longer is. Every M+ and M− writes a line on the tape, and an M indicator shows the total whenever memory holds a value.
+
 ## Who it is not for
 
 - **Scientific or engineering work.** There are no powers, roots, functions or constants.
@@ -29,23 +43,29 @@ We make no claim about how any spreadsheet handles arithmetic. The case for swit
 - No input is silently dropped or guessed at. Every refusal says why, in plain words.
 - No one is ever stuck. Every error can be left with one key, and nothing needs a reload.
 - A VoiceOver user completes a sum, hears ≈ as "approximately", and can read the tape as a list.
+- Someone with weak eyesight can use it at 200% zoom with nothing cut off, and at 400% zoom it reflows to one column with no sideways scrolling. Key labels are at least 24px, and a larger default text size set in the browser is followed. Low-vision support is in scope, not an extra.
 - A reviewer clones the repository and runs it from the README with Node 20.19 or later and nothing else.
 
 ## Taken off the table, and why
 
 - **Exact fractions.** The screen shows decimals regardless, so ≈ is needed anyway. Fractions add a lot of code for a case people rarely hit.
 - **Precedence and brackets.** The adding-machine model matches how a desk checker works, and keeps the logic simple enough to trust.
-- **Memory keys.** Recalling a tape line does the same job, and the user can see the value being recalled.
 - **Keeping the tape after a reload.** Money figures left in a shared browser are a worse failure than lost working.
 - **Currency or units mode.** Plain numbers only. A unit price like 0.0125 must not be forced to two places.
 - **European number formats and accounting brackets.** These are refused, not converted, because converting them would mean guessing.
 - **A hosted service or backend.** Nothing leaves the browser.
 
-## Roadmap for the three cut stories, in build order
+## Roadmap for the cut stories, in build order
 
 1. **S-16 Edit an earlier tape line.** This comes first because it closes the gap S-7 admits, and serves J-4 directly. It also requires the tape to store operations rather than text, which the next item builds on.
 2. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16, and serves J-7.
-3. **S-17 Percent and tax.** This comes last. It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others.
+3. **S-17 Percent and tax.** It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others. There is no % key until then.
+4. **S-21 Sound on key presses.** This is conditional, not scheduled. It would be built only off by default, only once users ask for it, and only after testing alongside VoiceOver. The reasons:
+   - It would have to be off by default in an office or beside a screen reader, so most people would never hear it.
+   - It competes with VoiceOver's speech.
+   - It behaves differently across devices: the iPhone silent switch can mute it, and browsers hold audio back until the first tap. A feature that works on some devices and not others undermines trust.
+   - It can only be checked by ear, not by an automated test.
+   - The need it serves (J-10) is already met by the display and the tape.
 
 ## Open questions, and the assumption we are running on
 
@@ -62,3 +82,4 @@ We make no claim about how any spreadsheet handles arithmetic. The case for swit
 | Do phone users need to paste? | No. There is no paste button. R-1 on a phone types. |
 | Will other screen readers behave like VoiceOver on macOS Safari? | Probably, but untested. The docs say VoiceOver is the only one checked. |
 | In exponential form the expression line shows two × signs (`≈ 9.99999999999998 × 10²⁹ ×`). How readable is it? | The characters are decided and stay. UX work may change spacing and type size only. |
+| Phones have been checked only at 320px wide in a desktop browser. Will real phone browsers, and landscape, behave the same? | Unknown. The narrow layout and the touch safeguards are built in, but we make no promise for phone browsers or landscape until they have been tried on real devices. |
