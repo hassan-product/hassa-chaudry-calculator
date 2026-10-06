@@ -31,3 +31,9 @@ When a long calculation has produced a total I do not believe, I want to find th
 **Role:** R-2 Desk Checker
 
 When the figures I need to check arrive in a spreadsheet or an email, I want to use them exactly as they were written, so I cannot add a copying mistake of my own.
+
+## J-6 Carry a result forward without retyping it
+
+**Role:** R-2 Desk Checker
+
+When a result I have just worked out is part of the next sum, I want to carry it forward exactly as it is, so I do not retype it and lose digits or make a slip.
