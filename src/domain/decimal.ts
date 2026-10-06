@@ -7,8 +7,7 @@ import Decimal from 'decimal.js'
 // steps can need more, and those are marked ≈ rather than shown as if exact (Decision 1).
 //
 // ROUND_HALF_UP is deliberate too, not banker's rounding: it is what an ordinary person expects,
-// and for negatives it rounds away from zero (−2.5 → −3). The product brief keeps banker's
-// rounding as an open question.
+// and for negatives it rounds away from zero (−2.5 → −3), as Decision 1 chose.
 //
 // toExpNeg and toExpPos are at their limits so toString() never switches to exponent notation;
 // format.ts decides notation from the rounded value instead.
@@ -19,8 +18,8 @@ const Value34 = Decimal.clone({
   toExpPos: 9e15,
 })
 
-// Deliberate, and a departure from "one configured clone" in CLAUDE.md: two more clones, used
-// only to tell whether a step was rounded. If rounding toward zero and away from zero give the
+// Deliberate, and allowed by the arithmetic rule in CLAUDE.md: two more clones, used only to
+// tell whether a step was rounded. If rounding toward zero and away from zero give the
 // same 34 digits, the exact answer has at most 34 digits and nothing was rounded. Their results
 // are compared and thrown away here; no value they produce leaves this file.
 const TowardZero = Value34.clone({ rounding: Decimal.ROUND_DOWN })

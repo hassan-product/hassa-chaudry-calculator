@@ -33,7 +33,8 @@ export type Calc =
 export type Engine = {
   readonly calc: Calc
   readonly memory: Memory
-  // Append-only: lines are added, never changed or removed, by the engine (Decision 11).
+  // Append-only: lines are added, never changed. The one exception is emptyTape, which
+  // removes them all (Decision 11).
   readonly tape: readonly TapeLine[]
 }
 
@@ -53,6 +54,7 @@ export type Event =
   | { readonly type: 'memoryMinus' }
   | { readonly type: 'memoryRecall' }
   | { readonly type: 'memoryClear' }
+  | { readonly type: 'emptyTape' }
 
 export type StepOutput = { readonly state: Engine; readonly notice?: NoticeCode }
 
@@ -266,6 +268,12 @@ function memoryClear(state: Engine): StepOutput {
   return state.memory ? { state: { ...state, memory: null } } : unchanged(state)
 }
 
+// Empties the tape and nothing else: memory stays, and so does an error (Decision 11, AC-14.7).
+// The first press that only relabels the button belongs to the app, not here.
+function emptyTape(state: Engine): StepOutput {
+  return state.tape.length === 0 ? unchanged(state) : { state: { ...state, tape: [] } }
+}
+
 export function step(state: Engine, event: Event): StepOutput {
   switch (event.type) {
     case 'digit':
@@ -296,6 +304,8 @@ export function step(state: Engine, event: Event): StepOutput {
       return memoryRecall(state)
     case 'memoryClear':
       return memoryClear(state)
+    case 'emptyTape':
+      return emptyTape(state)
   }
 }
 
@@ -338,5 +348,6 @@ export function readout(state: Engine): Readout {
     expression: expression(state.calc),
     memory: state.memory ? `M ${show(state.memory)}` : null,
     error: state.calc.kind === 'error',
+    pendingOperator: state.calc.kind === 'pending' ? state.calc.pending.op : null,
   }
 }

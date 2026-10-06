@@ -86,19 +86,21 @@ function expectNoChange(session: Session, act: (s: Session) => void) {
   expect(session.notice).toBeUndefined()
 }
 
+// Tape after the prefix: 1 "2 + 3 = 5", 2 "M+ 5, memory 5", 3 "M+ 1, memory 6". Memory holds 6.
+const PREFIX = '2 + 3 = M+ 1 M+ Esc'
+const setups: Record<string, () => Session> = {
+  Ready: () => calc(PREFIX),
+  Entering: () => calc(`${PREFIX} 12`),
+  'Entering, operator pending': () => calc(`${PREFIX} 5 + 12`),
+  Recalled: () => calc(PREFIX).recall(3),
+  'Recalled, operator pending': () => calc(`${PREFIX} 7 +`).recall(3),
+  Pending: () => calc(`${PREFIX} 7 +`),
+  Result: () => calc(`${PREFIX} 7 + 1 =`),
+  Error: () => calc(`${PREFIX} 7 ÷ 0 =`),
+}
+const setup = (state: string) => (setups[state] ?? (() => calc()))()
+
 describe('the transition table: every state against every event', () => {
-  // Tape after the prefix: 1 "2 + 3 = 5", 2 "M+ 5, memory 5", 3 "M+ 1, memory 6". Memory holds 6.
-  const PREFIX = '2 + 3 = M+ 1 M+ Esc'
-  const setups: Record<string, () => Session> = {
-    Ready: () => calc(PREFIX),
-    Entering: () => calc(`${PREFIX} 12`),
-    'Entering, operator pending': () => calc(`${PREFIX} 5 + 12`),
-    Recalled: () => calc(PREFIX).recall(3),
-    'Recalled, operator pending': () => calc(`${PREFIX} 7 +`).recall(3),
-    Pending: () => calc(`${PREFIX} 7 +`),
-    Result: () => calc(`${PREFIX} 7 + 1 =`),
-    Error: () => calc(`${PREFIX} 7 ÷ 0 =`),
-  }
 
   type Expect = { kind: string; display: string; expression: string; line?: string; memory?: string | null }
   type Row = [state: string, event: string, act: (s: Session) => void, expected: Expect | 'unchanged' | NoticeCode]
@@ -259,7 +261,7 @@ describe('the transition table: every state against every event', () => {
   })
 
   it.each(rows)('%s, %s', (state, _event, run, expected) => {
-    const session = (setups[state] ?? (() => calc()))()
+    const session = setup(state)
     const before = session.state
     run(session)
     if (expected === 'unchanged') {
@@ -282,13 +284,13 @@ describe('the transition table: every state against every event', () => {
   })
 
   it.each(Object.keys(setups))('%s: MR and MC do nothing while memory is empty (AC-19.6)', (state) => {
-    const withoutMemory = (setups[state] ?? (() => calc()))().send({ type: 'memoryClear' })
+    const withoutMemory = setup(state).send({ type: 'memoryClear' })
     expectNoChange(withoutMemory, (s) => s.keys('MR'))
     expectNoChange(withoutMemory, (s) => s.keys('MC'))
   })
 
   it.each(Object.keys(setups))('%s: recalling a line that does not exist does nothing (AC-13.8)', (state) => {
-    expectNoChange((setups[state] ?? (() => calc()))(), (s) => s.recall(99))
+    expectNoChange(setup(state), (s) => s.recall(99))
   })
 })
 
@@ -774,6 +776,50 @@ describe('S-13 Recall a result from the tape', () => {
     const s = calc('12 + 8 = 5 ÷ 0 =').recall(1)
     expect(s.display).toBe('20')
     expect(s.expression).toBe('')
+  })
+})
+
+describe('S-14 Empty the tape (the reducer event)', () => {
+  const emptyTape: Event = { type: 'emptyTape' }
+
+  it.each(Object.keys(setups))('AC-14.2, AC-14.5, AC-14.7: %s: empties the tape and leaves the calculation and memory', (state) => {
+    const s = setup(state)
+    const { calc: before, memory } = s.state
+    s.send(emptyTape)
+    expect(s.state.tape).toEqual([])
+    expect(s.state.calc).toEqual(before)
+    expect(s.state.memory).toEqual(memory)
+    expect(s.notice).toBeUndefined()
+  })
+
+  it('AC-14.7: works in an error and leaves the error showing', () => {
+    const s = setup('Error').send(emptyTape)
+    expect(s.display).toBe('Cannot divide by zero')
+    expect(s.expression).toBe('7 ÷ 0 =')
+  })
+
+  it('AC-14.4: on an empty tape it does nothing', () => {
+    expectNoChange(calc('5 +'), (s) => s.send(emptyTape))
+  })
+
+  it('new lines after emptying start again from line 1', () => {
+    const s = setup('Ready').send(emptyTape).keys('1 + 1 =')
+    expect(s.tape).toEqual(['1 + 1 = 2'])
+    expect(s.recall(1).display).toBe('2')
+  })
+})
+
+describe('the readout names an operator waiting for its figure', () => {
+  it.each([
+    ['5 +', '+'],
+    ['+', '+'],
+    ['2 + 3 ×', '×'],
+    ['5 + 3', null],
+    ['2 + 3 =', null],
+    ['5 ÷ 0 =', null],
+    ['', null],
+  ])('Decision 14: after %j it is %s, so the display is heard as "12 plus"', (keys, op) => {
+    expect(readout(calc(keys).state).pendingOperator).toBe(op)
   })
 })
 
