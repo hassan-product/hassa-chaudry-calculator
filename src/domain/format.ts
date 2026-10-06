@@ -1,3 +1,4 @@
+import { ERROR_TEXT } from '../shared/messages'
 import { atLeastInSize, exponentText, figure, isZero, plainText, toDisplayPrecision, type Dec } from './decimal'
 import type { Entry } from './entry'
 import { calcError, fail, ok, type CalcError, type Result } from './result'
@@ -57,4 +58,12 @@ export function withMark(f: Formatted): string {
 // A figure being typed or pasted is shown exactly as entered, with no commas (Decision 2).
 export function formatEntry(e: Entry): string {
   return (e.negative ? MINUS : '') + e.text
+}
+
+// A stored value with its ≈, as the expression line, tape and M indicator show it. Values reach
+// the engine only through checks that keep them in range, so the fallback is never seen; it
+// exists so that showing a value can never fail.
+export function show(v: Value): string {
+  const f = formatValue(v)
+  return f.ok ? withMark(f.value) : ERROR_TEXT[f.error.code]
 }
