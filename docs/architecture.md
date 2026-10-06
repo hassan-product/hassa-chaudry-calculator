@@ -95,7 +95,7 @@ flowchart LR
 
 ## Layers and modules
 
-Every arrow is an import, and every arrow points inwards. The M indicator is part of `Display`, on the readout's top row beside the expression line. The "Change sign" tooltip is part of `Keypad`, on the `+/−` key.
+Every arrow is an import, and every arrow points inwards. The domain arrows are the imports in `src/domain/` as built; the `app` and `ui` arrows are still the plan. The M indicator is part of `Display`, on the readout's top row beside the expression line. The "Change sign" tooltip is part of `Keypad`, on the `+/−` key.
 
 ```mermaid
 flowchart TB
@@ -151,19 +151,17 @@ flowchart TB
     useKeyboard --> useCalculator
     useCalculator --> view & messages
 
-    engine --> entry & paste & arithmetic & tape & memory & value & result
+    engine --> entry & paste & arithmetic & tape & memory & value & result & format & decimal
     memory --> arithmetic & value & result
-    paste --> entry
+    paste --> entry & result
     arithmetic --> value & decimal & result
-    format --> value & decimal
-    engine --> format
-    tape --> format
+    format --> value & decimal & entry & result
+    tape --> format & value
     value --> decimal
-    entry --> result
-    paste --> result
     decimal --> decimaljs
-    engine --> messages
-    format --> view
+    engine & memory & arithmetic & tape --> keys
+    engine & paste & format & value & result --> messages
+    engine --> view
 ```
 
 ## Engine states
@@ -201,6 +199,7 @@ stateDiagram-v2
     Recalled --> Entering : paste accepted
     Recalled --> Recalled : +/−, ≈ kept
     Recalled --> Recalled : Backspace (no change)
+    Recalled --> Recalled : = with nothing pending (no change)
     Recalled --> Entering : Delete, value becomes 0, pending operator kept
     Recalled --> Recalled : recall, replaces value
     Recalled --> Recalled : paste refused, notice
