@@ -564,7 +564,8 @@ The calculator follows the key the browser reports (`event.key`), with `event.co
 | `Backspace` | Remove the last character typed | |
 | `Space` | Activate the focused control | Does nothing when nothing has focus. |
 | `Tab`, `Shift`+`Tab` | Move focus | Follows visual order. Above 900px: keypad row by row (memory row first), then the tape (one stop), then the empty-tape control. At 900px and below: the toggle, then the tape when open, then the keypad. Focus is never trapped. |
-| `↑` `↓` | Move between tape lines | While the tape has focus. Enter or Space recalls. |
+| `↑` `↓` | Move between tape lines | Only while the tape has focus; the tape is one Tab stop. Enter or Space recalls the line, and Tab leaves the tape. |
+| `←` `→`, and `↑` `↓` outside the tape | Nothing | Left and Right do nothing in the tape either. |
 | `+/−`, `MC`, `MR`, `M−`, `M+` | No key | Tab to them, then Enter or Space. The usual memory shortcuts clash with the browser's (Ctrl+P prints, Ctrl+R reloads), so there are none. The cost: memory is slower from the keyboard than everything else. |
 | Ctrl, Cmd or Alt with any key | Ignored by the calculator | The browser's own shortcut runs, including paste. |
 | Numpad with Num Lock off | Whatever the browser reports | Navigation keys such as End or ArrowDown do nothing. |
