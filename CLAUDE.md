@@ -60,7 +60,7 @@ Never stop to ask about unspecified behaviour. Decide it with these, in order: (
 8. **Errors.**
    - The messages are "Cannot divide by zero" (x ÷ 0, 0 ÷ 0), "Number too large" (rounded size ≥ 1e100) and "Number too small" (non-zero rounded size < 1e-99, never shown as 0).
    - There is one error state, and it writes no tape line. Escape, Delete, a digit, the point, paste and recall leave it by starting a new calculation. Operators, =, ± and Backspace do nothing.
-   - If a bug throws anyway: "Something went wrong. Press Escape to start again." Escape resets the calculation and keeps the tape; every other input does nothing. It is announced like an error. Nobody ever needs a reload.
+   - If a bug throws anyway: "Something went wrong. Press C or Escape to start again." The on-screen C key and Escape both reset the calculation and keep the tape; every other input does nothing. It is announced like an error. Nobody ever needs a reload.
 9. **Paste.**
    - One figure, via the browser's own paste; there is no paste button. Surrounding whitespace is trimmed.
    - £ $ € and spaces are stripped, and so are commas followed by exactly three digits. A leading -, + or − (U+2212) is accepted before or after the symbol (`-£5`, `£-5`).
@@ -84,15 +84,8 @@ Never stop to ask about unspecified behaviour. Decide it with these, in order: (
     - Enter and Space activate the focused control, keypad keys included. With nothing focused, Enter is =.
     - A mouse click on a keypad key leaves no focus. Typing any calculator key moves focus off the focused control.
 14. **Accessibility.** Every action works without a mouse. Changes to the display (figure, running result with its operator, result, error, message) are announced. Keys with no effect announce nothing. Tested with VoiceOver on macOS Safari only.
-15. **Layout.** Above 900px wide the tape is visible by default. At 900px and below it sits behind a "Show tape" / "Hide tape" toggle, closed by default. The tape is visually quiet. On-screen keys cover every action except paste, and are at least 44×44px down to 320px wide. No units or currency mode. The UI never says "precision" or "floating point".
+15. **Layout.** Direction C, "Ledger", flipped: calculator on the left, tape on the right, so visual, Tab and screen-reader order are calculator first. The tape gets the width; the display keeps the largest type on screen. Tape results sit in a right-hand column aligned on the decimal point, with ≈ in its own column and line numbers; the characters of each line are unchanged. An empty tape shows only "Finished calculations appear here". Keys carry small, muted legends for their keyboard equivalents (Esc, Del, Enter, …). Above 900px wide the tape is visible by default. At 900px and below it sits behind a "Show tape" / "Hide tape" toggle, closed by default. The tape is visually quiet. On-screen keys cover every action except paste, and are at least 44×44px down to 320px wide. No units or currency mode. The UI never says "precision" or "floating point". Visual source of truth: `docs/ux/mockup.html` and its tokens; if the app and that file disagree, one of them is a bug.
 16. **Not implemented** (stories with criteria): editing earlier tape lines, percent and tax mode, CSV export of the tape.
-17. **Product promise (verbatim tests).**
-    - 0.1 + 0.2 shows exactly 0.3.
-    - 1.005 × 100 shows exactly 100.5.
-    - 0.1 × 3 shows exactly 0.3.
-    - 100 ÷ 3 shows ≈ 33.3333333333333.
-    - 100 ÷ 3 then × 3 shows ≈ 100.
-    - 2 + 3 × 4 shows 20, and the expression line shows 5 × once × is pressed.
-    - 5 ÷ 0 shows "Cannot divide by zero", and typing 7 afterwards shows 7.
-    - A 16th digit of exactly 5 rounds up, for both a positive and a negative number.
+17. **Product promise (verbatim tests).** 0.1 + 0.2 shows exactly 0.3. 1.005 × 100 shows exactly 100.5. 0.1 × 3 shows exactly 0.3. 100 ÷ 3 shows ≈ 33.3333333333333. 100 ÷ 3 then × 3 shows ≈ 100.
+    2 + 3 × 4 shows 20, and the expression line shows 5 × once × is pressed. 5 ÷ 0 shows "Cannot divide by zero", and typing 7 afterwards shows 7. A 16th digit of exactly 5 rounds up, positive and negative.
 18. **Stack.** Vite, React, TypeScript strict, decimal.js, Vitest + React Testing Library + jsdom. CSS Modules with no framework. No backend, env vars or keys. Runs locally on Node 20.19 or later from the README; a hosted link is optional.
