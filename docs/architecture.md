@@ -155,7 +155,7 @@ The engine is a pure function `step(state, event) → { state, tapeLine?, notice
 
 - A `≈` is a flag on the running value. It is set when a step is rounded at 34 digits, when the result is cut for display, or when an operand already carried one (Decision 3). A new calculation clears it.
 - **▶ tape** marks the transitions that write a calculation line. **▶ memory line** marks those that write a memory line.
-- MC, and MR or M± with memory empty, change only memory, or nothing, in every state. Every memory key does nothing during a fault.
+- MC changes only memory, in every state. MR with memory empty does nothing. Every memory key does nothing during a fault.
 - **notice** marks a refusal that leaves the state unchanged.
 
 ```mermaid
@@ -253,7 +253,7 @@ export type ErrorCode = 'DIVIDE_BY_ZERO' | 'NUMBER_TOO_LARGE' | 'NUMBER_TOO_SMAL
 export type NoticeCode = 'DIGIT_LIMIT' | 'PASTE_UNREADABLE' | 'PASTE_AMBIGUOUS_DECIMAL' | 'PASTE_BRACKETS'
 export const ERROR_TEXT: Record<ErrorCode, string>   // "Cannot divide by zero", …
 export const NOTICE_TEXT: Record<NoticeCode, string> // "15 digits maximum", …
-export const FAULT_TEXT: string // "Something went wrong. Press Escape to start again."
+export const FAULT_TEXT: string // "Something went wrong inside the calculator. It was not caused by anything you entered. Your tape and memory are kept. Press C or Escape to start again."
 
 // domain/result.ts
 export type Result<T, E> = { ok: true; value: T } | { ok: false; error: E }
