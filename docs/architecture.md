@@ -79,7 +79,7 @@ flowchart LR
 
 ## Layers and modules
 
-Every arrow is an import, and every arrow points inwards.
+Every arrow is an import, and every arrow points inwards. The M indicator is part of `Display`, on the readout's top row beside the expression line. The "Change sign" tooltip is part of `Keypad`, on the `+/−` key.
 
 ```mermaid
 flowchart TB
@@ -87,8 +87,8 @@ flowchart TB
 
     subgraph ui["ui"]
         App["App.tsx"]
-        Display["Display.tsx"]
-        Keypad["Keypad.tsx"]
+        Display["Display.tsx<br/>readout and M indicator"]
+        Keypad["Keypad.tsx<br/>keys and Change sign tooltip"]
         Tape["Tape.tsx"]
         TapeToggle["TapeToggle.tsx"]
         Announcer["Announcer.tsx"]
