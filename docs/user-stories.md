@@ -324,7 +324,7 @@ As an Everyday Calculator User, I want a clear message when a sum cannot be done
 - **AC-9.8** Given the display shows "Number too large" or "Number too small", when I try each key above, then it behaves exactly like "Cannot divide by zero".
 
 **After a result or an error**
-- **AC-9.9** Given a fault inside the calculator, when it happens, then the display shows "Something went wrong inside the calculator. It was not caused by anything you entered. Your tape is kept. Press C or Escape to start again."
+- **AC-9.9** Given a fault inside the calculator, when it happens, then the display shows "Something went wrong inside the calculator. It was not caused by anything you entered. Your tape and memory are kept. Press C or Escape to start again."
 - **AC-9.10** Given the fault message is showing, when I tap `C` or press Escape, then the display shows `0`, and the tape and memory are unchanged.
 - **AC-9.11** Given the fault message is showing, when I press any other key, paste, recall a line or use a memory key, then nothing changes.
 

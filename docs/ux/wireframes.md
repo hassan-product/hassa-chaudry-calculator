@@ -273,9 +273,9 @@ After `1 × 10⁻⁹⁹` (from the tape) `× 0.000000001 =`:
 │                                                 │
 │                 Something went wrong inside the │
 │                calculator. It was not caused by │
-│              anything you entered. Your tape is │
-│                kept. Press C or Escape to start │
-│                                          again. │
+│                 anything you entered. Your tape │
+│                 and memory are kept. Press C or │
+│                          Escape to start again. │
 │                                                 │
 └─────────────────────────────────────────────────┘
 ```
