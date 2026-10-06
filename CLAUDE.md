@@ -34,7 +34,8 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
 - Screen reader testing is manual, VoiceOver only, and the docs say so.
 
 ## Docs
-- Roles, jobs and stories follow `.claude/skills/product-spec`. ADRs follow `.claude/skills/adr`.
+- Roles, jobs and stories follow `.claude/skills/product-spec`. ADRs follow `.claude/skills/adr` and live in `docs/adr/`.
+- The three required docs stay exactly where they are. Extra files beside them (`docs/adr/`, `docs/ux/`, `architecture.md`, `product-brief.md`) are fine.
 - Docs must be honest about what was built. A story is Implemented only if its criteria pass.
 - The UI never uses the words "precision" or "floating point".
 
@@ -57,6 +58,7 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
    - Repeated = repeats the last operation, and each press is its own tape line.
    - A second operator replaces the first.
    - A digit after = starts a new calculation.
+   - An operator after = continues from the result: 5 = then + 2 = gives 7, on its own tape line.
 5. **Input limit.** At most 15 significant digits can be typed. An extra digit shows a short message and is never dropped silently. A paste over 15 digits is refused with the same message.
 6. **Paste.**
    - Currency symbols, spaces and thousands commas are stripped. A comma counts as a thousands separator only when followed by exactly three digits.
