@@ -20,7 +20,7 @@ As an Everyday Calculator User, I want to type a number and see exactly what I t
 - **Decisions:** 2, 5, 12
 
 **Normal case**
-- Given a fresh calculator, when I type `1234.50`, then the display shows `1,234.50`.
+- Given a fresh calculator, when I type `1234.50`, then the display shows `1234.50`, with no comma added.
 - Given a fresh calculator, when I press `.` then `5`, then the display shows `0.5`.
 
 **Invalid input**
@@ -34,7 +34,7 @@ As an Everyday Calculator User, I want to type a number and see exactly what I t
 - Given the message "15 digits maximum" is showing and I do nothing, when any amount of time passes, then the message is still showing.
 
 **Very large and very small**
-- Given a fresh calculator, when I type `999999999999999`, then the display shows `999,999,999,999,999` in plain notation.
+- Given a fresh calculator, when I type `999999999999999`, then the display shows `999999999999999` in plain notation.
 - Given a fresh calculator, when I type `0.000000000000001`, then the display shows `0.000000000000001` exactly as typed, not in exponential form.
 
 **After a result or an error**
@@ -342,15 +342,16 @@ As a Desk Checker, I want to paste a figure with its currency symbol and separat
 
 **Normal case**
 - Given a fresh calculator, when I paste:
-  - `£1,234.56`, then the display shows `1,234.56`
+  - `£1,234.56`, then the display shows `1234.56`
   - `  42` followed by a line break, then the display shows `42`
-  - `$1,000,000`, then the display shows `1,000,000`
+  - `$1,000,000`, then the display shows `1000000`
   - `-£5`, `£-5` or `−5` (true minus sign), then the display shows `−5`
   - `+3`, then the display shows `3`
-  - `1 234`, then the display shows `1,234`, because spaces are stripped
+  - `1 234`, then the display shows `1234`, because spaces are stripped
 - Given I have entered `5 +`, when I paste `2` and press `=`, then the display shows `7`.
 - Given I am typing `12`, when I paste `34`, then the display shows `34`.
 - Given I pasted `12.5`, when I press Backspace, then the display shows `12.`.
+- Given I pasted `£1,234.56`, when I press `+`, then the expression line shows `1,234.56 +`. Commas appear once the figure becomes a result.
 
 **Invalid input.** Each of these leaves the display unchanged:
 - Given a fresh calculator, when I paste `1.234,56`, `1,23` or `12,3456`, then the message "Unclear which mark is the decimal point" appears.
@@ -358,9 +359,9 @@ As a Desk Checker, I want to paste a figure with its currency symbol and separat
 - Given a fresh calculator, when I paste `abc`, `5+3`, `¥500`, an empty clipboard, or `12` and `34` separated by a tab or a line break, then the message "Couldn't read that as a number" appears.
 
 **Boundaries**
-- Given a fresh calculator, when I paste `123,456,789,012,345`, then the display shows `123,456,789,012,345`.
+- Given a fresh calculator, when I paste `123,456,789,012,345`, then the display shows `123456789012345`.
 - Given a fresh calculator, when I paste `1,234,567,890,123,456`, then the display is unchanged and "15 digits maximum" appears.
-- Given a fresh calculator, when I paste `1,234`, then the display shows `1,234`. This relies on the UK/US assumption.
+- Given a fresh calculator, when I paste `1,234`, then the display shows `1234`. This relies on the UK/US assumption.
 - Given a refusal message is showing, when I press any key, click or paste, then it disappears.
 
 **Very large and very small**
@@ -443,7 +444,7 @@ As a Desk Checker, I want to bring an earlier result back into the sum I am doin
 
 As a Desk Checker, I want to empty the tape when I move on to a new set of figures, so that the working in front of me belongs only to the check I am doing.
 
-- **Job:** J-4. This is the weakest job link in the document. Emptying the tape keeps J-4's search to the calculation in hand, but no job is about emptying as such.
+- **Job:** J-8
 - **Status:** Not implemented
 - **Decisions:** 11, 13
 
@@ -566,7 +567,7 @@ As a Desk Checker, I want to add or take off a percentage and apply a set tax ra
 
 As a Desk Checker, I want to save the tape as a file, so that I can attach my working to the approval.
 
-- **Job:** none. No job covers showing my working to someone else. See the note in the reply that added this story.
+- **Job:** J-7
 - **Status:** Not implemented
 - **Reason:** A file download adds a second output format with its own quoting and number rules. It waits until the tape format has settled.
 

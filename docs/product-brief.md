@@ -44,7 +44,7 @@ We make no claim about how any spreadsheet handles arithmetic. The case for swit
 ## Roadmap for the three cut stories, in build order
 
 1. **S-16 Edit an earlier tape line.** This comes first because it closes the gap S-7 admits, and serves J-4 directly. It also requires the tape to store operations rather than text, which the next item builds on.
-2. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16. It is still waiting on whether sharing the working is a real job (see below).
+2. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16, and serves J-7.
 3. **S-17 Percent and tax.** This comes last. It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others.
 
 ## Open questions, and the assumption we are running on
@@ -53,7 +53,7 @@ We make no claim about how any spreadsheet handles arithmetic. The case for swit
 |---|---|
 | Will users paste figures in styles other than UK/US, such as `1.234,56`? | UK/US only. Anything else is refused with "Unclear which mark is the decimal point". |
 | Do finance users need accounting brackets `(1,234)` for negatives? | They will accept a minus sign. Brackets are refused with a message that says so. |
-| Spaces are stripped from pasted figures, so `12 34` becomes 1,234. Could that join two figures? | Users paste one figure at a time. Tabs and line breaks inside a paste are refused, which covers copying several cells at once. |
+| Spaces are stripped from pasted figures, so `12 34` becomes 1234. Could that join two figures? | Users paste one figure at a time. Tabs and line breaks inside a paste are refused, which covers copying several cells at once. |
 | Do some finance teams expect banker's rounding rather than half up? | Half up, because it is what an ordinary person expects. |
 | Will R-1 be confused by `≈ 0` after, for example, 100 ÷ 3 × 0? | Honest beats tidy. The mark overstates the doubt but never claims something false. |
 | Will R-1 expect 2 + 3 × 4 to give 14? | Some will. Showing the running result (`5 ×`) as soon as the operator is pressed makes the rule visible early enough. |
@@ -61,6 +61,4 @@ We make no claim about how any spreadsheet handles arithmetic. The case for swit
 | Do all browsers deliver a paste to a page with no text field? | Yes. Safari is checked first, and if it does not, this becomes a build decision recorded as an ADR. |
 | Do phone users need to paste? | No. There is no paste button. R-1 on a phone types. |
 | Will other screen readers behave like VoiceOver on macOS Safari? | Probably, but untested. The docs say VoiceOver is the only one checked. |
-| In exponential form the expression line can show two × signs (`≈ 9.99999999999998 × 10²⁹ ×`). Is that readable? | It will be resolved in the UX design. Until then, the notation stays as decided. |
-| Is "show my working to someone else" a real job? S-18 has no job without it. | Unproven, so S-18 stays cut and its job is left unwritten until there is evidence. |
-| Is S-14 (empty the tape) properly served by J-4? | Yes, weakly. A tape holding only the current check is easier to search. |
+| In exponential form the expression line shows two × signs (`≈ 9.99999999999998 × 10²⁹ ×`). How readable is it? | The characters are decided and stay. UX work may change spacing and type size only. |
