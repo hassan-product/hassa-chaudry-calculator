@@ -4,7 +4,7 @@
 - **Date:** 2026-10-06
 
 ## Context
-The UI is one screen of about twenty elements: a display, an expression line, a keypad, a tape and a few controls. Reviewers will read the code, and the styling should be as easy to follow as the logic.
+The UI is one screen of 33 elements: a keypad of 24 keys, a display, an expression line, a message line, an M indicator, a tape with its heading and empty-tape control, a tape toggle and a tooltip. Reviewers will read the code, and the styling should be as easy to follow as the logic.
 
 ## Decision
 Style with CSS Modules, which Vite supports with no extra dependency. Colours, spacing and type sizes come from design tokens defined as CSS custom properties in `tokens.css`.
