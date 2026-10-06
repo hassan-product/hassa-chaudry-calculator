@@ -74,7 +74,6 @@ Memory was first taken off the table for two reasons. Both are now answered:
 | Will users paste figures in styles other than UK/US, such as `1.234,56`? | UK/US only. Anything else is refused with "Unclear which mark is the decimal point". |
 | Do finance users need accounting brackets `(1,234)` for negatives? | They will accept a minus sign. Brackets are refused with a message that says so. |
 | Spaces are stripped from pasted figures, so `12 34` becomes 1234. Could that join two figures? | Users paste one figure at a time. Tabs and line breaks inside a paste are refused, which covers copying several cells at once. |
-| Do some finance teams expect banker's rounding rather than half up? | Half up, because it is what an ordinary person expects. |
 | Will R-1 be confused by `≈ 0` after, for example, 100 ÷ 3 × 0? | Honest beats tidy. The mark overstates the doubt but never claims something false. |
 | Will R-1 expect 2 + 3 × 4 to give 14? | Some will. Showing the running result (`5 ×`) as soon as the operator is pressed makes the rule visible early enough. |
 | Do 15 digits cover every money figure a desk checker meets? | Yes. Up to 9,999,999,999,999.99 fits, with pence. |
