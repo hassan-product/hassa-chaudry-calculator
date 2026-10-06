@@ -716,4 +716,5 @@ The display (26px at its smallest) is always larger than the key labels (24px).
 | `--size-gutter` | 1rem (16px), or the device safe-area inset if larger |
 | `--focus-ring` | 3px solid `--color-focus`, offset 2px |
 | `--shadow-pressed` | inset 0 2px 4px rgba(0, 0, 0, 0.25) |
+| `--key-operator-glyph-scale` | 1.35. The ÷ × − + = glyphs are drawn small in system fonts, so the glyph alone is scaled to match the digits' ink height. Their font size stays 24px, so the display is still the largest type. |
 | Breakpoint | 900px. It is a constant in the CSS, because variables cannot be used in media queries. |
