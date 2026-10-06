@@ -1,0 +1,84 @@
+.readout {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.topRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  column-gap: var(--space-3);
+  /* Keeps its height when empty, so nothing below moves (Decision 15a). */
+  min-height: 1.5em;
+  font-size: var(--font-size-expression);
+  line-height: 1.5;
+}
+
+.memory {
+  color: var(--color-text-muted);
+  text-align: left;
+}
+
+.expression {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Room for two lines at the long size, so an error that wraps on a narrow screen fills space
+     already reserved and the keypad does not jump. */
+  min-height: calc(2 * 1.2 * var(--font-size-display-long));
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text);
+  /* A long result wraps; it is never cut (Decision 15a). */
+  overflow-wrap: anywhere;
+}
+
+.short {
+  font-size: var(--font-size-display);
+}
+
+.medium {
+  font-size: var(--font-size-display-medium);
+}
+
+.long {
+  font-size: var(--font-size-display-long);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.message {
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+  min-height: 1.5em;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-message);
+  line-height: 1.5;
+  color: var(--color-text);
+  text-align: left;
+}
+
+/* The leading bar marks a message without relying on colour (Decision 15a). */
+.bar {
+  flex: none;
+  width: 4px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+@media (max-width: 900px) {
+  /* The longest message wraps to two lines at 320px; reserve both so the keypad stays put. */
+  .message {
+    min-height: 3em;
+  }
+}

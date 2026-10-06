@@ -1,0 +1,41 @@
+/* Above 900px: the calculator on the left, never narrower than 30rem, and the tape takes the
+   rest (Decision 15, layout C flipped). */
+.layout {
+  display: grid;
+  grid-template-columns: var(--size-rail-min) minmax(0, 1fr);
+  align-items: start;
+  min-height: 100vh;
+}
+
+.calc {
+  min-height: 100vh;
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-rule);
+}
+
+/* The tape scrolls on its own, so a long tape never pushes the calculator out of view. */
+.tapeColumn {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+/* At 900px and below, one column: the same calculator, centred, at most 40rem, inside the
+   safe margins. This is also the layout at 200% and 400% zoom (Decision 20). */
+@media (max-width: 900px) {
+  .layout {
+    display: block;
+    padding-inline: max(var(--size-gutter), env(safe-area-inset-left)) max(var(--size-gutter), env(safe-area-inset-right));
+  }
+
+  .calc {
+    max-width: var(--size-narrow-max);
+    min-height: 0;
+    margin: 0 auto;
+    padding: var(--space-3) 0;
+    background: var(--color-bg);
+    border-right: 0;
+  }
+}

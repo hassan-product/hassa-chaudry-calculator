@@ -1,0 +1,140 @@
+.tape {
+  padding: var(--space-5);
+  color: var(--color-text-muted);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--font-size-tape);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.head h2 {
+  margin: 0;
+  font-size: var(--font-size-label);
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.emptyControl {
+  min-height: var(--size-key-min);
+  padding: 0 var(--space-3);
+  font: 500 var(--font-size-label) var(--font-family-ui);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-key-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.armed {
+  color: var(--color-text);
+  background: var(--color-armed-bg);
+  border: 2px solid var(--color-armed-border);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr) auto auto auto auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-tape);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Each line is a real grid box sharing the list's columns through subgrid. display: contents
+   would line the columns up too, but browsers have dropped the list item's role with it. */
+.line {
+  position: relative;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  cursor: pointer;
+}
+
+.line > span:not(:global(.sr-only)) {
+  padding-block: var(--space-1);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.line:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: 0;
+  border-radius: var(--radius-sm);
+}
+
+.no,
+.work,
+.eq,
+.ap {
+  padding-right: var(--space-2);
+}
+
+.no {
+  font-size: var(--font-size-legend);
+  line-height: calc(1.5 * var(--font-size-tape));
+  text-align: right;
+}
+
+/* Long lines wrap; nothing on the tape is ever cut (Decision 11). */
+.work {
+  overflow-wrap: anywhere;
+}
+
+.eq,
+.ap {
+  text-align: center;
+}
+
+.ap {
+  min-width: 2.25ch;
+}
+
+.int {
+  text-align: right;
+  color: var(--color-text);
+}
+
+.frac {
+  text-align: left;
+  color: var(--color-text);
+}
+
+.memoryLine .work,
+.memoryLine .int,
+.memoryLine .frac {
+  color: var(--color-mem-line);
+}
+
+/* At 900px and below there is no room for columns: the result sits on its own row below. */
+.stacked {
+  padding: var(--space-3) 0 0;
+}
+
+.stacked .list {
+  max-height: 50vh;
+  overflow: auto;
+}
+
+.stacked .work {
+  grid-column: 2 / -1;
+}
+
+.stacked .line > .no,
+.stacked .line > .work {
+  border-bottom: none;
+}
+
+.stacked .eq {
+  grid-column: 2 / 4;
+  text-align: right;
+}

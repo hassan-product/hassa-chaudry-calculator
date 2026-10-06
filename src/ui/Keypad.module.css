@@ -1,0 +1,231 @@
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(var(--size-key-min), 1fr));
+  gap: var(--size-key-gap);
+  margin-top: var(--space-4);
+}
+
+.key {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: var(--size-key-min);
+  min-height: var(--size-key-min);
+  /* On a short window keys get shorter, never narrower and never below 44px, and the page
+     scrolls (Decision 15). The 15rem is the readout and margins above the keypad. */
+  height: clamp(
+    var(--size-key-min),
+    calc((100vh - 15rem) / 6 - var(--size-key-gap)),
+    var(--size-key-height-no-legend)
+  );
+  padding: var(--space-2);
+  border: 1px solid var(--color-key-border);
+  border-radius: var(--radius-md);
+  font: 500 var(--font-size-key) / 1 var(--font-family-ui);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.label {
+  line-height: 1;
+}
+
+/* The operator glyphs are drawn small in system fonts; scaling the glyph, not the font size,
+   matches the digits' ink height and keeps the display the largest type (Decision 15). */
+.operator .label,
+.equals .label {
+  display: inline-block;
+  transform: scale(var(--key-operator-glyph-scale));
+}
+
+/* Legends sit in their own row at the bottom of the key, centred under the label. */
+.legend {
+  position: absolute;
+  left: var(--space-2);
+  right: var(--space-2);
+  bottom: var(--space-3);
+  display: none;
+  text-align: center;
+  font-size: var(--font-size-legend);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.memory {
+  background: var(--color-mem-bg);
+  color: var(--color-mem-text);
+  /* Quieter by weight and fill, but a solid outline: dashed would read as disabled. */
+  font-weight: 400;
+}
+
+.digit {
+  background: var(--color-key-bg);
+  color: var(--color-key-text);
+}
+
+.control {
+  background: var(--color-ctrl-bg);
+  color: var(--color-key-text);
+}
+
+.operator {
+  background: var(--color-op-bg);
+  color: var(--color-op-text);
+}
+
+.equals {
+  background: var(--color-eq-bg);
+  color: var(--color-eq-text);
+  border-color: var(--color-eq-bg);
+  font-weight: 600;
+}
+
+.digit .legend,
+.control .legend,
+.memory .legend {
+  color: var(--color-legend);
+}
+
+.operator .legend {
+  color: var(--color-legend-on-op);
+}
+
+.equals .legend {
+  color: var(--color-legend-on-equals);
+}
+
+.key:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+.digit:active {
+  background: var(--color-key-pressed-bg);
+  color: var(--color-key-hover-text);
+}
+
+.control:active {
+  background: var(--color-ctrl-pressed-bg);
+  color: var(--color-key-hover-text);
+}
+
+.control:active .legend {
+  color: var(--color-legend-hover);
+}
+
+.memory:active {
+  background: var(--color-mem-pressed-bg);
+  color: var(--color-mem-hover-text);
+}
+
+.operator:active {
+  background: var(--color-op-pressed-bg);
+  color: var(--color-op-hover-text);
+}
+
+.operator:active .legend {
+  color: var(--color-legend-on-op-pressed);
+}
+
+.equals:active {
+  background: var(--color-eq-pressed-bg);
+  border-color: var(--color-eq-pressed-bg);
+  color: var(--color-eq-text);
+}
+
+/* Focus is a ring outside the key, never colour alone (Decision 15). */
+.key:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 1;
+  display: none;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font: 500 var(--font-size-label) / 1.3 var(--font-family-ui);
+  background: var(--color-tooltip-bg);
+  color: var(--color-tooltip-text);
+  pointer-events: none;
+}
+
+/* Hover styles only where there is real hover, so no colour sticks after a tap (Decision 15). */
+@media (hover: hover) {
+  .digit:hover {
+    background: var(--color-key-hover-bg);
+    color: var(--color-key-hover-text);
+  }
+
+  .control:hover {
+    background: var(--color-ctrl-hover-bg);
+    color: var(--color-key-hover-text);
+  }
+
+  .control:hover .legend {
+    color: var(--color-legend-hover);
+  }
+
+  .memory:hover {
+    background: var(--color-mem-hover-bg);
+    color: var(--color-mem-hover-text);
+  }
+
+  .operator:hover {
+    background: var(--color-op-hover-bg);
+    color: var(--color-op-hover-text);
+  }
+
+  .equals:hover {
+    background: var(--color-eq-hover-bg);
+    border-color: var(--color-eq-hover-bg);
+    color: var(--color-eq-hover-text);
+  }
+
+  .key:hover .tooltip {
+    display: block;
+  }
+
+  /* Pressed wins over hover while the mouse is down. */
+  .digit:active {
+    background: var(--color-key-pressed-bg);
+  }
+
+  .control:active {
+    background: var(--color-ctrl-pressed-bg);
+  }
+
+  .memory:active {
+    background: var(--color-mem-pressed-bg);
+  }
+
+  .operator:active {
+    background: var(--color-op-pressed-bg);
+  }
+
+  .equals:active {
+    background: var(--color-eq-pressed-bg);
+    border-color: var(--color-eq-pressed-bg);
+  }
+}
+
+/* Keyboard legends only with a mouse and hover; a phone gets a clean keypad (Decision 15).
+   They also need a key at least 4.5rem tall to sit clear of the label, which the formula below
+   gives from a 46.5rem window. On a shorter window, at 200% zoom for example, the legends go and
+   the keys shrink instead, rather than crowding the label. */
+@media (hover: hover) and (pointer: fine) and (min-height: 46.5rem) {
+  .key {
+    height: clamp(4.5rem, calc((100vh - 15rem) / 6 - var(--size-key-gap)), var(--size-key-height));
+    /* Every label sits the same step above centre, so rows stay level with or without a legend. */
+    padding-bottom: calc(var(--space-2) + var(--space-3));
+  }
+
+  .legend {
+    display: block;
+  }
+}

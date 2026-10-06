@@ -1,0 +1,14 @@
+/* The ≈ chip: bold, larger than the text around it and outlined, at every size it appears.
+   Shape and weight tell it from =, not colour alone (Decision 15). */
+.approx {
+  display: inline-block;
+  font-size: calc(var(--approx-scale) * 1em);
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.04em 0.16em 0.1em;
+  margin: 0 0.04em;
+  border: max(1px, 0.06em) solid var(--color-approx-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-approx-bg);
+  color: var(--color-approx-text);
+}
