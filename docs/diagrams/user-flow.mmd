@@ -1,0 +1,212 @@
+---
+title: User flow — how each role moves through the calculator
+config:
+  theme: base
+  layout: elk
+  fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+  themeVariables:
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+    fontSize: 16px
+    primaryColor: "#FFFFFF"
+    primaryTextColor: "#16191D"
+    primaryBorderColor: "#808892"
+    lineColor: "#545B64"
+    clusterBkg: "#F6F7F9"
+    clusterBorder: "#DDE1E6"
+    titleColor: "#16191D"
+    edgeLabelBackground: "#FFFFFF"
+  flowchart:
+    nodeSpacing: 36
+    rankSpacing: 44
+    padding: 14
+    wrappingWidth: 420
+---
+%% Source of docs/diagrams/user-flow.png. Behaviour comes from CLAUDE.md Decisions and docs/user-stories.md only.
+%% Colours and type are the light-theme tokens in docs/ux/mockup.html.
+%% Invisible links (~~~) between lanes fix their left-to-right order.
+flowchart TB
+
+  subgraph R1["R-1 Everyday Calculator User"]
+    direction LR
+
+    subgraph R1a["A quick sum (S-3, S-4)"]
+      direction TB
+      a1("A number comes up mid-task.<br/>Types 12, presses +")
+      a2["Expression: 12 +<br/>Display: 12"]
+      a3("Types 8, presses =")
+      a4["Expression: 12 + 8 =<br/>Display: 20"]
+      a5[["Tape: 12 + 8 = 20"]]
+      a6("Back to what they were doing")
+      a1 --> a2 --> a3 --> a4 --> a5 --> a6
+    end
+
+    subgraph R1b["A slip while typing (S-7)"]
+      direction TB
+      b1("Means 12, types 123")
+      b2("Backspace")
+      b3["Display: 12"]
+      b4("Or Delete (CE):<br/>the figure goes back to 0, retype it")
+      b5["Not in this version: after 5 + 3 ×,<br/>the 3 is already folded in (8 ×).<br/>Backspace does nothing; only Escape,<br/>starting again. Closing this is S-16."]
+      b1 --> b2 --> b3
+      b1 -.-> b4
+      b3 -.->|"the figure was already<br/>followed by an operator"| b5
+    end
+
+    subgraph R1c["Getting out of an error (S-9)"]
+      direction TB
+      c1("Types 5 ÷ 0 =")
+      c2["Cannot divide by zero<br/>Expression: 5 ÷ 0 =<br/>No tape line"]
+      c3("Types 7")
+      c4["Display: 7<br/>a new calculation"]
+      c5("C, Escape or Delete")
+      c6["Display: 0"]
+      c7["Operators, =, +/−, Backspace,<br/>M+ and M− do nothing here"]
+      c1 --> c2 --> c3 --> c4
+      c2 --> c5 --> c6
+      c2 -.- c7
+    end
+
+    subgraph R1d["Too many digits (S-1)"]
+      direction TB
+      d1("Has typed 15 digits,<br/>types a 16th")
+      d2["15 digits maximum<br/>The figure is unchanged.<br/>The message stays until<br/>the next key, click or paste."]
+      d1 --> d2
+    end
+    R1a ~~~ R1b ~~~ R1c ~~~ R1d
+
+  end
+
+  subgraph R2["R-2 Desk Checker"]
+    direction TB
+    subgraph R2r1[" "]
+      direction LR
+
+      subgraph R2a["Paste a figure (S-11)"]
+        direction TB
+        p1("Pastes £1,234.56<br/>with Ctrl+V or Cmd+V")
+        p1b["The calculator strips £ $ €, spaces,<br/>and commas followed by three digits"]
+        p2{"One readable<br/>UK/US figure?"}
+        p3["Display: 1234.56<br/>as pasted, no commas;<br/>Backspace can edit it"]
+        p4["Refused, figure unchanged:<br/>Couldn't read that as a number<br/>Unclear which mark is the decimal point<br/>Use a minus sign for negative numbers<br/>15 digits maximum"]
+        p5["In an error, a refused paste<br/>leaves the error showing"]
+        p1 --> p1b --> p2
+        p2 -->|yes| p3
+        p2 -->|no| p4
+        p4 -.- p5
+      end
+
+      subgraph R2b["A chain of steps, then the tape (S-4, S-12)"]
+        direction TB
+        t1("With 1234.56 pasted:<br/>presses +, types 89.10, presses ×")
+        t2["Expression: 1,323.66 ×<br/>the running result, so the order<br/>operations run in is visible"]
+        t3("Types 1.2, presses =")
+        t4[["Tape: 1,234.56 + 89.1 = 1,323.66<br/>→ × 1.2 = 1,588.392"]]
+        t5("Reads the tape: every step with<br/>its running result, newest last,<br/>results aligned on the point")
+        t1 --> t2 --> t3 --> t4 --> t5
+      end
+
+      subgraph R2c["Seeing ≈ (S-5)"]
+        direction TB
+        x1("Types 100 ÷ 3 =")
+        x2["≈ 33.3333333333333<br/>on the display, expression line and tape"]
+        x3("Presses × 3 =")
+        x4["≈ 100<br/>≈ carries until a new calculation"]
+        x1 --> x2 --> x3 --> x4
+      end
+      R2a ~~~ R2b ~~~ R2c
+    end
+
+    subgraph R2r2[" "]
+      direction LR
+
+      subgraph R2d["Recall a line (S-13)"]
+        direction TB
+        r1("Tab to the tape, ↑ ↓ to the line<br/>100 ÷ 3 = ≈ 33.3333333333333,<br/>Enter or Space, or a click")
+        r2["The full 34-digit value comes back<br/>with its ≈: ≈ 33.3333333333333"]
+        r3{"What was showing?"}
+        r4["Typing a figure:<br/>it replaces the figure"]
+        r5["An operator pending:<br/>it is the next figure"]
+        r6["A result, the start or an error:<br/>a new calculation starts from it"]
+        r7["Backspace does nothing on it;<br/>a digit replaces it"]
+        r1 --> r2 --> r3
+        r3 --> r4
+        r3 --> r5
+        r3 --> r6
+        r2 -.- r7
+      end
+
+      subgraph R2e["A running total in memory (S-19)"]
+        direction TB
+        m1("Part 1: 120.5 + 30 =<br/>then M+")
+        m2[["Tape: M+ 150.5, memory 150.5<br/>Indicator: M 150.5"]]
+        m3("Part 2: 75 × 2 =, M+<br/>Part 3: 9.99 × 3 =, M+")
+        m4[["Tape: M+ 150, memory 300.5<br/>M+ 29.97, memory 330.47<br/>Indicator: M 330.47"]]
+        m5("MR")
+        m6["Display: 330.47<br/>a new calculation starts from it"]
+        m7["Number too large<br/>Memory unchanged, no tape line"]
+        m1 --> m2 --> m3 --> m4 --> m5 --> m6
+        m3 -.->|"the total would be<br/>1e100 or more"| m7
+      end
+      R2d ~~~ R2e
+    end
+
+    R2r1 ~~~ R2r2
+  end
+
+  subgraph Both["Either role"]
+    direction LR
+
+    subgraph F["A fault: a bug inside the calculator (S-9)"]
+      direction TB
+      f1("Something throws<br/>despite the error model")
+      f2["Something went wrong inside the calculator.<br/>It was not caused by anything you entered.<br/>Your tape and memory are kept.<br/>Press C or Escape to start again."]
+      f3("C or Escape")
+      f4["Display: 0<br/>Tape and memory kept, no reload"]
+      f5["Every other input does nothing"]
+      f1 --> f2 --> f3 --> f4
+      f2 -.- f5
+    end
+
+    subgraph L["Legend"]
+      direction TB
+      l1("What the person does")
+      l2["What the screen shows"]
+      l3[["A line written on the tape"]]
+      l4["≈ : the number may not be exact"]
+      l5["A refusal message, not an error"]
+      l6["An error state"]
+      l7["A fault"]
+      l8["Not built in this version"]
+      l9{"A branch"}
+      l10["A note on the step it hangs from"]
+      l1 ~~~ l2 ~~~ l3 ~~~ l4 ~~~ l5 ~~~ l6 ~~~ l7 ~~~ l8 ~~~ l9 ~~~ l10
+    end
+    F ~~~ L
+
+  end
+
+  R1 ~~~ R2 ~~~ Both
+
+  classDef action fill:#EEF1F4,stroke:#808892,stroke-width:1px,color:#16191D
+  classDef screen fill:#FFFFFF,stroke:#16191D,stroke-width:1.5px,color:#16191D
+  classDef tape fill:#DCE8F5,stroke:#1D4F80,stroke-width:1.5px,color:#123A63
+  classDef approx fill:#FCEFD9,stroke:#8A5A00,stroke-width:2px,color:#5A3B00,font-weight:bold
+  classDef refusal fill:#FFFFFF,stroke:#545B64,stroke-width:1.5px,stroke-dasharray:6 4,color:#16191D
+  classDef error fill:#FFFFFF,stroke:#A3260F,stroke-width:2.5px,color:#A3260F
+  classDef fault fill:#FFFFFF,stroke:#A3260F,stroke-width:3px,stroke-dasharray:9 4,color:#A3260F
+  classDef notbuilt fill:#F6F7F9,stroke:#808892,stroke-width:1px,stroke-dasharray:2 3,color:#545B64
+  classDef branch fill:#FFFFFF,stroke:#1D4F80,stroke-width:1.5px,color:#16191D
+  classDef row fill:#F6F7F9,stroke:#F6F7F9
+  classDef note fill:#F6F7F9,stroke:#DDE1E6,stroke-width:1px,color:#545B64
+
+  class a1,a3,a6,b1,b2,b4,c1,c3,c5,d1,p1,t1,t3,t5,x1,x3,r1,m1,m3,m5,f1,f3,l1 action
+  class a2,a4,b3,c4,c6,p3,t2,r4,r5,r6,m6,f4,l2 screen
+  class a5,t4,m2,m4,l3 tape
+  class x2,x4,r2,l4 approx
+  class d2,p4,l5 refusal
+  class c2,m7,l6 error
+  class f2,l7 fault
+  class b5,l8 notbuilt
+  class p2,r3,l9 branch
+  class c7,p1b,p5,r7,f5,l10 note
+  class R2r1,R2r2 row

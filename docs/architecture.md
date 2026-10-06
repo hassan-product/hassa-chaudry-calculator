@@ -2,6 +2,22 @@
 
 This document records decisions already made; it adds no behaviour. The behaviour itself is in the Decisions section of `CLAUDE.md` and in `user-stories.md`. ADRs for individual choices are in `docs/adr/`. Module names below are the planned layout. `src/` is empty until the first story is built.
 
+## Flow diagrams
+
+Three diagrams draw what this document and the stories already say. They are large, so open an image on its own to read it at full size. The Mermaid sources and the command that regenerates them are in `diagrams/`.
+
+**User flow.** How each role moves through the calculator, including the refusal, error and fault paths.
+
+![User flow: the Everyday Calculator User's quick sum, slip, error and digit cap, and the Desk Checker's paste, chain, tape, ≈, recall and running total in memory](diagrams/user-flow.png)
+
+**App flow.** The path of one key press from the browser event to the screen, then each engine state with every way out of it.
+
+![App flow: a key press passing through useKeyboard, useCalculator, engine.step and the view model to the ui, then the six engine states and their transitions](diagrams/app-flow.png)
+
+**Architecture flow.** The layers and their imports, decimal.js behind its one wrapper, memory in the domain, and the tape and memory held only in page memory.
+
+![Architecture flow: ui, app, domain and shared inside the browser tab, imports pointing inwards, decimal.ts as the only import of decimal.js, and no server, network or storage](diagrams/architecture-flow.png)
+
 ## Layer model
 
 ```

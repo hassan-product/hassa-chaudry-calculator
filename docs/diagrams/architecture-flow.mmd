@@ -1,0 +1,144 @@
+---
+title: Architecture flow — layers, dependencies and where state lives
+config:
+  theme: base
+  layout: elk
+  fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+  themeVariables:
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+    fontSize: 16px
+    primaryColor: "#FFFFFF"
+    primaryTextColor: "#16191D"
+    primaryBorderColor: "#808892"
+    lineColor: "#545B64"
+    clusterBkg: "#F6F7F9"
+    clusterBorder: "#808892"
+    titleColor: "#16191D"
+    edgeLabelBackground: "#FFFFFF"
+  flowchart:
+    nodeSpacing: 36
+    rankSpacing: 64
+    padding: 16
+    wrappingWidth: 420
+---
+%% Source of docs/diagrams/architecture-flow.png. Layers, modules, import rules and the no-storage rule
+%% come from docs/architecture.md (Layer model, Context, Layers and modules, Memory). Nothing here is new.
+%% Colours and type are the light-theme tokens in docs/ux/mockup.html.
+flowchart TB
+
+  person(["Person<br/>keyboard · mouse or touch · screen reader"])
+  clip(["System clipboard"])
+  files["Static files: HTML · JS · CSS<br/>loaded once, from the local dev server or dist/"]
+
+  subgraph Tab["Browser tab: the only runtime"]
+    direction LR
+
+    subgraph Stack[" "]
+    direction TB
+    main["main.tsx<br/>mounts ui/App"]
+
+    subgraph UI["ui · components, CSS Modules, tokens"]
+      direction LR
+      uApp["App.tsx<br/>error boundary"]
+      uDisplay["Display.tsx<br/>readout and M indicator"]
+      uKeypad["Keypad.tsx<br/>keys and Change sign tooltip"]
+      uTape["Tape.tsx"]
+      uToggle["TapeToggle.tsx"]
+      uAnn["Announcer.tsx<br/>polite live region"]
+      uCss["*.module.css · tokens.css"]
+    end
+
+    subgraph APP["app · hooks wiring domain to ui"]
+      direction LR
+      aCalc["useCalculator.ts<br/>holds engine state, the tape and memory"]
+      aKey["useKeyboard.ts"]
+      aPaste["usePaste.ts"]
+      aEmpty["useEmptyTapeConfirm.ts"]
+      pageMem["Page memory only<br/>the tape and memory are React state<br/>inside useCalculator, gone on reload"]
+    end
+
+    subgraph DOMAIN["domain · pure calculation: no React, no DOM, never throws"]
+      direction LR
+      dEngine["engine.ts"]
+      dEntry["entry.ts"]
+      dPaste["paste.ts"]
+      dArith["arithmetic.ts"]
+      dFormat["format.ts"]
+      dTape["tape.ts"]
+      dMemory["memory.ts<br/>M+, M−, MR, MC"]
+      dValue["value.ts"]
+      dResult["result.ts"]
+      dDecimal["decimal.ts<br/>the only door to decimal.js:<br/>one clone, precision 34, ROUND_HALF_UP"]
+    end
+
+
+    decimaljs[("decimal.js 10.6.0<br/>npm package")]
+    end
+
+    subgraph SHARED["shared · types and constant tables; imports nothing"]
+      direction TB
+      sMessages["messages.ts"]
+      sView["view.ts"]
+      sKeys["keys.ts"]
+    end
+
+    Stack ~~~ SHARED
+  end
+
+  none["Not used anywhere<br/>server · network requests · cookies<br/>localStorage · sessionStorage · IndexedDB"]
+
+  subgraph Key["Legend"]
+    direction TB
+    k1["A module"]
+    k2["Where the tape and memory live"]
+    k3["A package from outside the app"]
+    k4["Something the app never uses"]
+    k5["Thick arrows: imports between layers.<br/>All point inwards, ui → app → domain,<br/>and any layer may use shared."]
+    k6["Red dotted arrow with a cross:<br/>an import the rules forbid"]
+    k7["Called out: memory logic sits in the domain;<br/>decimal.ts is the single wrapper round decimal.js"]
+    k1 ~~~ k7 ~~~ k2 ~~~ k3 ~~~ k4 ~~~ k5 ~~~ k6
+  end
+
+  person <-->|"in: keys, clicks, taps<br/>out: display, tape, live-region announcements"| UI
+  clip -->|"browser paste event"| aPaste
+  files -->|"loaded once at page load"| main
+  main --> uApp
+
+  UI ==>|"imports hooks"| APP
+  APP ==>|"imports the engine and format"| DOMAIN
+  UI ==>|"imports types"| SHARED
+  APP ==>|"imports types"| SHARED
+  DOMAIN ==>|"imports types and messages"| SHARED
+  dDecimal ==>|"the only import of decimal.js"| decimaljs
+  UI -. "never imports domain" .-x DOMAIN
+
+  aCalc --- pageMem
+  Tab -.- none
+
+  Tab ~~~ Key
+
+  classDef module fill:#FFFFFF,stroke:#808892,stroke-width:1px,color:#16191D
+  classDef layer fill:#F6F7F9,stroke:#808892,stroke-width:1.5px,color:#16191D
+  classDef runtime fill:#FFFFFF,stroke:#1D4F80,stroke-width:2px,color:#16191D
+  classDef memory fill:#DCE8F5,stroke:#1D4F80,stroke-width:1.5px,color:#123A63
+  classDef pkg fill:#EEF1F4,stroke:#545B64,stroke-width:1.5px,color:#16191D
+  classDef never fill:#FFFFFF,stroke:#A3260F,stroke-width:1.5px,stroke-dasharray:6 4,color:#A3260F
+  classDef outside fill:#EEF1F4,stroke:#808892,stroke-width:1px,color:#16191D
+  classDef note fill:#F6F7F9,stroke:#DDE1E6,stroke-width:1px,color:#545B64
+  classDef stack fill:#FFFFFF,stroke:#FFFFFF
+  classDef door fill:#FFFFFF,stroke:#1D4F80,stroke-width:2px,color:#123A63
+
+  class uApp,uDisplay,uKeypad,uTape,uToggle,uAnn,uCss,aCalc,aKey,aPaste,aEmpty,dEngine,dEntry,dPaste,dArith,dFormat,dTape,dValue,dResult,sMessages,sView,sKeys,main,k1 module
+  class pageMem,k2 memory
+  class dMemory,dDecimal,k7 door
+  class decimaljs,k3 pkg
+  class none,k4 never
+  class person,clip,files outside
+  class k5,k6 note
+  class UI,APP,DOMAIN,SHARED layer
+  class Stack stack
+  class Tab runtime
+
+  %% Link indices count every link in order: Stack ~~~ SHARED, then the six legend links, come first.
+  linkStyle 11,12,13,14,15,16 stroke:#1D4F80,stroke-width:3px
+  linkStyle 17 stroke:#A3260F,stroke-width:2px,stroke-dasharray:4 4

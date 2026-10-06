@@ -1,0 +1,175 @@
+---
+title: App flow — one key press, and the engine's states
+config:
+  theme: base
+  layout: elk
+  fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+  themeVariables:
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+    fontSize: 16px
+    primaryColor: "#FFFFFF"
+    primaryTextColor: "#16191D"
+    primaryBorderColor: "#808892"
+    lineColor: "#545B64"
+    clusterBkg: "#F6F7F9"
+    clusterBorder: "#DDE1E6"
+    titleColor: "#16191D"
+    edgeLabelBackground: "#FFFFFF"
+  flowchart:
+    nodeSpacing: 40
+    rankSpacing: 60
+    padding: 14
+    wrappingWidth: 420
+---
+%% Source of docs/diagrams/app-flow.png. Every state and transition is the engine state diagram in
+%% docs/architecture.md; the path of a key press is its layer model and error model. Nothing here is new.
+%% Colours and type are the light-theme tokens in docs/ux/mockup.html.
+flowchart TB
+
+  subgraph Path["The path of one key press"]
+    direction LR
+    k1("Browser event<br/>keydown or paste,<br/>or a click on a Keypad key")
+    k2["app · useKeyboard / usePaste<br/>reads event.key (event.code only for the<br/>numpad point); Ctrl, Cmd and Alt ignored;<br/>Enter or Space on a focused control<br/>activates that control instead"]
+    k3["app · useCalculator<br/>calls engine.step(state, event)"]
+    k4["domain · engine.step<br/>a pure function, never throws<br/>returns { state, tapeLine?, notice? }"]
+    k5["app · useCalculator<br/>keeps the new state and memory,<br/>appends tapeLine to the tape,<br/>holds notice until the next event"]
+    k6["app → shared/view.ts<br/>a view model of display strings,<br/>made by format.ts"]
+    k7["ui · Display, Tape, Keypad, Announcer<br/>render the view model;<br/>display changes are announced politely"]
+    kf["Fault, held in useCalculator, not an engine state<br/>A throw from the engine, or a render failure caught<br/>by the error boundary in ui/App, shows FAULT_TEXT,<br/>announced like an error. Only C or Escape act:<br/>engine back to Ready, tape and memory kept."]
+    k1 --> k2 --> k3 --> k4 --> k5 --> k6 --> k7
+    k3 -. "a throw is caught" .-> kf
+  end
+
+  subgraph Engine["Engine states · domain/engine.ts · each panel is one state: ↺ keeps it there, arrows are every way out"]
+    direction TB
+    subgraph ERow0[" "]
+      direction LR
+      subgraph PReady["Ready"]
+        direction LR
+        start(("page<br/>load"))
+        Ready["<b>Ready</b><br/>↺ Escape, Delete, Backspace, +/−, = (no change)<br/>↺ paste refused (notice)<br/>↺ M+ or M− on the 0 showing ▶ memory line"]
+        Ready_Entering["→ Entering"]
+        Ready_Recalled["→ Recalled"]
+        Ready_Pending["→ Pending"]
+        Ready_Error["→ Error"]
+        start -->|"tape empty"| Ready
+        Ready -->|"digit, point or paste accepted<br/>≈ cleared"| Ready_Entering
+        Ready -->|"recall, ≈ taken from the line<br/>MR with memory held"| Ready_Recalled
+        Ready -->|"operator, acts on the 0 showing"| Ready_Pending
+        Ready -->|"M+ or M− would push<br/>memory out of range"| Ready_Error
+      end
+      subgraph PEntering["Entering"]
+        direction LR
+        Entering["<b>Entering</b><br/>↺ digit, point, Backspace, +/−, Delete to 0<br/>↺ paste accepted, replaces the figure<br/>↺ 16th digit or paste refused (notice)<br/>↺ = with nothing pending (no change)<br/>↺ M+ or M− on the figure ▶ memory line"]
+        Entering_Recalled["→ Recalled"]
+        Entering_Pending["→ Pending"]
+        Entering_Result["→ Result"]
+        Entering_Error["→ Error"]
+        Entering_Ready["→ Ready"]
+        Entering -->|"recall or MR, replaces the figure"| Entering_Recalled
+        Entering -->|"operator: nothing pending, or the step<br/>succeeds; ≈ set if rounded, cut or carried"| Entering_Pending
+        Entering ==>|"= with an operator pending ▶ tape<br/>≈ set if rounded, cut or carried"| Entering_Result
+        Entering -->|"operator or = and the step fails<br/>M+ or M− out of range"| Entering_Error
+        Entering -->|"Escape"| Entering_Ready
+      end
+      subgraph PRecalled["Recalled"]
+        direction LR
+        Recalled["<b>Recalled</b><br/>↺ +/−, ≈ kept<br/>↺ Backspace (no change)<br/>↺ recall, replaces the value<br/>↺ paste refused (notice)<br/>↺ M+ or M− ▶ memory line"]
+        Recalled_Entering["→ Entering"]
+        Recalled_Pending["→ Pending"]
+        Recalled_Result["→ Result"]
+        Recalled_Error["→ Error"]
+        Recalled_Ready["→ Ready"]
+        Recalled -->|"digit, point or paste accepted<br/>Delete: value becomes 0,<br/>pending operator kept"| Recalled_Entering
+        Recalled -->|"operator: the step succeeds<br/>or nothing pending"| Recalled_Pending
+        Recalled ==>|"= with an operator pending ▶ tape"| Recalled_Result
+        Recalled -->|"operator or = and the step fails<br/>M+ or M− out of range"| Recalled_Error
+        Recalled -->|"Escape"| Recalled_Ready
+      end
+      PReady ~~~ PEntering ~~~ PRecalled
+    end
+    subgraph ERow1[" "]
+      direction LR
+      subgraph PPending["Pending"]
+        direction LR
+        Pending["<b>Pending</b><br/>↺ operator, replaces the operator<br/>↺ =, Backspace, +/−, Delete (no change)<br/>↺ paste refused (notice)<br/>↺ M+ or M− on the running result ▶ memory line"]
+        Pending_Entering["→ Entering"]
+        Pending_Recalled["→ Recalled"]
+        Pending_Error["→ Error"]
+        Pending_Ready["→ Ready"]
+        Pending -->|"digit, point or paste accepted"| Pending_Entering
+        Pending -->|"recall or MR,<br/>becomes the next figure"| Pending_Recalled
+        Pending -->|"M+ or M− out of range"| Pending_Error
+        Pending -->|"Escape"| Pending_Ready
+      end
+      subgraph PResult["Result"]
+        direction LR
+        Result["<b>Result</b><br/>↺ = repeats the last operation ▶ tape<br/>↺ +/−, ≈ kept, no tape line<br/>↺ Backspace (no change)<br/>↺ paste refused (notice)<br/>↺ M+ or M− ▶ memory line;<br/>memory takes ≈ if the value has it"]
+        Result_Pending["→ Pending"]
+        Result_Entering["→ Entering"]
+        Result_Recalled["→ Recalled"]
+        Result_Error["→ Error"]
+        Result_Ready["→ Ready"]
+        Result -->|"operator, continues from the result<br/>≈ kept"| Result_Pending
+        Result -->|"digit, point or paste accepted<br/>new calculation, ≈ cleared"| Result_Entering
+        Result -->|"recall or MR, new calculation<br/>≈ taken from the line"| Result_Recalled
+        Result -->|"repeated = fails<br/>M+ or M− out of range"| Result_Error
+        Result -->|"Escape or Delete, ≈ cleared"| Result_Ready
+      end
+      subgraph PError["Error"]
+        direction LR
+        Error["<b>Error</b><br/>Cannot divide by zero<br/>Number too large · Number too small<br/>↺ operator, =, +/−, Backspace (no change)<br/>↺ paste refused (notice), the error stays<br/>↺ M+ or M− (no change)<br/>↺ MC clears memory"]
+        Error_Ready["→ Ready"]
+        Error_Entering["→ Entering"]
+        Error_Recalled["→ Recalled"]
+        Error -->|"Escape or Delete"| Error_Ready
+        Error -->|"digit, point or paste accepted"| Error_Entering
+        Error -->|"recall, or MR with memory held"| Error_Recalled
+      end
+      PPending ~~~ PResult ~~~ PError
+    end
+    ERow0 ~~~ ERow1
+  end
+
+  subgraph Key["Legend"]
+    direction TB
+    g1["A layer step on the path of a key press"]
+    g2["An engine state, with the inputs that keep it there (↺)"]
+    g3["The error state"]
+    g4["The fault: outside the engine"]
+    g5["▶ tape: writes a calculation line<br/>▶ memory line: writes a memory line<br/>thick blue arrows write a calculation line;<br/>red arrows lead into the error state;<br/>a chip such as → Pending names the next state"]
+    g6["≈ is a flag on the running value. It is set when a step<br/>is rounded at 34 digits, cut for display, or uses a value<br/>that already had ≈. A new calculation clears it."]
+    g7["Every state: MC changes only memory;<br/>MR with memory empty does nothing.<br/>In a fault every memory key does nothing.<br/>A notice is a refusal message; the state is unchanged."]
+    g1 ~~~ g2 ~~~ g3 ~~~ g4 ~~~ g5 ~~~ g6 ~~~ g7
+  end
+
+  Path ~~~ Engine
+  Engine ~~~ Key
+
+  classDef step fill:#EEF1F4,stroke:#808892,stroke-width:1px,color:#16191D
+  classDef state fill:#FFFFFF,stroke:#16191D,stroke-width:1.5px,color:#16191D
+  classDef error fill:#FFFFFF,stroke:#A3260F,stroke-width:2.5px,color:#A3260F
+  classDef fault fill:#FFFFFF,stroke:#A3260F,stroke-width:3px,stroke-dasharray:9 4,color:#A3260F
+  classDef tape fill:#DCE8F5,stroke:#1D4F80,stroke-width:1.5px,color:#123A63
+  classDef approx fill:#FCEFD9,stroke:#8A5A00,stroke-width:2px,color:#5A3B00
+  classDef note fill:#F6F7F9,stroke:#DDE1E6,stroke-width:1px,color:#545B64
+  classDef target fill:#FFFFFF,stroke:#808892,stroke-width:1px,color:#16191D
+  classDef errtarget fill:#FFFFFF,stroke:#A3260F,stroke-width:1.5px,color:#A3260F
+  classDef row fill:#F6F7F9,stroke:#F6F7F9
+  classDef start fill:#1D4F80,stroke:#1D4F80,color:#FFFFFF
+
+  class k1,k2,k3,k4,k5,k6,k7,g1 step
+  class Ready,Entering,Recalled,Pending,Result,g2 state
+  class Ready_Entering,Ready_Recalled,Ready_Pending,Entering_Recalled,Entering_Pending,Entering_Result,Entering_Ready,Recalled_Entering,Recalled_Pending,Recalled_Result,Recalled_Ready,Pending_Entering,Pending_Recalled,Pending_Ready,Result_Pending,Result_Entering,Result_Recalled,Result_Ready,Error_Ready,Error_Entering,Error_Recalled target
+  class Ready_Error,Entering_Error,Recalled_Error,Pending_Error,Result_Error errtarget
+  class ERow0,ERow1 row
+  class Error,g3 error
+  class kf,g4 fault
+  class g5 tape
+  class g6 approx
+  class g7 note
+  class start start
+
+  %% Link indices count every link in order, invisible ones included.
+  linkStyle 14,19 stroke:#1D4F80,stroke-width:3.5px
+  linkStyle 11,15,20,26,31 stroke:#A3260F,stroke-width:1.5px
