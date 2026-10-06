@@ -166,7 +166,7 @@ flowchart TB
 
 ## Engine states
 
-The engine is a pure function `step(state, event) → { state, notice? }`. Its state is `{ calc, memory, tape }`: `calc` is one of the states in the diagram. The tape is append-only and built by the engine, so a finished calculation or a memory change returns a state whose tape has one more line. `engine.ts` also exports `readout(state)`, which uses `format.ts` to give the display, expression line and M indicator as strings. In the diagram:
+The engine is a pure function `step(state, event) → { state, notice? }`. Its state is `{ calc, memory, tape }`: `calc` is one of the states in the diagram. The tape is append-only and built by the engine, so a finished calculation or a memory change returns a state whose tape has one more line. The one exception is `emptyTape` (Decision 11), which empties the tape and leaves the calculation, an error included, and memory alone. Its two-press confirmation lives in the app, in `useEmptyTapeConfirm`. `engine.ts` also exports `readout(state)`, which uses `format.ts` to give the display, expression line and M indicator as strings. In the diagram:
 
 - A `≈` is a flag on the running value. It is set when a step is rounded at 34 digits, when the result is cut for display, or when an operand already carried one (Decision 3). A new calculation clears it.
 - **▶ tape** marks the transitions that write a calculation line. **▶ memory line** marks those that write a memory line.
