@@ -41,7 +41,7 @@ Versions are the ones installed from `package.json`. The ranges there resolve to
 | React + TypeScript, strict | React 19.3.0, TypeScript 5.9.3 | The calculator is a state machine, and its states are a discriminated union. With `strict` and an exhaustive `switch` ending in a `never` check, adding a state breaks the build until every transition handles it. | Plain JavaScript, or TypeScript without `strict` |
 | decimal.js | 10.6.0 | See below. | Native numbers, and big.js |
 | CSS Modules + design tokens | built into Vite | One screen and about twenty elements. A dependency with its own config to style twenty elements is not worth it, and a reviewer should be able to read the CSS. | Tailwind, or a component library |
-| Vitest + React Testing Library | Vitest 4.1.11, RTL 16.3.3, jsdom 29.1.1 | Vitest uses the same transform pipeline as the build, so there is no second toolchain. Testing through the DOM makes the tests read like the acceptance criteria. | Not stated. A second toolchain is the cost being avoided. |
+| Vitest + React Testing Library | Vitest 4.1.11, RTL 16.3.3, jsdom 29.1.1 | Vitest uses the same transform pipeline as the build, so there is no second toolchain. Testing through the DOM makes the tests read like the acceptance criteria. | Jest. It needs its own TypeScript and ESM transform setup alongside Vite, while Vitest reuses the Vite config. |
 
 Vitest 4 and jsdom 29 are the newest versions whose `engines` accept Node 20.19. Vitest 5 and jsdom 30 require Node 22, which the run-with-Node-20 rule excludes.
 
@@ -163,6 +163,7 @@ stateDiagram-v2
     Ready --> Entering : paste accepted, ≈ cleared
     Ready --> Recalled : recall, ≈ taken from line
     Ready --> Ready : Escape, Delete, Backspace, ±, = (no change)
+    Ready --> Pending : operator, acts on the 0 showing
     Ready --> Ready : paste refused, notice
 
     Entering --> Entering : digit, point, Backspace, ±, Delete to 0
@@ -180,6 +181,7 @@ stateDiagram-v2
     Recalled --> Entering : paste accepted
     Recalled --> Recalled : ±, ≈ kept
     Recalled --> Recalled : Backspace (no change)
+    Recalled --> Entering : Delete, value becomes 0, pending operator kept
     Recalled --> Recalled : recall, replaces value
     Recalled --> Recalled : paste refused, notice
     Recalled --> Pending : operator, step succeeds or nothing pending
@@ -188,7 +190,7 @@ stateDiagram-v2
     Recalled --> Ready : Escape
 
     Pending --> Pending : operator, replaces operator
-    Pending --> Pending : =, Backspace (no change)
+    Pending --> Pending : =, Backspace, ±, Delete (no change)
     Pending --> Pending : paste refused, notice
     Pending --> Entering : digit, point, paste accepted
     Pending --> Recalled : recall, becomes next figure
@@ -210,15 +212,6 @@ stateDiagram-v2
     Error --> Entering : digit, point, paste accepted
     Error --> Recalled : recall
 
-    note right of Ready
-        Operator here is undecided, see gap G-1
-    end note
-    note right of Pending
-        ± and Delete here are undecided, see gap G-2
-    end note
-    note left of Recalled
-        Delete here is undecided, see gap G-2
-    end note
 ```
 
 `Recalled` is its own state, not a flavour of `Entering`, because Decision 10 makes a recalled value uneditable: Backspace does nothing, and a digit replaces it. "Step fails" means `Cannot divide by zero`, `Number too large` or `Number too small`.
@@ -233,6 +226,7 @@ export type ErrorCode = 'DIVIDE_BY_ZERO' | 'NUMBER_TOO_LARGE' | 'NUMBER_TOO_SMAL
 export type NoticeCode = 'DIGIT_LIMIT' | 'PASTE_UNREADABLE' | 'PASTE_AMBIGUOUS_DECIMAL' | 'PASTE_BRACKETS'
 export const ERROR_TEXT: Record<ErrorCode, string>   // "Cannot divide by zero", …
 export const NOTICE_TEXT: Record<NoticeCode, string> // "15 digits maximum", …
+export const FAULT_TEXT: string // "Something went wrong. Press Escape to start again."
 
 // domain/result.ts
 export type Result<T, E> = { ok: true; value: T } | { ok: false; error: E }
@@ -256,6 +250,12 @@ decimal.js does throw on a malformed string. Because only `domain/decimal.ts` to
 - `NoticeCode` and `ErrorCode` are separate unions, so a notice cannot be put where an error belongs, or the other way round, without a type error.
 - The app hook holds the last notice and drops it on the next event (Decision 12).
 
+**Bugs are caught, not shown raw** (Decision 8). If code throws despite all this:
+- `useCalculator` wraps each call to the engine and catches the exception.
+- A React error boundary in `ui/App.tsx` catches render failures.
+- Either one switches the view model to a *fault*, which shows `FAULT_TEXT` and is announced like an error. Only Escape acts on it: it resets the engine to `Ready` and keeps the tape.
+- A fault is not an engine state, because the engine is what failed. It lives in the app hook, next to the tape.
+
 **The UI cannot render a raw error.**
 - `ui` may not import `domain` (rule 5), so it never sees `CalcError`, `Decimal` or an `Error` object.
 - It receives only the view model in `shared/view.ts`. Every field there is a display string already produced by `format.ts`, or text looked up from `ERROR_TEXT` or `NOTICE_TEXT`.
@@ -270,18 +270,20 @@ Each of these will be a test, so this document and the code cannot drift apart:
 3. **No native number maths on values.** Production files in `src/` contain no `parseFloat`, `parseInt`, `Number(`, `toFixed`, `toPrecision` or `Math.` calls. Operators on values cannot be grepped for, so this rule is backed by the domain tests and by values being typed as `Decimal`.
 4. **No throw in domain.** `domain/**` contains no `throw`.
 5. **No persistence and no network.** `src/**` references none of `localStorage`, `sessionStorage`, `indexedDB`, `document.cookie`, `fetch`, `XMLHttpRequest`, `WebSocket` or `sendBeacon`.
-6. **Messages are verbatim.** `ERROR_TEXT` and `NOTICE_TEXT` match the strings in Decisions 8 and 9 exactly.
+6. **Messages are verbatim.** `ERROR_TEXT`, `NOTICE_TEXT` and `FAULT_TEXT` match the strings in Decisions 8 and 9 exactly.
 7. **No raw errors in the UI.** No type in `shared/view.ts` includes `Error`, `unknown` or `Decimal`.
 8. **Banned words.** No file in `src/ui/` and no rendered text contains "precision" or "floating point".
 9. **Exhaustive states.** The engine's `switch` on `state.kind` ends in an `assertNever`, so `npm run typecheck` fails when a state is added and not handled.
 
 ## Gaps found in the Decisions
 
-Listed, not filled. Each needs a decision before the code that meets it is written.
+All six gaps found while writing this document were resolved on 2026-10-06 and are now in the Decisions:
 
-- **G-1.** An operator pressed on a fresh calculator (`Ready`, display `0`, nothing typed). Does it start `0 +`, or do nothing?
-- **G-2.** `±` or Delete pressed when an operator is pending and no figure has been typed (`5 +` then `±`). Also Delete on a recalled value. Decision 6 defines both only for "the figure being typed", and neither case has one.
-- **G-3.** Backspace when the last thing typed was the point (`12.`). Decision 5 says Backspace "always removes the last digit", which would turn `12.` into `1.` rather than `12`.
-- **G-4.** What the expression line shows after `=`, and while an error is showing. Decision 4 defines it only after an operator.
-- **G-5.** What the person sees if the code throws despite the error model, i.e. a bug. No decision covers it, so this document adds no error boundary.
-- **G-6.** The browser's back/forward cache can restore the page, tape included, when someone navigates away and back. Decision 11 says the tape is not persisted, but does not say whether this counts.
+| Gap | Question | Resolved in |
+|---|---|---|
+| G-1 | An operator on a fresh calculator | Decision 4: it acts on the 0 showing (`0 +`) |
+| G-2 | ± or Delete with an operator pending and nothing typed; Delete on a recalled value | Decision 6 |
+| G-3 | Backspace on `12.` | Decision 5: it removes the last character, so `12.` becomes `12` |
+| G-4 | The expression line after = and during an error | Decision 4 |
+| G-5 | What a person sees if a bug throws | Decision 8, and "Bugs are caught" above |
+| G-6 | Whether the browser's back/forward cache is persistence | Decision 11: it is not; see ADR 0006 |

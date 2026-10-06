@@ -17,4 +17,4 @@ Nothing is stored. The tape and the calculation live in memory only and are gone
 - No figure outlives the page, and there is no storage code to test or get wrong.
 - **Cost:** an accidental reload (a stray Cmd+R, or a crashed tab) wipes a long check with no way back. This is the decision the desk checker will like least.
 - **Cost:** there is no way to pause a check and resume it later.
-- **Cost:** the browser's back/forward cache may still restore the page, tape included, when someone navigates back to it. Whether that counts as persistence is undecided (gap G-6 in `architecture.md`).
+- **Cost:** the browser's back/forward cache may keep the page in memory and restore it, tape included, when someone navigates back. This is not persistence, because nothing is written to storage (Decision 11). But it is the same exposure as a tab left open on a shared machine, which this decision already accepts.

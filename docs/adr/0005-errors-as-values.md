@@ -19,4 +19,4 @@ Three conditions stop a calculation: divide by zero, a result of 1e100 or more, 
 - The type checker forces every caller to handle failure. Errors and notices cannot be confused, because they are different types.
 - **Cost:** every arithmetic call site unwraps a `Result`, which is wordier than a `try` around a block.
 - **Cost:** decimal.js itself throws on malformed strings. The domain has to validate before constructing a `Decimal`, and `domain/decimal.ts` is the one place that has to get this right.
-- **Cost:** a genuine bug can still throw. What the person sees then is not decided (gap G-5 in `architecture.md`).
+- **Cost:** a genuine bug can still throw. That needs a second, separate path: the app hook and an error boundary catch it and show "Something went wrong. Press Escape to start again." (Decision 8). The code then has two failure paths, and the one for bugs is only exercised when something is already wrong.
