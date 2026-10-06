@@ -16,8 +16,7 @@ A four-function calculator (+ − × ÷) you can trust with money. Take-home exe
 Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, user-stories), `transcripts/`.
 
 - `src/domain/`: pure calculation. Imports nothing from React, `ui`, or `app`. No DOM.
-- `src/app/`: hooks wiring domain to UI. `src/ui/`: components, CSS Modules, tokens.
-- `src/shared/`: types used by more than one layer. Imports from no other layer.
+- `src/app/`: hooks wiring domain to UI. `src/ui/`: components, CSS Modules, tokens. `src/shared/`: types used by more than one layer; imports nothing.
 - Dependencies point inwards only: `ui → app → domain`, and any layer may use `shared`. A test will enforce this.
 
 ## Arithmetic rule
@@ -25,15 +24,13 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
 - Use one configured clone (`precision: 34`, `ROUND_HALF_UP`). Never mutate the global `Decimal`. JS numbers are fine for non-values (indexes, lengths, digit counts).
 
 ## Testing
-- Vitest, React Testing Library, jsdom.
-- Domain tests are table-driven and pure, and hold most of the coverage, including every boundary in Decisions.
+- Vitest, React Testing Library, jsdom. Domain tests are table-driven and pure, and hold most of the coverage, including every boundary in Decisions.
 - Hooks are tested with `renderHook`. UI is tested through role and label queries. Each story's Given/When/Then criteria map to tests, and the test name cites the story ID (`S-3: …`).
 - Screen reader testing is manual, VoiceOver only, and the docs say so.
 
 ## Docs
 - Roles, jobs and stories follow `.claude/skills/product-spec`. ADRs follow `.claude/skills/adr` and live in `docs/adr/`.
-- The three required docs stay exactly where they are. Extra files beside them (`docs/adr/`, `docs/ux/`, `architecture.md`, `product-brief.md`) are fine.
-- Docs must be honest about what was built. A story is Implemented only if its criteria pass.
+- The three required docs stay exactly where they are; extra files beside them are fine. Docs must be honest about what was built. A story is Implemented only if its criteria pass.
 
 ## Commits (standing rule)
 - Commit at the end of each unit of work, never in one lump at the end. Push after every commit.
@@ -41,16 +38,19 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
 - Documents are committed before the code they specify. Never put docs and source in one commit.
 - Tell the user each commit message as it is made. Never touch git config.
 
+## Unspecified behaviour (standing rule)
+Never stop to ask about unspecified behaviour. Decide it with these, in order: (1) the must-never clauses in `docs/app-roles.md`; (2) act on what is showing on screen rather than guessing; (3) a key with nothing to act on does nothing. Add the choice to Decisions and list it at the end of the reply so the user can overrule it. Stop only when two written decisions directly contradict each other.
+
 ## Decisions (frozen; anything added later is listed to the user when added)
 1. **Maths.** decimal.js, 34 significant digits. Round half up everywhere, internal and display; for negatives that is away from zero (−2.5 → −3). No fractions.
 2. **Display.** Results are rounded to 15 significant digits. Plain notation unless the *rounded* value is ≥ 1e15 or < 1e-9 in size, then `1.5 × 10¹⁵`, read as "1.5 times 10 to the power 15". Results (the display after =, the running result and the tape) get thousands commas in the integer part. A figure being typed or pasted is shown as plain digits with no commas added. Results drop trailing zeros. Negatives use a true minus sign (−), read as "minus". Never negative zero.
 3. **≈** shows whenever the number on screen may not be the exact answer, either because the display cut digits or because any step was rounded at 34 digits. It carries through the rest of the calculation, sign toggle and recall until a new calculation starts, so 100 ÷ 3 × 0 shows `≈ 0`. It appears on the display, the expression line and the tape, and is read aloud as "approximately".
-4. **Order.** Each operation runs as entered, so 2 + 3 × 4 = 20. When an operator is pressed the expression line shows the running result: `2 + 3 ×` shows `5 ×`. After a power it reads `≈ 9.99999999999998 × 10²⁹ ×`; UX may change spacing and type size, not characters.
-5. **Typing.** The figure being typed is shown as typed, keeping the point and trailing zeros. Backspace always removes the last digit. It holds at most 15 digits; every digit counts except a single 0 before the point. A 16th shows "15 digits maximum". "." first gives "0.". Keys with nothing to act on do nothing and show no message: a second point, extra leading zeros, Backspace with nothing to delete, ± on 0.
+4. **Order.** Each operation runs as entered, so 2 + 3 × 4 = 20. When an operator is pressed the expression line shows the running result: `2 + 3 ×` shows `5 ×`. After a power it reads `≈ 9.99999999999998 × 10²⁹ ×`; UX may change spacing and type size, not characters. After = it shows the last step that produced the result (`5 × 4 =`); during an error, the step that failed (`5 ÷ 0 =`). The full chain is on the tape. An operator on a fresh calculator acts on the 0 showing (`0 +`).
+5. **Typing.** The figure being typed is shown as typed, keeping the point and trailing zeros. Backspace removes the last character typed, digit or point (`12.` → `12`). It holds at most 15 digits; every digit counts except a single 0 before the point. A 16th shows "15 digits maximum". "." first gives "0.". Keys with nothing to act on do nothing and show no message: a second point, extra leading zeros, Backspace with nothing to delete, ± on 0.
 6. **Correcting.**
-   - Backspace edits only the figure being typed; deleting the last digit leaves 0. On a result or a recalled value it does nothing.
+   - Backspace edits only the figure being typed; deleting its last character leaves 0. On a result or a recalled value it does nothing.
    - Delete (clear entry) resets the figure being typed to 0, and on a result starts a new calculation at 0. Escape (clear) clears the whole calculation. Neither touches the tape.
-   - A second operator replaces the first. ± while typing flips that figure.
+   - A second operator replaces the first. ± while typing flips that figure. With an operator pending and nothing typed, ± and Delete do nothing. Delete on a recalled value replaces it with 0 and keeps the pending operator.
 7. **After a result.**
    - Repeated = repeats the last operation; each press is a tape line (`8 + 3 = 11`).
    - An operator continues from the result (5 = then + 2 = gives 7, on its own line).
@@ -60,6 +60,7 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
 8. **Errors.**
    - The messages are "Cannot divide by zero" (x ÷ 0, 0 ÷ 0), "Number too large" (rounded size ≥ 1e100) and "Number too small" (non-zero rounded size < 1e-99, never shown as 0).
    - There is one error state, and it writes no tape line. Escape, Delete, a digit, the point, paste and recall leave it by starting a new calculation. Operators, =, ± and Backspace do nothing.
+   - If a bug throws anyway: "Something went wrong. Press Escape to start again." Escape resets the calculation and keeps the tape; every other input does nothing. It is announced like an error. Nobody ever needs a reload.
 9. **Paste.**
    - One figure, via the browser's own paste; there is no paste button. Surrounding whitespace is trimmed.
    - £ $ € and spaces are stripped, and so are commas followed by exactly three digits. A leading -, + or − (U+2212) is accepted before or after the symbol (`-£5`, `£-5`).
@@ -75,7 +76,7 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
     - Backspace does not edit it; a digit replaces it. Recall replaces memory functions.
 11. **Tape.**
     - One line per =, showing every step with its running result: `2 + 3 = 5 → × 4 = 20`. Newest last. Long lines wrap and are never cut off.
-    - It is a real list. It is not persisted, because money figures should not be left on shared machines.
+    - It is a real list. It is not persisted, because money figures should not be left on shared machines. The browser keeping the page in memory on Back is not persistence; nothing is written to storage.
     - Emptying it: the first press relabels the control "Press again to empty". It reverts when focus leaves or any other key is pressed; there is no timer. It does nothing when the tape is empty. It works in the error state and leaves the error in place.
 12. **Messages** (not errors) stay until the next key press, click or paste, with no timer. They are announced like a result.
 13. **Keyboard.**
