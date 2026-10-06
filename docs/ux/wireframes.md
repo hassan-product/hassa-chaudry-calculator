@@ -8,6 +8,7 @@ How to read the drawings:
 - A **readout** is the top of the calculator: the expression line, the display and the message line. The keypad does not change between states, so most states show only the readout.
 - `▸` marks the element that has keyboard focus.
 - Text in the right margin, after `←`, is annotation, not on screen.
+- ≈ is drawn as a plain character here. On screen it is always the ≈ chip: bold, 15% larger than the text around it, in an outlined box (section 8), so it can never be read as `=`. The character itself is unchanged.
 
 ---
 
@@ -15,7 +16,7 @@ How to read the drawings:
 
 The calculator column is never narrower than 480px (30rem); the tape takes the rest of the width.
 
-The border style shows the key type: dotted `┄` for memory (quiet), light `─` for digits and `C CE ⌫ +/−`, heavy `━` for the four operators (accent), and double `═` for `=` (strongest accent). Every key is the same size and shape, with a 12px gap on every side.
+The border style shows the key type: rounded corners `╭╮` for memory (quiet: a solid outline, no fill of its own and a regular-weight label; never dashed, which reads as disabled), light `─` for digits and `C CE ⌫ +/−`, heavy `━` for the four operators (accent), and double `═` for `=` (strongest accent). Every key is the same size and shape, with a 12px gap on every side.
 
 ### 1.1 Fresh, with an empty tape
 
@@ -25,50 +26,51 @@ The border style shows the key type: dotted `┄` for memory (quiet), light `─
 │                                               0 │ Finished calculations appear here         │
 │                                                 │                                           │
 │                                                 │                                           │
-│ ┌┄┄┄┄┄┄┄┄┄┐ ┌┄┄┄┄┄┄┄┄┄┐ ┌┄┄┄┄┄┄┄┄┄┐ ┌┄┄┄┄┄┄┄┄┄┐ │                                           │
-│ ┆         ┆ ┆         ┆ ┆         ┆ ┆         ┆ │                                           │
-│ ┆    MC   ┆ ┆    MR   ┆ ┆    M−   ┆ ┆    M+   ┆ │                                           │
-│ ┆         ┆ ┆         ┆ ┆         ┆ ┆         ┆ │                                           │
-│ ┆         ┆ ┆         ┆ ┆         ┆ ┆         ┆ │                                           │
-│ └┄┄┄┄┄┄┄┄┄┘ └┄┄┄┄┄┄┄┄┄┘ └┄┄┄┄┄┄┄┄┄┘ └┄┄┄┄┄┄┄┄┄┘ │                                           │
+│ ╭─────────╮ ╭─────────╮ ╭─────────╮ ╭─────────╮ │                                           │
+│ │         │ │         │ │         │ │         │ │                                           │
+│ │    MC   │ │    MR   │ │    M−   │ │    M+   │ │                                           │
+│ │         │ │         │ │         │ │         │ │                                           │
+│ │         │ │         │ │         │ │         │ │                                           │
+│ ╰─────────╯ ╰─────────╯ ╰─────────╯ ╰─────────╯ │                                           │
 │                                                 │                                           │
 │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
 │ │    C    │ │    CE   │ │    ⌫    │ ┃    ÷    ┃ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
-│ │     Esc │ │     Del │ │    Bksp │ ┃       / ┃ │                                           │
+│ │   Esc   │ │   Del   │ │   Bksp  │ ┃    /    ┃ │                                           │
 │ └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛ │                                           │
 │                                                 │                                           │
 │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
 │ │    7    │ │    8    │ │    9    │ ┃    ×    ┃ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
-│ │         │ │         │ │         │ ┃       * ┃ │                                           │
+│ │         │ │         │ │         │ ┃    *    ┃ │                                           │
 │ └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛ │                                           │
 │                                                 │                                           │
 │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
 │ │    4    │ │    5    │ │    6    │ ┃    −    ┃ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
-│ │         │ │         │ │         │ ┃       - ┃ │                                           │
+│ │         │ │         │ │         │ ┃    -    ┃ │                                           │
 │ └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛ │                                           │
 │                                                 │                                           │
 │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
 │ │    1    │ │    2    │ │    3    │ ┃    +    ┃ │                                           │
 │ │         │ │         │ │         │ ┃         ┃ │                                           │
-│ │         │ │         │ │         │ ┃       + ┃ │                                           │
+│ │         │ │         │ │         │ ┃    +    ┃ │                                           │
 │ └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛ │                                           │
 │                                                 │                                           │
 │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ╔═════════╗ │                                           │
 │ │         │ │         │ │         │ ║         ║ │                                           │
 │ │   +/−   │ │    0    │ │    .    │ ║    =    ║ │                                           │
 │ │         │ │         │ │         │ ║         ║ │                                           │
-│ │         │ │         │ │         │ ║   Enter ║ │                                           │
+│ │         │ │         │ │         │ ║  Enter  ║ │                                           │
 │ └─────────┘ └─────────┘ └─────────┘ ╚═════════╝ │                                           │
 └─────────────────────────────────────────────────┴───────────────────────────────────────────┘
 ```
-- The legends (Esc, Del, Bksp, /, *, -, +, Enter) sit in their own row at the bottom of each key, with a blank row between them and the centred label. They show only on devices with a mouse and hover.
+- The legends (Esc, Del, Bksp, /, *, -, +, Enter) sit in their own row at the bottom of each key, centred under the label, at least 14px, muted, with clear space between them and the label and a margin from the key edge. They show only on devices with a mouse and hover.
+- With legends showing, every label sits the same small step above the key's centre, so each row stays level whether or not its keys have a legend.
 - Key labels are at least 24px. The display is always larger.
 - `+/−` has the accessible name "change sign". On a mouse device, hovering over it shows a "Change sign" tooltip.
 - The empty tape shows only its one quiet line.
@@ -106,46 +108,46 @@ A 1440px window at 200% zoom lays out at 720 CSS pixels, so it gets the layout f
 │     │ Show tape                                     │       │
 │     └───────────────────────────────────────────────┘       │
 │                                                             │
-│      ┌┄┄┄┄┄┄┄┄┄┐ ┌┄┄┄┄┄┄┄┄┄┐ ┌┄┄┄┄┄┄┄┄┄┐ ┌┄┄┄┄┄┄┄┄┄┐        │
-│      ┆         ┆ ┆         ┆ ┆         ┆ ┆         ┆        │
-│      ┆    MC   ┆ ┆    MR   ┆ ┆    M−   ┆ ┆    M+   ┆        │
-│      ┆         ┆ ┆         ┆ ┆         ┆ ┆         ┆        │
-│      ┆         ┆ ┆         ┆ ┆         ┆ ┆         ┆        │
-│      └┄┄┄┄┄┄┄┄┄┘ └┄┄┄┄┄┄┄┄┄┘ └┄┄┄┄┄┄┄┄┄┘ └┄┄┄┄┄┄┄┄┄┘        │
+│      ╭─────────╮ ╭─────────╮ ╭─────────╮ ╭─────────╮        │
+│      │         │ │         │ │         │ │         │        │
+│      │    MC   │ │    MR   │ │    M−   │ │    M+   │        │
+│      │         │ │         │ │         │ │         │        │
+│      │         │ │         │ │         │ │         │        │
+│      ╰─────────╯ ╰─────────╯ ╰─────────╯ ╰─────────╯        │
 │                                                             │
 │      ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓        │
 │      │         │ │         │ │         │ ┃         ┃        │
 │      │    C    │ │    CE   │ │    ⌫    │ ┃    ÷    ┃        │
 │      │         │ │         │ │         │ ┃         ┃        │
-│      │     Esc │ │     Del │ │    Bksp │ ┃       / ┃        │
+│      │   Esc   │ │   Del   │ │   Bksp  │ ┃    /    ┃        │
 │      └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛        │
 │                                                             │
 │      ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓        │
 │      │         │ │         │ │         │ ┃         ┃        │
 │      │    7    │ │    8    │ │    9    │ ┃    ×    ┃        │
 │      │         │ │         │ │         │ ┃         ┃        │
-│      │         │ │         │ │         │ ┃       * ┃        │
+│      │         │ │         │ │         │ ┃    *    ┃        │
 │      └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛        │
 │                                                             │
 │      ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓        │
 │      │         │ │         │ │         │ ┃         ┃        │
 │      │    4    │ │    5    │ │    6    │ ┃    −    ┃        │
 │      │         │ │         │ │         │ ┃         ┃        │
-│      │         │ │         │ │         │ ┃       - ┃        │
+│      │         │ │         │ │         │ ┃    -    ┃        │
 │      └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛        │
 │                                                             │
 │      ┌─────────┐ ┌─────────┐ ┌─────────┐ ┏━━━━━━━━━┓        │
 │      │         │ │         │ │         │ ┃         ┃        │
 │      │    1    │ │    2    │ │    3    │ ┃    +    ┃        │
 │      │         │ │         │ │         │ ┃         ┃        │
-│      │         │ │         │ │         │ ┃       + ┃        │
+│      │         │ │         │ │         │ ┃    +    ┃        │
 │      └─────────┘ └─────────┘ └─────────┘ ┗━━━━━━━━━┛        │
 │                                                             │
 │      ┌─────────┐ ┌─────────┐ ┌─────────┐ ╔═════════╗        │
 │      │         │ │         │ │         │ ║         ║        │
 │      │   +/−   │ │    0    │ │    .    │ ║    =    ║        │
 │      │         │ │         │ │         │ ║         ║        │
-│      │         │ │         │ │         │ ║   Enter ║        │
+│      │         │ │         │ │         │ ║  Enter  ║        │
 │      └─────────┘ └─────────┘ └─────────┘ ╚═════════╝        │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -447,9 +449,9 @@ The tape sits behind the toggle, between the readout and the keypad. The keypad 
 │┌───────────────────────────────┐ │
 ││ Show tape                     │ │
 │└───────────────────────────────┘ │
-│ ┌┄┄┄┄┄┐ ┌┄┄┄┄┄┐ ┌┄┄┄┄┄┐ ┌┄┄┄┄┄┐  │
-│ ┆  MC ┆ ┆  MR ┆ ┆  M− ┆ ┆  M+ ┆  │
-│ └┄┄┄┄┄┘ └┄┄┄┄┄┘ └┄┄┄┄┄┘ └┄┄┄┄┄┘  │
+│ ╭─────╮ ╭─────╮ ╭─────╮ ╭─────╮  │
+│ │  MC │ │  MR │ │  M− │ │  M+ │  │
+│ ╰─────╯ ╰─────╯ ╰─────╯ ╰─────╯  │
 │                                  │
 │ ┌─────┐ ┌─────┐ ┌─────┐ ┏━━━━━┓  │
 │ │  C  │ │  CE │ │  ⌫  │ ┃  ÷  ┃  │
@@ -491,9 +493,9 @@ The tape sits behind the toggle, between the readout and the keypad. The keypad 
 │  3  M+ 20, memory                │
 │                              20  │
 │                                  │
-│ ┌┄┄┄┄┄┐ ┌┄┄┄┄┄┐ ┌┄┄┄┄┄┐ ┌┄┄┄┄┄┐  │
-│ ┆  MC ┆ ┆  MR ┆ ┆  M− ┆ ┆  M+ ┆  │
-│ └┄┄┄┄┄┘ └┄┄┄┄┄┘ └┄┄┄┄┄┘ └┄┄┄┄┄┘  │
+│ ╭─────╮ ╭─────╮ ╭─────╮ ╭─────╮  │
+│ │  MC │ │  MR │ │  M− │ │  M+ │  │
+│ ╰─────╯ ╰─────╯ ╰─────╯ ╰─────╯  │
 │                                  │
 │ ┌─────┐ ┌─────┐ ┌─────┐ ┏━━━━━┓  │
 │ │  C  │ │  CE │ │  ⌫  │ ┃  ÷  ┃  │
@@ -524,9 +526,11 @@ The tape sits behind the toggle, between the readout and the keypad. The keypad 
 
 Each state is distinct, and none relies on colour alone. Hover changes the label colour as well as the fill. Pressed adds an inset shadow. Focus adds a 3px ring with a 2px offset. Hover styles apply only on devices with hover, so nothing stays highlighted after a tap. Tokens are in section 8; every pairing is in the contrast table.
 
+Legend colours by state: on `C CE ⌫`, `legend`, then `legend-hover` on hover and when pressed; on `÷ × − +`, `legend-on-op`, then `legend-on-op-pressed` when pressed; on `=`, `legend-on-equals` throughout.
+
 | Key type | Default (fill / label) | Hover (fill / label) | Pressed (fill / label) | Focused |
 |---|---|---|---|---|
-| Memory `MC MR M− M+` | `mem-bg` / `mem-text`, dotted outline | `mem-hover-bg` / `mem-hover-text` | `mem-pressed-bg` / `mem-hover-text`, inset shadow | ring in `focus`, 3px, offset 2px |
+| Memory `MC MR M− M+` | `mem-bg` / `mem-text`, solid outline in `key-border`, no fill of its own, regular weight | `mem-hover-bg` / `mem-hover-text` | `mem-pressed-bg` / `mem-hover-text`, inset shadow | ring in `focus`, 3px, offset 2px |
 | Digits `0–9 .` | `key-bg` / `key-text` | `key-hover-bg` / `key-hover-text` | `key-pressed-bg` / `key-hover-text`, inset shadow | ring |
 | Controls `C CE ⌫ +/−` | `ctrl-bg` / `key-text` | `ctrl-hover-bg` / `key-hover-text` | `ctrl-pressed-bg` / `key-hover-text`, inset shadow | ring |
 | Operators `÷ × − +` | `op-bg` / `op-text` | `op-hover-bg` / `op-hover-text` | `op-pressed-bg` / `op-hover-text`, inset shadow | ring |
@@ -580,7 +584,7 @@ The calculator follows the key the browser reports (`event.key`), with `event.co
 - **The tape** is an `<ol>` with an explicit `role="list"`, because Safari can drop list semantics once the bullet styling is removed. It is labelled "Tape" and is one Tab stop, with ↑ and ↓ between lines. The VoiceOver check includes confirming it is read as a list.
 - **Focus** is always visible: a 3px ring in `--color-focus` with a 2px offset. It is a shape, so it never relies on colour alone, and it meets 3:1 against the panel and the page. Focus is never trapped.
 - **Targets** are at least 44 by 44px at every width down to 320px. Taps do not double-tap zoom (`touch-action: manipulation`).
-- **Colour is never the only carrier of meaning.** Errors are words. ≈ is a character. The waiting empty-tape control changes its label. Messages have a leading bar. Key types differ by position and outline as well as fill.
+- **Colour is never the only carrier of meaning.** Errors are words. ≈ is a character, drawn bold, larger and boxed, so its shape tells it from `=` without colour. The waiting empty-tape control changes its label. Messages have a leading bar. Key types differ by position and outline as well as fill.
 - **Low vision:**
   - All sizes are in rem, so a larger default text size set in the browser is followed.
   - At 200% zoom nothing is cut off or overlaps (section 1.3).
@@ -630,6 +634,7 @@ These are the values the app must use. `mockup.html` renders the same values. Li
 | `--color-legend` | `#545B64` | `#A0A8B2` |
 | `--color-legend-hover` | `#3B4148` | `#C4CAD1` |
 | `--color-legend-on-op` | `#2F5378` | `#A9C6E6` |
+| `--color-legend-on-op-pressed` | `#24476B` | `#C9DCF0` |
 | `--color-legend-on-equals` | `#D6E4F2` | `#1E3550` |
 | `--color-error` | `#A3260F` | `#FF9E8C` |
 | `--color-armed-bg` | `#FFF1D6` | `#3A2C0E` |
@@ -638,12 +643,21 @@ These are the values the app must use. `mockup.html` renders the same values. Li
 | `--color-tooltip-bg` | `#16191D` | `#EEF1F4` |
 | `--color-tooltip-text` | `#FFFFFF` | `#101215` |
 | `--color-mem-line` | `#545B64` | `#A4ACB6` |
+| `--color-approx-bg` | `#FCEFD9` | `#3A2C12` |
+| `--color-approx-text` | `#5A3B00` | `#FFE0A8` |
+| `--color-approx-border` | `#8A5A00` | `#D9A441` |
 
 ### Contrast, WCAG AA
 
-Text needs 4.5:1. Non-text parts (outlines, key edges and focus rings) need 3:1. Every pairing is checked in light and in dark.
+Text needs 4.5:1. Non-text parts (outlines, key edges, the ≈ chip outline and focus rings) need 3:1. Every pairing is checked in light and in dark. Legends are 14px, still below the WCAG large-text size, so they keep the 4.5:1 bar.
 
-One value changed on recheck. Light `--color-key-border` was #8A929C. Against the page background it measured 2.94, which fails; it is now #808892. That pairing is new: at 900px and below, keys sit on the page background rather than the panel. Every other pairing passed as first set.
+Latest recheck (legends at 14px, the ≈ chip, the solid memory row). Pressed legends had not been measured before, and two failed:
+- Legends on pressed `C CE ⌫` in `legend` measured 3.92 light and 3.36 dark. They now use `legend-hover` (5.89, 4.88).
+- Legends on pressed operators in `legend-on-op` measured 4.28 dark. The new `legend-on-op-pressed` measures 5.44 light and 5.38 dark.
+
+The memory row's colours did not change, only its outline style, so its pairings stand. The ≈ chip is new and passes.
+
+Earlier: light `--color-key-border` was #8A929C. Against the page background it measured 2.94, which fails; it is now #808892. At 900px and below, keys sit on the page background rather than the panel.
 
 | Foreground | Background | Used for | Needs | Light | Dark |
 |---|---|---|---|---|---|
@@ -667,19 +681,25 @@ One value changed on recheck. Light `--color-key-border` was #8A929C. Against th
 | `eq-text` | `eq-bg` | = key | 4.5:1 | 8.46 pass | 8.93 pass |
 | `eq-hover-text` | `eq-hover-bg` | = key, hover | 4.5:1 | 10.45 pass | 13.51 pass |
 | `eq-text` | `eq-pressed-bg` | = key, pressed | 4.5:1 | 14.39 pass | 6.84 pass |
-| `legend` | `ctrl-bg` | Legends on C, CE, ⌫ (12px) | 4.5:1 | 5.52 pass | 5.39 pass |
-| `legend-hover` | `ctrl-hover-bg` | Legends on C, CE, ⌫, hover | 4.5:1 | 7.17 pass | 6.19 pass |
-| `legend-on-op` | `op-bg` | Legends on ÷ × − + | 4.5:1 | 6.43 pass | 7.09 pass |
-| `legend-on-op` | `op-hover-bg` | Legends on ÷ × − +, hover | 4.5:1 | 5.47 pass | 5.49 pass |
-| `legend-on-equals` | `eq-bg` | Legend on = (Enter) | 4.5:1 | 6.54 pass | 6.35 pass |
-| `legend-on-equals` | `eq-hover-bg` | Legend on =, hover | 4.5:1 | 8.75 pass | 8.04 pass |
+| `legend` | `ctrl-bg` | Legends on C, CE, ⌫ (14px) | 4.5:1 | 5.52 pass | 5.39 pass |
+| `legend-hover` | `ctrl-hover-bg` | Legends on C, CE, ⌫, hover (14px) | 4.5:1 | 7.17 pass | 6.19 pass |
+| `legend-hover` | `ctrl-pressed-bg` | Legends on C, CE, ⌫, pressed (14px) | 4.5:1 | 5.89 pass | 4.88 pass |
+| `legend-on-op` | `op-bg` | Legends on ÷ × − + (14px) | 4.5:1 | 6.43 pass | 7.09 pass |
+| `legend-on-op` | `op-hover-bg` | Legends on ÷ × − +, hover (14px) | 4.5:1 | 5.47 pass | 5.49 pass |
+| `legend-on-op-pressed` | `op-pressed-bg` | Legends on ÷ × − +, pressed (14px) | 4.5:1 | 5.44 pass | 5.38 pass |
+| `legend-on-equals` | `eq-bg` | Legend on = (Enter, 14px) | 4.5:1 | 6.54 pass | 6.35 pass |
+| `legend-on-equals` | `eq-hover-bg` | Legend on =, hover (14px) | 4.5:1 | 8.75 pass | 8.04 pass |
+| `legend-on-equals` | `eq-pressed-bg` | Legend on =, pressed (14px) | 4.5:1 | 11.13 pass | 4.86 pass |
 | `tooltip-text` | `tooltip-bg` | Change sign tooltip | 4.5:1 | 17.63 pass | 16.55 pass |
+| `approx-text` | `approx-bg` | ≈ mark, inside its chip | 4.5:1 | 8.97 pass | 10.64 pass |
 | `error` | `surface` | Error and fault text | 4.5:1 | 7.39 pass | 8.66 pass |
 | `text` | `armed-bg` | Empty-tape control waiting | 4.5:1 | 15.79 pass | 11.98 pass |
 | `key-border` | `surface` | Key outline on panel (non-text) | 3.0:1 | 3.59 pass | 3.80 pass |
 | `key-border` | `bg` | Key outline on page at 900px and below (non-text) | 3.0:1 | 3.35 pass | 4.13 pass |
 | `eq-bg` | `surface` | = key edge on panel (non-text) | 3.0:1 | 8.46 pass | 8.78 pass |
 | `armed-border` | `bg` | Armed control outline (non-text) | 3.0:1 | 5.53 pass | 8.34 pass |
+| `approx-border` | `bg` | ≈ chip outline on page and tape (non-text) | 3.0:1 | 5.53 pass | 8.34 pass |
+| `approx-border` | `surface` | ≈ chip outline on panel (non-text) | 3.0:1 | 5.93 pass | 7.68 pass |
 | `focus` | `surface` | Focus ring on panel (non-text) | 3.0:1 | 6.49 pass | 9.73 pass |
 | `focus` | `bg` | Focus ring on page and tape (non-text) | 3.0:1 | 6.05 pass | 10.56 pass |
 
@@ -698,7 +718,7 @@ One value changed on recheck. Light `--color-key-border` was #8A929C. Against th
 | `--font-size-tape` | 1rem (16px) | 400 | Tape lines |
 | `--font-size-message` | 1rem (16px) | 400 | Message line |
 | `--font-size-label` | 0.875rem (14px) | 500 | Toggle, empty-tape control, tape heading, tooltip |
-| `--font-size-legend` | 0.75rem (12px) | 400 | Key legends, tape line numbers |
+| `--font-size-legend` | 0.875rem (14px) | 400 | Key legends, tape line numbers. The floor for legends. |
 
 The display (26px at its smallest) is always larger than the key labels (24px).
 
@@ -710,11 +730,12 @@ The display (26px at its smallest) is always larger than the key labels (24px).
 | `--radius-sm`, `--radius-md`, `--radius-lg` | 4px, 8px, 12px |
 | `--size-key-gap` | 0.75rem (12px) between keys, every side |
 | `--size-key-min` | 2.75rem (44px) |
-| `--size-key-height` | 4.5rem (72px) with legends (mouse devices); 3.5rem (56px) without. On a short window it shrinks toward `--size-key-min`, and the page scrolls. |
+| `--size-key-height` | 5rem (80px) with legends (mouse devices); 3.5rem (56px) without. With legends, every label sits 6px above the key's centre and the legend sits 12px above the bottom edge, about 14px clear of the label. On a short window it shrinks toward `--size-key-min`, and the page scrolls. |
 | `--size-rail-min` | 30rem (480px), the calculator column above 900px |
 | `--size-narrow-max` | 40rem (640px), the calculator's width at 900px and below, centred |
 | `--size-gutter` | 1rem (16px), or the device safe-area inset if larger |
 | `--focus-ring` | 3px solid `--color-focus`, offset 2px |
 | `--shadow-pressed` | inset 0 2px 4px rgba(0, 0, 0, 0.25) |
 | `--key-operator-glyph-scale` | 1.35. The ÷ × − + = glyphs are drawn small in system fonts, so the glyph alone is scaled to match the digits' ink height. Their font size stays 24px, so the display is still the largest type. |
+| `--approx-scale` | 1.15. ≈ is drawn bold at 1.15 times the surrounding text, in a chip with a 1px (at least) outline in `--color-approx-border`, fill `--color-approx-bg` and glyph `--color-approx-text`. The same everywhere it appears: display, expression line, tape and M indicator. |
 | Breakpoint | 900px. It is a constant in the CSS, because variables cannot be used in media queries. |
