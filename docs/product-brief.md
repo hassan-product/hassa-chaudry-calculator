@@ -1,0 +1,66 @@
+# Product brief
+
+Roles, jobs and stories are in `app-roles.md`, `jobs-to-be-done.md` and `user-stories.md`. This brief covers what those do not: why the product exists, what it is not, and what is still unknown.
+
+## The problem
+
+When a calculator rounds its display, a correct answer and a slightly wrong one can look identical. For a quick sum that rarely matters. For someone about to approve an invoice, it means the number on screen cannot be trusted on its own. They either accept it on faith or rework it another way. The problem is not that arithmetic is hard. It is that the person cannot see whether the figure in front of them is exact, or how it was reached.
+
+## What they would otherwise use, and why switch
+
+The person checking money figures would otherwise use a spreadsheet. This calculator gives them three things for that particular check:
+
+- **The working is written down as they go.** Every finished calculation lands on a tape with each step and its running result. There are no formulas to write and no cells to lay out, and nothing to reconstruct afterwards.
+- **An honest mark on every number.** A number shown without ≈ is exactly the answer to what was entered. A number with ≈ was rounded somewhere, and the mark follows it through every later step, including a value brought back from the tape.
+- **Figures go in as they arrive.** A figure copied with its £, $ or € and thousands commas can be pasted straight in. Anything that could be read two ways is refused with a reason, not interpreted. The whole thing works from the keyboard.
+
+We make no claim about how any spreadsheet handles arithmetic. The case for switching rests only on the above.
+
+## Who it is not for
+
+- **Scientific or engineering work.** There are no powers, roots, functions or constants.
+- **Anyone who needs brackets or precedence.** Operations run in the order entered, like an adding machine, so 2 + 3 × 4 is 20.
+- **Anyone who needs a spreadsheet.** It does not store figures, name them, sum columns or keep anything after the page is closed.
+
+## What success looks like
+
+- A desk checker re-keys a ten-line invoice from the keyboard alone. When the total disagrees, they find the line that caused it from the tape without starting again.
+- No number ever appears without ≈ unless it is exactly the answer to what was entered. Every product-promise case in the Decisions passes as a test.
+- No input is silently dropped or guessed at. Every refusal says why, in plain words.
+- No one is ever stuck. Every error can be left with one key, and nothing needs a reload.
+- A VoiceOver user completes a sum, hears ≈ as "approximately", and can read the tape as a list.
+- A reviewer clones the repository and runs it from the README with Node 20.19 or later and nothing else.
+
+## Taken off the table, and why
+
+- **Exact fractions.** The screen shows decimals regardless, so ≈ is needed anyway. Fractions add a lot of code for a case people rarely hit.
+- **Precedence and brackets.** The adding-machine model matches how a desk checker works, and keeps the logic simple enough to trust.
+- **Memory keys.** Recalling a tape line does the same job, and the user can see the value being recalled.
+- **Keeping the tape after a reload.** Money figures left in a shared browser are a worse failure than lost working.
+- **Currency or units mode.** Plain numbers only. A unit price like 0.0125 must not be forced to two places.
+- **European number formats and accounting brackets.** These are refused, not converted, because converting them would mean guessing.
+- **A hosted service or backend.** Nothing leaves the browser.
+
+## Roadmap for the three cut stories, in build order
+
+1. **S-16 Edit an earlier tape line.** This comes first because it closes the gap S-7 admits, and serves J-4 directly. It also requires the tape to store operations rather than text, which the next item builds on.
+2. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16. It is still waiting on whether sharing the working is a real job (see below).
+3. **S-17 Percent and tax.** This comes last. It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others.
+
+## Open questions, and the assumption we are running on
+
+| Question | Assumption for now |
+|---|---|
+| Will users paste figures in styles other than UK/US, such as `1.234,56`? | UK/US only. Anything else is refused with "Unclear which mark is the decimal point". |
+| Do finance users need accounting brackets `(1,234)` for negatives? | They will accept a minus sign. Brackets are refused with a message that says so. |
+| Spaces are stripped from pasted figures, so `12 34` becomes 1,234. Could that join two figures? | Users paste one figure at a time. Tabs and line breaks inside a paste are refused, which covers copying several cells at once. |
+| Do some finance teams expect banker's rounding rather than half up? | Half up, because it is what an ordinary person expects. |
+| Will R-1 be confused by `≈ 0` after, for example, 100 ÷ 3 × 0? | Honest beats tidy. The mark overstates the doubt but never claims something false. |
+| Will R-1 expect 2 + 3 × 4 to give 14? | Some will. Showing the running result (`5 ×`) as soon as the operator is pressed makes the rule visible early enough. |
+| Do 15 digits cover every money figure a desk checker meets? | Yes. Up to 9,999,999,999,999.99 fits, with pence. |
+| Do all browsers deliver a paste to a page with no text field? | Yes. Safari is checked first, and if it does not, this becomes a build decision recorded as an ADR. |
+| Do phone users need to paste? | No. There is no paste button. R-1 on a phone types. |
+| Will other screen readers behave like VoiceOver on macOS Safari? | Probably, but untested. The docs say VoiceOver is the only one checked. |
+| In exponential form the expression line can show two × signs (`≈ 9.99999999999998 × 10²⁹ ×`). Is that readable? | It will be resolved in the UX design. Until then, the notation stays as decided. |
+| Is "show my working to someone else" a real job? S-18 has no job without it. | Unproven, so S-18 stays cut and its job is left unwritten until there is evidence. |
+| Is S-14 (empty the tape) properly served by J-4? | Yes, weakly. A tape holding only the current check is easier to search. |
