@@ -223,6 +223,10 @@ stateDiagram-v2
     Recalled --> Recalled : M+ or M− ▶ memory line
     Pending --> Pending : M+ or M− on the running result ▶ memory line
     Result --> Result : M+ or M− ▶ memory line, memory takes ≈ if the value has it
+    Ready --> Error : M+ or M− would push memory out of range
+    Entering --> Error : M+ or M− would push memory out of range
+    Recalled --> Error : M+ or M− would push memory out of range
+    Pending --> Error : M+ or M− would push memory out of range
     Result --> Error : M+ or M− would push memory out of range
     Ready --> Recalled : MR with memory held
     Entering --> Recalled : MR replaces the figure
