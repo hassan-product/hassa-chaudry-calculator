@@ -37,3 +37,15 @@ When the figures I need to check arrive in a spreadsheet or an email, I want to 
 **Role:** R-2 Desk Checker
 
 When a result I have just worked out is part of the next sum, I want to carry it forward exactly as it is, so I do not retype it and lose digits or make a slip.
+
+## J-7 Let the next person see how I reached a figure
+
+**Role:** R-2 Desk Checker
+
+When I pass on a figure I have checked, I want the person receiving it to see how I reached it, so they can trust it without asking me to go through it again.
+
+## J-8 Keep one check separate from the next
+
+**Role:** R-2 Desk Checker
+
+When I finish one check and start another, I want the previous working out of the way, so I do not mix the two up.
