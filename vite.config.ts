@@ -6,7 +6,5 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
-    // src is empty until the first story lands; remove once tests exist.
-    passWithNoTests: true,
   },
 })
