@@ -21,7 +21,7 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
 
 ## Arithmetic rule
 - No user-facing arithmetic uses JS number operators, `Number()`, `parseFloat` or `toFixed`. Values are decimal.js `Decimal` (or strings) from input to display.
-- Use one configured clone (`precision: 34`, `ROUND_HALF_UP`). Never mutate the global `Decimal`. JS numbers are fine for non-values (indexes, lengths, digit counts).
+- Every stored value comes from one configured clone (`precision: 34`, `ROUND_HALF_UP`). `domain/decimal.ts` also holds two clones that round toward and away from zero: they only answer whether a step was rounded, and no value they produce leaves that file. Never mutate the global `Decimal`. JS numbers are fine for non-values (indexes, lengths, digit counts).
 
 ## Testing
 - Vitest, React Testing Library, jsdom. Domain tests are table-driven and pure, and hold most of the coverage, including every boundary in Decisions.
