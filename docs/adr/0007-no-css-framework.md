@@ -10,7 +10,7 @@ The UI is one screen of 33 elements: a keypad of 24 keys, a display, an expressi
 Style with CSS Modules, which Vite supports with no extra dependency. Colours, spacing and type sizes come from design tokens defined as CSS custom properties in `tokens.css`.
 
 ## Alternatives rejected
-- **Tailwind.** It is fast to write. It was rejected because it brings its own config and build step to style twenty elements, and class-heavy markup is harder for a reviewer to read than a short stylesheet.
+- **Tailwind.** It is fast to write. It was rejected because it brings its own config and build step to style 33 elements, and class-heavy markup is harder for a reviewer to read than a short stylesheet.
 - **A component library** (for example MUI or Radix). It comes with accessible primitives and focus handling. It was rejected because it is a large dependency for a handful of buttons and a list, and its styling and behaviour would have to be bent to fit the keypad.
 
 ## Consequences
