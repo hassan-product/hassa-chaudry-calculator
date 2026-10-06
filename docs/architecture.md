@@ -247,6 +247,7 @@ stateDiagram-v2
     Ready --> Recalled : MR with memory held
     Entering --> Recalled : MR replaces the figure
     Pending --> Recalled : MR becomes the next figure
+    Recalled --> Recalled : MR replaces the value
     Result --> Recalled : MR, new calculation
 
 ```
