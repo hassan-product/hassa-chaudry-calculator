@@ -3,8 +3,9 @@
 - **Model:** `claude-sonnet-5-5`, through the Claude Code login (`claude -p`), for both the answers and the grading.
 - **Run:** 2026-10-07, with `promptfoo@0.120.19`.
 - **Threshold:** suites A and B pass with at most one failing case; suite C passes only with none.
+- **Rubrics:** A passes a job when the need would still exist without this calculator and it names no app, screen or button (retype, message and write down are allowed). B passes criteria when each has a Given, a When and a Then that says what is seen, counting phrases the Decisions define as exact; correct, appropriate, gracefully, or wording the Decisions do not fix, still fail. C is unchanged.
 
-## A. Job statement quality: FAIL (5 of 7 cases)
+## A. Job statement quality: PASS (7 of 7 cases)
 
 | Case | Result | Why it failed |
 |---|---|---|
@@ -13,51 +14,51 @@
 | A3 approving an expense claim | pass |  |
 | A4 checking a supplier invoice | pass |  |
 | A5 checking homework | pass |  |
-| A6 awkward, a history list smuggled in | **fail** | The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device. |
-| A7 awkward, a copy button smuggled in | **fail** | The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow. |
+| A6 awkward, a history list smuggled in | pass |  |
+| A7 awkward, a copy button smuggled in | pass |  |
 
 <details><summary>Answers</summary>
 
 **A1 shopper weighing an offer**
 
 ```
-When I'm standing in a supermarket aisle looking at a three-for-two offer, I want to know whether it works out cheaper than buying the single packs, so I can choose the better deal before the queue moves on.
+When I'm standing at a supermarket shelf with a three-for-two offer and the queue is moving, I want to know whether the offer actually costs less than buying the single packs I need, so I can decide on the spot without overpaying.
 ```
 
 **A2 splitting a bill**
 
 ```
-When the bill arrives and everyone at the table ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying.
+When the bill arrives after a group meal where everyone ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying.
 ```
 
 **A3 approving an expense claim**
 
 ```
-When a colleague submits an expense claim with a dozen receipts for my approval, I want to confirm that the amounts add up and each receipt is legitimate, so I can approve the claim knowing the company is paying exactly what was spent.
+When a colleague submits an expense claim with many receipts for my approval, I want to confirm that the claimed amounts match the receipts and add up correctly, so I can approve the claim knowing the company is paying only what was actually spent.
 ```
 
 **A4 checking a supplier invoice**
 
 ```
-When a supplier's invoice arrives for payment, I want to confirm that its total is correct, so I can pay the right amount and avoid overpaying or having to chase a correction later.
+When I'm checking a supplier's invoice total before paying it, I want to confirm that the amounts add up correctly, so I can pay the right amount and avoid overpaying or underpaying.
 ```
 
 **A5 checking homework**
 
 ```
-When my child hands me their finished long-division homework, I want to check whether each answer is right, so I can confirm what they got correct and help them fix what they got wrong.
+When my child finishes a page of long-division homework, I want to confirm which answers are right and which are wrong, so I can help them fix mistakes and trust the work they hand in.
 ```
 
 **A6 awkward, a history list smuggled in**
 
 ```
-When I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or retyping it by hand.
+When I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or risking a copying mistake.
 ```
 
 **A7 awkward, a copy button smuggled in**
 
 ```
-When I have worked out a figure that my manager needs to see, I want to get that exact number into my message to them without retyping it, so I can report it quickly and without transcription mistakes.
+When I have a figure I've worked out, I want to share it with my manager in an email, so I can report the result accurately without retyping it and risking a mistake.
 ```
 
 </details>
@@ -66,214 +67,216 @@ When I have worked out a figure that my manager needs to see, I want to get that
 
 | Case | Result | Why it failed |
 |---|---|---|
-| B1 recall from the tape | **fail** | Incomplete: - Given I am typing `5` and I recall a line, then the recalled value replaces the 5. / Many criteria are concrete (exact values like 33.33333333333333333333333333333333, '≈ 100', 'Number too large'). But several rely on unspecified or judgement-based wording: 'the display change is announced politely' (no exact text or mechanism), 'nothing happens' for some cases is vague about observable state, 'a fault' is undefined, 'a very small result such as 1e-99' and 'a recalled value of 1.5 × 10¹⁵ or more, or below 1e-9' leave specific values and display strings unspecified (e.g., the exact display for a recalled value is not given), 'behaves like recalling a tape line' is not an exact observable result, and 'the full value is used in the calculation' gives no specific check. Also 'Given a recalled value, then I can press an operator and continue' has no When or exact result. A tester would need to make judgement calls. |
-| B2 correct the figure being typed | **fail** | Many criteria are exact, but several leave values or observable results unspecified or rely on judgement. 'The change is announced politely' (polite aria-live) is not an observable exact result. 'the matching message is shown' for pasted `1.234,56` or `£5£` does not give the exact text. 'a fault' is undefined, and 'Only C or Escape resets the calculation' conflicts with the earlier error criterion where Delete, Escape or a digit clears. 'the message clears' and 'the error clears' use the vague word 'clear'. 'Any correction', 'any key' and 'a recalled tape line or MR value' leave the setup state and values unspecified. 'Neither shows a message' is fine, but 'The same applies to a second point in `1.5`' is loosely specified. The `−0.5` Backspace example says it shows `0.` while the later 'same applies' sentence is ambiguous about `−5`. 'Cannot divide by zero' is exact, but 'the error stays' is somewhat loose. A tester would need judgement calls on several items. |
-| B3 running total in memory | **fail** | Incomplete: - **Given** I type 1200 and press M+, **then** the tape line reads `M+ 1,200, memory 1,200`, with commas on results only. The figure being typed stays plain digits. / Most criteria are concrete, but several rely on unspecified or vague wording that requires a tester's judgement. Examples: 'the calculation clears' (C/Escape) does not say what the display shows; 'a new calculation starts' (MR, overflow cases) does not specify the display or expression line; 'the display, expression line and tape result are unchanged' is not concrete; 'a fault' is never defined as a reproducible state, so a tester cannot set it up; 'announced like any error' gives no exact text; 'the error is left' and 'nothing happens' are loosely defined; 'when I empty the tape' names no specific input; the screen reader criterion lacks the exact announcement string; the pasted/refused figure case does not say what was showing before; and 'it still shows' (M indicator at 0) omits the exact text. Because of these gaps and unspecified values, the output fails. |
-| B4 getting out of an error | **fail** | Incomplete: - **Given** any error, **then** only one error state exists, with one message at a time. / Most criteria name exact inputs and exact text, but several rely on vague or unspecified wording a tester would have to interpret. 'The message is announced politely' does not say what a tester observes (aria-live=polite?). 'Announced like an error' is similarly undefined. 'A new calculation starts' and 'the error clears' are not tied to a specific observable result in most cases (only the 7 example is exact). 'Nothing changes' and 'nothing happens' leave the checked state implicit. 'Just below 1e100' and 'just below that' give no exact value. 'The paste message shows' does not give the text. 'Every recovery action works from the keyboard' is open-ended. 'Rounded size' depends on a 15-digit rule that is stated only in one place. 'Leaves it' and 'the user leaves it' are undefined. 'Fault' has no stated way to trigger it as a Given. The fault message text is exact, but the setup is not reproducible. 'Display shows in × 10⁻ⁿ notation' leaves n unspecified. 'Within range' is not a concrete value. Because multiple criteria need a judgement call or leave values unspecified, the rubric is not met. |
+| B1 recall from the tape | **fail** | Incomplete: - **Given** the tape is empty, **then** it shows only "Finished calculations appear here", and there is no line to recall. / Several criteria have no When clause, which the rubric requires. Examples: 'Given the tape is empty, then it shows only...'; 'Given a recalled value of more than 15 digits, then the 15-digit typing limit does not apply...'; 'Given a recalled result whose rounded size is ≥ 1e15 or < 1e-9, then it shows as...'; 'Given an error is showing, then the tape lines are unchanged...'. Some Thens also state outcomes that are not something seen, such as 'the 15-digit typing limit does not apply' and 'Only C or Escape is accepted'. Most other criteria are well formed and use the defined phrases such as 'nothing happens', 'a new calculation starts' and 'announced politely'. But the missing Whens mean not every criterion has a Given, a When and a Then. |
+| B2 correct the figure being typed | **fail** | The Thens do not all say what is seen, and some state results that are wrong or whose wording is not fixed. (1) 'Given I have typed 12, press Backspace, type 3, press +, type 4 and press =, then the result is 15' is wrong. Backspace gives 1, typing 3 gives 13, and 13 + 4 = 17. (2) 'when I press +/−, then it flips, keeps any ≈, and writes no tape line' does not say what the display shows, and the '≈' wording is not fixed. (3) 'the tape line records only the corrected figures' does not say what the tape line shows. (4) 'I can then correct it with Backspace' and 'I can type another digit' describe ability, not something seen. (5) 'the calculation resets' and 'it replaces the recalled value' are loose, and the Thens that follow are not tied to a stated display. (6) 'Given I have typed `.`, then the display shows `0.`' has a Then with no When before it. These failures mean the criteria do not all meet the rubric. |
+| B3 running total in memory | **fail** | Incomplete: - **Given** the user types 0.1, presses M+, C, types 0.2, presses M+, then MR, **Then** the display shows exactly 0.3. / Most criteria have a Given, a When and a Then, and the Thens state what is seen. Several bullets have no When, so they fail the rubric's Given/When/Then requirement. These are: 'Given a memory total of 1234.5, Then...'; 'Given the user types 0.1, presses M+, C, types 0.2, presses M+, then MR, Then...' (the actions sit inside the Given); 'Given the user presses Ctrl+P, Ctrl+R or any other shortcut, Then...'; 'Given the tape is emptied, Then...'; and 'Given the page is reloaded, Then...'. The wording of the Thens is otherwise concrete, with no 'correct', 'appropriate' or 'gracefully'. |
+| B4 getting out of an error | **fail** | Incomplete: - Given a result of size ≥ 1e100, then the display shows "Number too large". Given a non-zero result of size < 1e-99, then it shows "Number too small" (never 0). / Most criteria have Given/When/Then with observable outcomes, but several fail the rubric. (1) Some bullets lack a When: 'Given a result of size ≥ 1e100, then the display shows...', 'Given any error, then the message is announced politely... and the calculator is in one error state', 'Given a fault (a bug throws), then...', the Boundaries bullets 'Given a result whose rounded size is exactly 1e100...' and 'Given a non-zero result whose rounded size is exactly 1e-99...', 'Given 5 ÷ 0 followed by a rounding...', and the Very large/small bullets 'Given 9.99999999999999 × 10⁹⁹-scale inputs...' and 'Given 1e-50 × 1e-50...' have no When. (2) Some Thens are not observable: 'the calculator is in one error state', 'the decision uses the rounded size' say nothing the user sees. (3) 'Every route out of an error or fault works with the keyboard alone, and with VoiceOver the error and the new value are each announced' has no Given/When/Then structure. (4) Some Thens state results whose wording the decisions may not fix, e.g. 'not a broken or infinite figure' is vague, and 'the usual error shows' is imprecise. Therefore the output does not meet the rubric. |
 
 <details><summary>Answers</summary>
 
 **B1 recall from the tape**
 
 ```
-**Normal case**
+## Normal case
 
-- Given a tape line `100 ÷ 3 = ≈ 33.3333333333333`, when I click it (or focus it and press Enter or Space), then its final result is recalled as the full 34-digit value (33.33333333333333333333333333333333), with its ≈.
-- Given I have typed `2 +` and then recall a tape line showing 11, when I type `3 =`, then the recalled 11 is the next figure and the result is 14.
-- Given I am typing `5` and I recall a line, then the recalled value replaces the 5.
-- Given I have just pressed =, or the calculator is at its start, when I recall a line, then a new calculation starts with that value.
-- Given I recall 100 ÷ 3 (≈) and press × 3 =, then the display shows `≈ 100`.
-- Given I press MR with memory holding 95, then it behaves like recalling a tape line, and recalling an `M+ 40, memory 95` line brings back the memory total 95.
-- Given a recalled value, then it shows with thousands commas, as a result does, and the full value is used in the calculation, not the 15-digit display.
+- **Given** a tape line `2 + 3 = 5 → × 4 = 20`, **when** I click it, or focus it and press Enter or Space, **then** its final result, 20, is recalled, not an earlier step such as 5.
+- **Given** I have entered `7 +` and nothing else, **when** I recall the line above, **then** 20 is the next figure, and `=` shows 27.
+- **Given** I am typing `12`, **when** I recall a line, **then** the recalled value replaces the typed figure.
+- **Given** a result is showing after `=`, or the calculator is fresh, **when** I recall a line, **then** a new calculation starts with that value.
+- **Given** a tape line `100 ÷ 3 = ≈ 33.3333333333333`, **when** I recall it, **then** the full 34-digit value comes back with its ≈, and the display shows `≈ 33.3333333333333`. **When** I then press `× 3 =`, **then** the display shows `≈ 100`.
+- **Given** a recalled value that carries ≈, **when** I continue the calculation, **then** every later result in it shows ≈ until a new calculation starts.
+- **Given** a memory line `M+ 40, memory 95`, **when** I recall it, **then** the memory total, 95, comes back.
+- **Given** the tape holds several lines, **when** I Tab to the tape, **then** it is one Tab stop. Up and Down move between lines, Enter or Space recalls the focused line, and Tab leaves the tape.
+- **Given** a recall, **when** it happens, **then** no new tape line is written and the tape is unchanged. The new display value is announced politely.
 
-**Invalid input**
+## Invalid input
 
-- Given the tape is empty, then there is nothing to recall, and the only text shown is "Finished calculations appear here".
-- Given I press a digit after a recall, then the digit replaces the recalled value and starts a new figure.
-- Given a recalled value, when I press Backspace, then nothing happens and no message shows.
-- Given focus is on the tape, when I press Left or Right, then nothing happens. Outside the tape, every arrow key does nothing.
-- Given memory is empty, when I press MR, then nothing happens.
-- Given an operator is pending with nothing typed, when I press +/− or Delete, then nothing happens.
+- **Given** a recalled value is showing, **when** I press Backspace, **then** nothing happens and nothing is announced.
+- **Given** a recalled value is showing, **when** I press a digit, **then** the digit replaces the recalled value and I am typing a new figure.
+- **Given** an operator is pending and a recalled value is showing, **when** I press Delete, **then** the figure becomes 0 and the pending operator is kept.
+- **Given** focus is in the tape, **when** I press Left or Right, **then** nothing happens. Outside the tape, every arrow key does nothing.
+- **Given** the tape is empty, **then** it shows only "Finished calculations appear here", and there is no line to recall.
+- **Given** a fault, **when** I click, or press Enter or Space on, a tape line, **then** nothing happens. Only C or Escape is accepted.
 
-**Boundaries**
+## Boundaries
 
-- Given the tape has several lines, when I Tab into it, then the tape is one Tab stop, Up and Down move between lines, Enter or Space recalls the focused line, and Tab leaves the tape.
-- Given a recalled value carries ≈, then ≈ carries through the rest of the calculation, the sign change, and memory until a new calculation starts (memory keeps it until MC).
-- Given I recall a value and press +/−, then the value flips and keeps its ≈.
-- Given I recall a value then press Delete, then the figure becomes 0 and any pending operator is kept.
-- Given a recalled value of 1.5 × 10¹⁵ or more, or below 1e-9 in size, then it displays in `1.5 × 10¹⁵` form but the full value is used in the sum.
-- Given a recalled value of exactly 15 digits, then it is accepted in full, because recall is not limited by the typing limit.
+- **Given** a recalled value of more than 15 digits, **then** the 15-digit typing limit does not apply, and the full 34-digit value is kept while the display shows 15 significant digits.
+- **Given** a recalled result whose rounded size is ≥ 1e15 or < 1e-9, **then** it shows as `1.5 × 10¹⁵`, read "1.5 times 10 to the power 15". Otherwise it shows in plain notation with thousands commas.
+- **Given** a recalled negative result, **when** I use it as the next figure, **then** it shows with a true minus (−), read "minus". Recalling a zero result shows 0, never negative zero.
+- **Given** a recalled value, **when** I press +/−, **then** it flips and keeps its ≈.
+- **Given** a recalled value, **when** I press an operator, **then** the expression line shows it in result formatting, such as `20 ×`.
 
-**Very large and very small numbers**
+## Very large and very small numbers
 
-- Given I recall a result of 1e99 and press × 10 =, then "Number too large" shows.
-- Given I recall a very small result such as 1e-99 and press ÷ 10 =, then "Number too small" shows, never 0.
-- Given a recalled 34-digit value, then every digit is used in the next step, with rounding half up at 34 significant digits.
+- **Given** a recalled result near 1e99, **when** I multiply it so the rounded size is ≥ 1e100, **then** the display shows "Number too large", with no tape line.
+- **Given** a recalled result near 1e-99, **when** I divide it so the non-zero rounded size is < 1e-99, **then** the display shows "Number too small", never 0.
+- **Given** a recalled result of 1e-99 or 1e99 exactly, **when** I recall it, **then** its full value comes back with no error.
 
-**After a result**
+## After a result
 
-- Given I have recalled a value and completed a sum, then the result is written as its own tape line, and the tape is unchanged by the recall itself.
-- Given I recall a value and press =, then nothing happens, because there is no operator.
-- Given a recalled value, then I can press an operator and continue from it, or press a digit to start a new calculation and forget the last operation.
-- Given I recall after `=`, then the last operation is forgotten, so repeated = does not repeat it.
-- Given a recalled value, then the tape and memory are untouched until I press =, M+ or M−.
+- **Given** I have recalled a value into `7 +`, **when** I press `=`, **then** the result is a new tape line showing every step.
+- **Given** I have recalled a value after an `=`, **when** I press `=` again, **then** nothing is repeated, because a recall forgets the last operation.
+- **Given** a recalled value is showing, **when** I press an operator, **then** the calculation continues from that value.
+- **Given** a recalled value is showing, **when** I press Escape, **then** the calculation clears, and the tape and memory are kept.
+- **Given** a recalled value is showing, **when** I recall another line, **then** the new value replaces it.
 
-**After an error**
+## After an error
 
-- Given the calculator shows "Cannot divide by zero", when I recall a tape line or press MR, then the error is left and a new calculation starts with that value.
-- Given a fault, when I try to recall, then nothing happens until I press C or Escape, which keeps the tape and memory, and then recall works.
-- Given an error, then operators, =, +/−, Backspace, M+ and M− do nothing, and recalling is one of the ways out, along with Escape, Delete, a digit, the point and paste.
-- Given a recall, then the display change is announced politely, with ≈ read "approximately" and − read "minus".
+- **Given** an error is showing, **when** I recall a tape line, **then** I leave the error and start a new calculation with the recalled value, with its ≈ if it had one.
+- **Given** a recalled value caused an error, such as `5 ÷ 0`, **when** I press Escape, Delete, a digit, the point, paste, MR or recall, **then** a new calculation starts. Operators, `=`, +/− and Backspace do nothing.
+- **Given** an error is showing, **then** the tape lines are unchanged and still recallable.
+- **Given** a fault, **when** I press C or Escape, **then** the calculation resets, the tape and memory are kept, and tape lines can be recalled again.
 ```
 
 **B2 correct the figure being typed**
 
 ```
 ## Normal case
-- **Given** I have typed `12.5`, **when** I press Backspace, **then** the display shows `12.`, and pressing it again shows `12`. The figure stays plain digits with no commas.
-- **Given** I have typed `1234`, **when** I press Backspace, **then** the display shows `123`. The change is announced politely.
-- **Given** I have typed `5 + 37`, **when** I press Backspace and then `4`, **then** the figure is `34`, the pending `+` is kept, and `=` gives `39`.
-- **Given** I am typing a figure, **when** I press Delete (clear entry), **then** the figure resets to `0` and any pending operator is kept.
-- **Given** I am typing `−0.5`, **when** I press +/−, **then** the figure becomes `0.5`. +/− flips only the figure being typed.
-- **Given** I have pasted `£1,250.5`, **when** I press Backspace, **then** the figure is `1250.` and then `1250`, as with a typed figure.
-- **Given** the ⌫ and CE keys, **when** I use only the keyboard (Backspace and Delete keys, or Tab to the keys and Enter or Space), **then** both work. With Num Lock off, the numpad point reports Delete and acts as clear entry.
-- **Given** a corrected figure, **when** I calculate, **then** the result uses the corrected figure only. For example, typing `0.15`, Backspace, `+ 0.2 =` shows `0.3`.
+- **Given** I have typed `123`, **when** I press Backspace (the ⌫ key or the Backspace key), **then** the display shows `12` as plain digits, and the change is announced politely.
+- **Given** I have typed `12.`, **when** I press Backspace, **then** the display shows `12`.
+- **Given** I have typed `1.50`, **when** I press Backspace, **then** the display shows `1.5`, as typed with no commas.
+- **Given** I have typed `7`, **when** I press Backspace, **then** the display shows `0`.
+- **Given** I have typed `12`, **when** I press +/−, **then** the display shows `−12`. Pressing +/− again shows `12`.
+- **Given** I have typed `2 + 345`, **when** I press Delete (CE) and then type `6` and `=`, **then** the pending `+` is kept, the figure is replaced by `6`, and the result is `8`.
+- **Given** I have typed `2 + 345`, **when** I press Escape or C, **then** the whole calculation clears to `0`, and the tape and memory are untouched.
+- **Given** I have typed `12`, **when** I press Backspace, type `3`, press `+`, type `4` and press `=`, **then** the result is `15`, and the tape line records only the corrected figures.
 
 ## Invalid input
-- **Given** a fresh calculator showing `0`, **when** I press Backspace, **then** nothing changes, with no message and no announcement.
-- **Given** I am typing `0`, **when** I press `0` again, **then** nothing changes. The same applies to a second point in `1.5`. Neither shows a message.
-- **Given** the display shows `0`, **when** I press +/−, **then** nothing changes and I never see negative zero.
-- **Given** an operator is pending and I have typed nothing, **when** I press +/− or Delete, **then** nothing changes.
-- **Given** I am typing `42`, **when** I paste `1.234,56` or `£5£`, **then** the figure stays `42` and the matching message is shown. Backspace then edits `42` as normal.
+- **Given** a fresh calculator showing `0`, **when** I press Backspace or +/−, **then** nothing changes, with no message and nothing announced.
+- **Given** I have typed `1.5`, **when** I press `.` again, **then** nothing changes, with no message.
+- **Given** I have typed `0`, **when** I press `0` again, **then** the display still shows `0`, with no message.
+- **Given** I have pressed `5 +` and typed nothing further, **when** I press +/− or Delete, **then** nothing changes and the pending operator is kept.
+- **Given** I have typed `−0.5`, **when** I press Backspace, **then** the display shows `0.` with no minus sign, never negative zero.
+- **Given** I have typed `−5`, **when** I press Backspace, **then** the display shows `0`, with no sign.
 
 ## Boundaries
-- **Given** I have typed 15 digits, **when** I press a 16th digit, **then** it is not added and "15 digits maximum" is shown. The figure is unchanged.
+- **Given** I have typed 15 digits, **when** I type a 16th, **then** the figure is unchanged and the message "15 digits maximum" shows. The message stays until my next key press, click or paste.
 - **Given** that message is showing, **when** I press Backspace, **then** the message goes, the last digit is removed, and I can type another digit.
-- **Given** I have typed `0.` followed by 15 digits, **when** I count digits, **then** the single 0 before the point does not count and the 15 digits are accepted.
-- **Given** I have typed one character, **when** I press Backspace, **then** the figure becomes `0`.
-- **Given** I have typed `−0.5`, **when** I press Backspace, **then** it shows `0.` with no sign. The same applies to `−5`, which becomes `0`.
-- **Given** I have typed `12.`, **when** I press Backspace, **then** the point is removed and the display shows `12`.
+- **Given** I have typed `0.123456789012345` (15 digits, the single 0 before the point not counted), **when** I press Backspace, **then** the display shows `0.12345678901234`.
+- **Given** I have typed `0.5`, **when** I press Backspace twice, **then** the display shows `0.` and then `0`. A third Backspace does nothing.
+- **Given** I have typed `.`, **then** the display shows `0.`. **When** I press Backspace, **then** the display shows `0`.
+- **Given** I have typed 15 digits, **when** I press Delete, **then** the figure resets to `0` and I can type a new 15-digit figure.
 
 ## Very large and very small numbers
-- **Given** I have typed `999999999999999` (15 digits), **when** I press Backspace, **then** the display shows `99999999999999` in plain digits, with no commas and no exponent.
-- **Given** I have typed `0.00000000000001`, **when** I press Backspace repeatedly, **then** each step shows exactly what remains, in plain digits, never in `× 10` form and never with ≈.
-- **Given** a figure typed or corrected to 15 digits, **when** I use it in a calculation, **then** it enters as an exact value, so a correction never adds ≈.
+- **Given** I have typed `999999999999999`, **when** I press Backspace, **then** the display shows `99999999999999` in plain digits, with no commas and no `× 10` notation.
+- **Given** I have typed `0.000000000000001` (15 digits after the point), **when** I press Backspace, **then** the display shows `0.00000000000000` as typed, with trailing zeros kept and no `× 10` notation.
+- **Given** I have typed `−999999999999999`, **when** I press +/−, **then** the display shows `999999999999999`, still within 15 digits.
 
-## After a result
-- **Given** the display shows a result (`2 + 3 =` → `5`), **when** I press Backspace, **then** nothing changes. The same applies to a recalled tape line or MR value.
-- **Given** a result is showing, **when** I press Delete, **then** a new calculation starts at `0`. The tape and memory are untouched.
-- **Given** a result is showing, **when** I type a digit, **then** a new calculation starts with that digit, and Backspace then edits it.
-- **Given** an operator is pending and I recalled a value, **when** I press Delete, **then** the value becomes `0` and the operator is kept.
-- **Given** any correction, **when** I make it, **then** the tape and memory are never changed.
+## What the user can do after a result
+- **Given** `2 + 3 =` has shown `5`, **when** I press Backspace, **then** nothing changes.
+- **Given** that result, **when** I press Delete, **then** a new calculation starts at `0`, and the tape and memory are untouched.
+- **Given** that result, **when** I type a digit, **then** a new calculation starts with that digit, and I can then correct it with Backspace.
+- **Given** that result, **when** I press +/−, **then** it flips, keeps any ≈, and writes no tape line.
+- **Given** I have recalled a tape line or MR, **when** I press Backspace, **then** nothing changes. **When** I press Delete, **then** the figure becomes `0` and any pending operator is kept. **When** I type a digit, **then** it replaces the recalled value.
 
-## After an error
-- **Given** the calculator shows "Cannot divide by zero", **when** I press Backspace, **then** nothing happens and the error stays.
-- **Given** that error, **when** I press Delete, Escape, or a digit, **then** the error clears and a new calculation starts. A digit shows as the typed figure (`5 ÷ 0 =` then `7` shows `7`), and Backspace then edits it.
-- **Given** the "15 digits maximum" message or a refused paste, **when** I press any key, **then** the message clears and I can keep correcting the same figure, which was not lost.
-- **Given** a fault, **when** I press Backspace or Delete, **then** nothing happens. Only C or Escape resets the calculation, and the tape and memory are kept.
+## What the user can do after an error
+- **Given** `5 ÷ 0 =` shows "Cannot divide by zero", **when** I press Backspace or +/−, **then** nothing changes and the error stays.
+- **Given** that error, **when** I press Delete or Escape, **then** the error clears and a new calculation starts at `0`, with the tape and memory kept.
+- **Given** that error, **when** I type `7`, **then** the display shows `7` and I can correct it with Backspace.
+- **Given** a fault message is showing, **when** I press Backspace, Delete or +/−, **then** nothing changes. **When** I press C or Escape, **then** the calculation resets with the tape and memory kept.
 ```
 
 **B3 running total in memory**
 
 ```
-### Normal case
-- **Given** a fresh calculator, **when** I type 120.50 and press M+, **then** the display still shows `120.50`, the M indicator shows `M 120.5`, and the tape gains a quiet line `M+ 120.5, memory 120.5` with no `=`.
-- **Given** memory holds 120.5, **when** I press Delete, type 79.25 and press M+, then press Delete, type 300 and press M+, **then** the M indicator shows `M 499.75` and the tape ends with `M+ 300, memory 499.75`.
-- **Given** memory holds 499.75, **when** I press MR, **then** the display shows `499.75`, a new calculation starts, and I did not retype any part.
-- **Given** memory holds 95, **when** I type 30 and press M−, **then** memory becomes 65 and the tape gains `M− 30, memory 65`.
-- **Given** I have worked out 2 + 3 = 5, **when** I press M+, **then** 5 is added to memory and the display, expression line and tape result are unchanged except for the new memory line.
-- **Given** I have typed 2 + 3 with 3 as the figure being typed, **when** I press M+, **then** memory gains 3, the pending operator is kept, and pressing = gives 5.
-- **Given** an operator is pending and nothing is typed (`5 +`), **when** I press M+, **then** the running result showing (5) is added to memory.
-- **Given** memory holds a value, **when** I press C or Escape, **then** the calculation clears, and the M indicator and total stay.
-- **Given** memory holds a value, **when** I empty the tape, **then** the M indicator and total stay.
-- **Given** a screen reader is running, **when** memory changes, **then** the M indicator is announced as "memory" and its total, and the keys are named "memory plus", "memory minus", "memory recall" and "memory clear".
-- **Given** memory is in use, **when** I use only the keyboard, **then** I can Tab to each memory key and activate it with Enter or Space. No letter key or Ctrl/Cmd/Alt combination triggers a memory key.
-- **Given** a tape line `M+ 40, memory 95`, **when** I click it, or press Enter or Space on it, **then** it recalls the memory total 95, not 40.
-- **Given** 0.1 is added with M+ and then 0.2 with M+, **when** I press MR, **then** the display shows exactly `0.3` with no ≈.
+## Normal case
 
-### Invalid input
-- **Given** a fresh calculator, **when** I press M+ or M−, **then** it acts on the 0 showing: the M indicator shows `M 0` and the tape gains `M+ 0, memory 0` (or `M− 0, memory 0`).
-- **Given** memory is empty, **when** I press MR or MC, **then** nothing happens, with no message, no tape line and no announcement.
-- **Given** the calculator is in an error, **when** I press M+ or M−, **then** nothing happens: memory and the error are unchanged, and there is no tape line.
-- **Given** the calculator is in a fault, **when** I press any memory key, MC included, **then** nothing happens.
-- **Given** any state, **when** I press a keyboard key such as `m`, `M`, Ctrl+M, Ctrl+P or Ctrl+R, **then** memory is not affected.
-- **Given** a figure pasted and refused (for example `1.234,56`), **when** I press M+, **then** the figure showing before the paste is what is added.
+- **Given** memory is empty and 40 is showing, **When** the user presses M+, **Then** memory holds 40, the M indicator shows `M 40` and is announced as "memory" and its total, and the tape gets a quiet line `M+ 40, memory 40` with no `=`. The calculation is unchanged.
+- **Given** the user adds three part totals of 40, 15 and 30.25 with M+, pressing C between them, **When** they press MR, **Then** the display shows 85.25 and the tape holds `M+ 40, memory 40`, `M+ 15, memory 55` and `M+ 30.25, memory 85.25`.
+- **Given** memory holds 95, **When** the user types 40 and presses M−, **Then** memory is 55, the indicator shows `M 55`, and the tape gets `M− 40, memory 55`.
+- **Given** a result such as 2 + 3 = 5 is showing, **When** M+ is pressed, **Then** 5 is added to memory and the display and expression line stay as they were.
+- **Given** an operator is pending (`2 + 3 ×`, display 5), **When** M+ is pressed, **Then** the running result 5 is added, and the pending operator and expression line are unchanged.
+- **Given** the user is typing `12.50`, **When** M+ is pressed, **Then** the display still shows `12.50` as typed, 12.5 is added, and the tape line reads `M+ 12.5, memory 12.5`.
+- **Given** the user types 0.1, presses M+, C, types 0.2, presses M+, then MR, **Then** the display shows exactly 0.3.
+- **Given** memory holds 85.25 and 100 − is entered, **When** the user presses MR then =, **Then** the result is 14.75. MR after an operator is the next figure.
+- **Given** memory holds a value, **When** the user presses C or Escape, **Then** memory and the M indicator are unchanged.
+- **Given** memory holds a value, **When** the user presses MC, **Then** memory is cleared, the M indicator disappears, and no tape line is written.
+- **Given** the memory keys, **When** the user presses any keyboard key, **Then** none of them activates. They are reached by Tab, activated with Enter or Space, and named "memory clear", "memory recall", "memory minus" and "memory plus".
+- **Given** a tape line `M+ 40, memory 95`, **When** the user clicks it or presses Enter or Space on it, **Then** the memory total 95 is recalled, not the 40.
+- **Given** a memory total of 1234.5, **Then** the indicator and tape show `1,234.5` with thousands commas.
 
-### Boundaries
-- **Given** memory holds 5, **when** I type 5 and press M−, **then** memory is 0, the indicator shows `M 0` (never a negative zero), and no error appears.
-- **Given** memory has been used and then reaches 0, **when** I look at the indicator, **then** it still shows until MC is pressed.
-- **Given** memory holds 9.9 × 10⁹⁹, **when** I add a value that keeps the total below 1e100, **then** it is accepted.
-- **Given** memory holds 6 × 10⁹⁹ and the display shows 4 × 10⁹⁹, **when** I press M+, **then** the total would be 1e100, so "Number too large" is shown, memory is unchanged, no tape line is written, and the expression line shows `M+ 4 × 10⁹⁹`.
-- **Given** memory holds 1 × 10⁻⁹⁹ and the display shows 9 × 10⁻¹⁰⁰, **when** I press M−, **then** the non-zero total would be below 1e-99, so "Number too small" is shown, memory is unchanged, and no tape line is written. Memory never rounds to 0 here.
-- **Given** the value showing carries ≈, **when** I press M+, **then** memory carries ≈ (`M ≈ …`) until MC, even if later values added are exact.
-- **Given** 100 ÷ 3 is showing as `≈ 33.3333333333333`, **when** I press M+ three times, **then** the full internal values are added and the indicator shows `M ≈ 100`.
-- **Given** memory has been used, **when** I reload the page, **then** memory is gone and no M indicator shows.
+## Invalid input
 
-### Very large and very small numbers
-- **Given** memory holds 999,999,999,999,999, **when** I add 1 with M+, **then** the indicator and tape line show `1 × 10¹⁵`, read "1 times 10 to the power 15".
-- **Given** a total of 999,999,999,999,999, **when** it is shown, **then** it uses plain notation with thousands commas.
-- **Given** I type 1200 and press M+, **then** the tape line reads `M+ 1,200, memory 1,200`, with commas on results only. The figure being typed stays plain digits.
-- **Given** I type 0.0000000001 and press M+, **then** memory shows `M 1 × 10⁻¹⁰`, read "1 times 10 to the power minus 10".
-- **Given** memory holds 0.000000001, **then** the indicator shows it in plain notation (`0.000000001`), because it is not below 1e-9.
-- **Given** a negative total, **when** it is shown, **then** it uses a true minus (−), read "minus".
+- **Given** memory is empty, **When** the user presses MR or MC, **Then** nothing happens, with no message, no tape line and no announcement.
+- **Given** an error is showing, **When** the user presses M+ or M−, **Then** nothing happens, and memory and the tape are unchanged.
+- **Given** a fault is showing, **When** the user presses any memory key (MC included), **Then** nothing happens.
+- **Given** the user presses Ctrl+P, Ctrl+R or any other shortcut, **Then** no memory action occurs. The browser handles the keys.
 
-### After a result
-- **Given** I have just pressed M+ or M−, **when** I continue (type, press an operator or press =), **then** the calculation carries on as if the memory key had not been pressed.
-- **Given** memory holds 95, **when** I press MR, **then** a new calculation starts at 95, the last operation is forgotten, and a following operator continues from 95 (MR, + 5 = gives 100).
-- **Given** MR has put 95 on the display, **when** I press Backspace, **then** nothing happens; a digit replaces the value.
-- **Given** memory holds a total, **when** I press MC, **then** the M indicator disappears, no tape line is written, and the display and calculation are unchanged.
-- **Given** memory has been cleared, **when** I press M+, **then** a new total begins from the value showing.
-- **Given** a result I want to correct, **when** I press +/−, **then** the result flips and I can send the flipped value to memory with M+.
+## Boundaries
 
-### After an error
-- **Given** memory overflow gave "Number too large", **when** I press MC, **then** memory clears and the error stays on screen.
-- **Given** a memory overflow error, **when** I press MR with memory holding a value, **then** the error is left and a new calculation starts at the memory total.
-- **Given** a memory overflow error, **when** I press Escape, Delete, a digit, the point or paste, **then** a new calculation starts and memory still holds its earlier total.
-- **Given** a memory overflow error, **when** I press an operator, =, +/− or Backspace, **then** nothing happens.
-- **Given** an error, **when** I press MC, **then** it works, and **when** I empty the tape, **then** the error is left and memory is kept.
-- **Given** a fault, **when** I press C or Escape, **then** the calculation resets and the tape and memory are kept, so I can press MR to read my total. Every other input does nothing, and no reload is needed.
-- **Given** an error or a fault, **when** it appears, **then** it is announced like any error. A key with no effect announces nothing.
+- **Given** a fresh calculator showing 0, **When** the user presses M+ or M−, **Then** memory is set to 0, `M 0` shows, and the tape gets `M+ 0, memory 0` or `M− 0, memory 0`.
+- **Given** memory holds 40 and 40 is showing, **When** M− is pressed, **Then** memory is 0, `M 0` stays visible until MC, and zero is never shown as negative.
+- **Given** memory is empty and 10 is showing, **When** M− is pressed, **Then** memory is −10, the indicator shows `M −10` with a true minus (read "minus"), and the tape line is `M− 10, memory −10`.
+- **Given** memory holds 999,999,999,999,999 and 1 is showing, **When** M+ is pressed, **Then** the total is exactly 1 × 10¹⁵ and is shown as `M 1 × 10¹⁵` with no ≈.
+- **Given** the total is 5 × 10⁹⁹ after M+ with 4 × 10⁹⁹ showing, **When** M+ is pressed again with 4 × 10⁹⁹ showing, **Then** the total is 9 × 10⁹⁹ and is accepted, because 1e100 is the first rejected size.
+- **Given** the tape is emptied, **Then** memory and the M indicator are unchanged and MR still works.
+
+## Very large and very small numbers
+
+- **Given** memory holds 5 × 10⁹⁹ and 5 × 10⁹⁹ is showing, **When** M+ is pressed, **Then** the total would reach 1e100, so "Number too large" shows, memory stays 5 × 10⁹⁹, no tape line is written, and the expression line shows `M+ 5 × 10⁹⁹`.
+- **Given** memory holds 1.5 × 10⁻⁹⁹ and 1 × 10⁻⁹⁹ is showing, **When** M− is pressed, **Then** the total would be 5 × 10⁻¹⁰⁰, so "Number too small" shows, memory is unchanged and not set to 0, and no tape line is written.
+- **Given** memory holds 1 × 10⁻⁹⁹ and 1 × 10⁻⁹⁹ is showing, **When** M− is pressed, **Then** the total is exactly 0 and is accepted, not an error.
+- **Given** 100 ÷ 3 shows `≈ 33.3333333333333`, **When** M+ is pressed, **Then** memory holds the full 34-digit value, the indicator and the tape line show ≈ (read "approximately"), and ≈ stays on memory until MC, even after exact amounts such as 5 are added.
+- **Given** memory holds ≈ 33.3333333333333, **When** MR is pressed then × 3 =, **Then** the result is `≈ 100`.
+- **Given** memory held ≈ and MC was pressed, **When** 5 is added with M+, **Then** the indicator shows `M 5` with no ≈.
+
+## After a result
+
+- **Given** a result is showing and M+ was pressed, **When** the user presses a digit, the point or MR, **Then** a new calculation starts. **When** the user presses an operator or =, **Then** it continues or repeats as it would have without M+.
+- **Given** a result is showing, **When** MR is pressed, **Then** a new calculation starts with the memory total, and the last operation is forgotten.
+- **Given** the user is typing a figure, **When** MR is pressed, **Then** the memory total replaces that figure. Backspace then does nothing, a digit replaces it, and Delete gives 0 and keeps any pending operator.
+- **Given** the memory total was recalled, **When** the user presses +/−, **Then** the total is flipped in the calculation only. Memory is unchanged.
+- **Given** the page is reloaded, **Then** memory and the tape are both lost.
+
+## After an error
+
+- **Given** "Number too large" or "Number too small" was caused by M+ or M−, **When** the user presses Escape, Delete, a digit, the point, paste, recall or MR, **Then** a new calculation starts, and a typed 7 shows 7.
+- **Given** that error is showing, **When** the user presses an operator, =, +/− or Backspace, **Then** nothing happens.
+- **Given** that error is showing, **When** the user presses MR, **Then** the error is left and the unchanged memory total is recalled.
+- **Given** an error is showing, **When** the user presses MC, **Then** memory is cleared and no tape line is written.
+- **Given** a fault is showing ("Something went wrong inside the calculator. It was not caused by anything you entered. Your tape and memory are kept. Press C or Escape to start again."), **When** the user presses C or Escape, **Then** the calculation resets, the tape and the memory total are kept, and the M indicator and MR work again.
 ```
 
 **B4 getting out of an error**
 
 ```
-## Normal case
-- **Given** 5 ÷ 0 has been entered, **when** = is pressed, **then** the display shows "Cannot divide by zero", the expression line shows `5 ÷ 0 =`, the message is announced politely, and no tape line is written.
-- **Given** 0 ÷ 0 has been entered, **when** = is pressed, **then** the display shows "Cannot divide by zero".
-- **Given** 5 ÷ 0 is pending, **when** an operator such as + is pressed, **then** the error shows and the expression line shows `5 ÷ 0 +`.
-- **Given** a result whose rounded size is ≥ 1e100, **when** it is calculated, **then** the display shows "Number too large".
-- **Given** a non-zero result whose rounded size is < 1e-99, **when** it is calculated, **then** the display shows "Number too small" and never shows 0.
-- **Given** any error, **then** only one error state exists, with one message at a time.
-- **Given** an error is showing, **when** time passes, **then** it stays until the user leaves it (no timer).
+**Normal case**
+- Given 5 ÷ 0, when I press =, then the display shows "Cannot divide by zero", the expression line shows `5 ÷ 0 =`, and no tape line is written.
+- Given 0 ÷ 0, when I press =, then the display shows "Cannot divide by zero".
+- Given 5 ÷ 0, when I press + instead of =, then the expression line shows `5 ÷ 0 +`.
+- Given a result of size ≥ 1e100, then the display shows "Number too large". Given a non-zero result of size < 1e-99, then it shows "Number too small" (never 0).
+- Given any error, then the message is announced politely, like a result, and the calculator is in one error state.
+- Given a memory step that would take the total to ≥ 1e100 or a non-zero size < 1e-99, when I press M+ or M−, then the usual error shows, memory is unchanged, no tape line is written, and the expression line shows the failed step (`M+ 40`).
 
-## Invalid input
-- **Given** an error is showing, **when** an operator, =, +/−, Backspace, M+ or M− is pressed, **then** nothing changes, no message appears, and nothing is announced.
-- **Given** an error is showing, **when** a paste is refused (for example `1.234,56`), **then** the paste message shows and the error stays.
-- **Given** a fault is showing, **when** any input other than C or Escape is made, MC and every memory key included, **then** nothing happens.
-- **Given** an error caused by a memory step (M+ or M− pushing the total to ≥ 1e100 or a non-zero size < 1e-99), **then** the usual error shows, memory is unchanged, no tape line is written, and the expression line shows the failed step (for example `M+ 40`).
+**Invalid input**
+- Given an error, when I press an operator, =, +/−, Backspace, M+ or M−, then nothing changes and nothing is announced.
+- Given an error, when I paste something refused (e.g. `abc`), then the error stays, with the refusal message for that paste (e.g. "Couldn't read that as a number").
+- Given a fault (a bug throws), then the display shows "Something went wrong inside the calculator. It was not caused by anything you entered. Your tape and memory are kept. Press C or Escape to start again.", the expression line is empty, and it is announced like an error.
+- Given a fault, when I press any key other than C or Escape (memory keys and MC included), then nothing happens.
 
-## Boundaries
-- **Given** a result whose rounded size is just below 1e100, **when** it is calculated, **then** it displays normally as `× 10⁹⁹` notation, with no error.
-- **Given** a result that rounds up to exactly 1e100 at 15 significant digits, **when** it is calculated, **then** "Number too large" shows, because the rounded value is what is tested.
-- **Given** a non-zero result whose rounded size is exactly 1e-99, **when** it is calculated, **then** it displays normally; just below that, "Number too small" shows.
-- **Given** a divisor typed as `0.00`, **when** = is pressed, **then** "Cannot divide by zero" shows.
-- **Given** a zero numerator and a non-zero divisor (0 ÷ 5), **when** = is pressed, **then** 0 shows with no error.
+**Boundaries**
+- Given a result whose rounded size is exactly 1e100, then "Number too large" shows. Given one just under (rounded < 1e100), then the result shows normally.
+- Given a non-zero result whose rounded size is exactly 1e-99, then it shows normally. Given one just under, then "Number too small" shows.
+- Given 5 ÷ 0 followed by a rounding that makes a value land on the limit, then the decision uses the rounded size.
+- Given an error, when I press a digit, the point, paste a valid figure, recall a tape line, or press MR (with memory held), then the error is left and a new calculation starts with that value.
 
-## Very large and very small numbers
-- **Given** repeated multiplication takes a result beyond 1e100 in size, positive or negative, **when** = or an operator is pressed, **then** "Number too large" shows.
-- **Given** repeated division takes a non-zero result below 1e-99 in size, positive or negative, **when** = or an operator is pressed, **then** "Number too small" shows.
-- **Given** a very small non-zero result within range, **then** it shows in `× 10⁻ⁿ` notation and not as 0.
+**Very large and very small numbers**
+- Given 9.99999999999999 × 10⁹⁹-scale inputs multiplied so the rounded size reaches 1e100, then "Number too large" shows, not a broken or infinite figure.
+- Given 1e-50 × 1e-50 (size 1e-100), then "Number too small" shows, not 0.
+- Given memory at a very large total, when M+ would push it to ≥ 1e100, then the error shows and memory keeps its old value and its M indicator.
 
-## What the user can do after a result and after an error
-- **Given** an error is showing, **when** Escape, Delete, a digit, the point, a paste, a recall or MR is used, **then** the error clears and a new calculation starts. For example, typing 7 after 5 ÷ 0 shows 7.
-- **Given** an error is showing and memory holds a value, **when** MC is pressed, **then** memory clears and the error stays. With memory empty, MC and MR do nothing.
-- **Given** an error is showing, **when** the user leaves it, **then** the tape and memory are untouched.
-- **Given** an error is showing, **when** the tape is emptied, **then** it empties and the error clears; if the tape is already empty, nothing happens.
-- **Given** an error was cleared, **when** a valid sum such as 7 + 2 = is entered, **then** 9 shows and a tape line is written.
-- **Given** a fault, **then** the message reads "Something went wrong inside the calculator. It was not caused by anything you entered. Your tape and memory are kept. Press C or Escape to start again." It is announced like an error, the expression line is empty, and no reload is needed.
-- **Given** a fault, **when** C or Escape is pressed, **then** the calculation resets, and tape and memory are kept.
-- **Given** any error or fault, **then** every recovery action works from the keyboard without a mouse.
+**After a result / after an error**
+- Given 5 ÷ 0 showing the error, when I type 7, then the display shows 7 as a new calculation.
+- Given an error, when I press Escape or Delete, then a new calculation starts at 0.
+- Given an error, when I press MC, then memory clears and the error stays; with memory empty, MC does nothing.
+- Given an error, when I press MR, then the memory total becomes the new calculation's figure and the error is left.
+- Given an error, when I click, or press Enter or Space on, a tape line, then its full value is recalled and a new calculation starts.
+- Given an error, when I use the tape-emptying control, then the tape empties and the error is left; the tape and memory are otherwise untouched by the error.
+- Given a fault, when I press C or Escape, then the calculation resets, the tape and memory are kept, and no reload is needed.
+- Every route out of an error or fault works with the keyboard alone, and with VoiceOver the error and the new value are each announced.
+
+**Categories left out**
+- None; every category applies.
 ```
 
 </details>

@@ -14,9 +14,11 @@ defaultTest:
       value: file://assertions.mjs:noFeatureWords
     - type: llm-rubric
       value: >-
-        The statement describes a need that would exist even if no software existed: it could be
-        met with paper, a person or a printed document. It does not describe a feature, a control,
-        or an interaction with a device. Fail it if it names or implies a piece of software.
+        This matches the product-spec skill's rule that a job is writable without mentioning the
+        app, a screen or a button. Pass it when the need would still exist if this calculator did
+        not, and the sentence does not name an app, a screen or a button. Everyday words such as
+        retype, message and write down are allowed. Fail it if it names an app, a screen or a
+        button, or if the need only makes sense because a particular calculator feature exists.
 tests:
   - description: A1 shopper weighing an offer
     vars:

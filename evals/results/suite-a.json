@@ -1,8 +1,8 @@
 {
-  "evalId": "eval-XwV-2026-10-07T11:05:27",
+  "evalId": "eval-PNw-2026-10-07T11:16:15",
   "results": {
     "version": 3,
-    "timestamp": "2026-10-07T11:05:27.471Z",
+    "timestamp": "2026-10-07T11:16:15.148Z",
     "prompts": [
       {
         "raw": "function ({ vars }) {\n  return `You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n${skill()}\n</skill>\n\n<situation>\n${vars.situation}\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.`\n}",
@@ -11,13 +11,13 @@
         "id": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
         "provider": "claude-code:claude-sonnet-5-5",
         "metrics": {
-          "score": 6.466666666666667,
-          "testPassCount": 5,
-          "testFailCount": 2,
+          "score": 7,
+          "testPassCount": 7,
+          "testFailCount": 0,
           "testErrorCount": 0,
-          "assertPassCount": 19,
-          "assertFailCount": 2,
-          "totalLatencyMs": 28014,
+          "assertPassCount": 21,
+          "assertFailCount": 0,
+          "totalLatencyMs": 26999,
           "tokenUsage": {
             "prompt": 0,
             "completion": 0,
@@ -77,11 +77,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
               "pass": true,
               "score": 1,
-              "reason": "The statement describes a shopper wanting to know whether a three-for-two offer is cheaper than buying single packs. This need exists without software: it could be met by mental arithmetic, a printed price-comparison chart, or a shelf label showing unit prices. It names no feature, control, or device interaction, and does not mention an app, calculator, screen, or any other software.",
+              "reason": "The sentence describes a real-world need (checking whether a three-for-two offer costs less than buying single packs) that would exist without any calculator. It names no app, screen, or button, and uses no calculator-specific feature; the need stands on its own at the supermarket shelf.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -95,13 +95,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm standing in a supermarket aisle looking at a three-for-two offer, I want to know whether it works out cheaper than buying the single packs, so I can choose the better deal before the queue moves on.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm standing at a supermarket shelf with a three-for-two offer and the queue is moving, I want to know whether the offer actually costs less than buying the single packs I need, so I can decide on the spot without overpaying.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "45d99d29-43b0-4c43-acb8-27bd5aa3cf9d",
-        "latencyMs": 3883,
+        "id": "85920dfd-f9d0-4b05-a762-e8864b8d93ac",
+        "latencyMs": 3989,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA shopper in a supermarket wants to know whether a three-for-two offer is cheaper than buying the single packs, before the queue moves on.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -117,7 +117,7 @@
           "label": ""
         },
         "response": {
-          "output": "When I'm standing in a supermarket aisle looking at a three-for-two offer, I want to know whether it works out cheaper than buying the single packs, so I can choose the better deal before the queue moves on."
+          "output": "When I'm standing at a supermarket shelf with a three-for-two offer and the queue is moving, I want to know whether the offer actually costs less than buying the single packs I need, so I can decide on the spot without overpaying."
         },
         "score": 1,
         "success": true,
@@ -137,7 +137,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -182,11 +182,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
               "pass": true,
               "score": 1,
-              "reason": "The statement describes a need to work out each person's share of a bill including tip, which could be met with paper, pen, or a person doing the arithmetic. It names no feature, control, device interaction, or software.",
+              "reason": "The sentence describes a need (splitting a group bill with different orders plus a fair share of the tip) that exists independent of any calculator. It names no app, screen, or button, and it does not depend on a particular calculator feature. Everyday wording like 'settle up' is fine.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -200,13 +200,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen the bill arrives and everyone at the table ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen the bill arrives after a group meal where everyone ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "f354c51a-5f3e-4192-8570-9dbf2c321e51",
-        "latencyMs": 6572,
+        "id": "0d573942-1d7e-4e3c-be9e-e3f184666365",
+        "latencyMs": 3934,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nFriends at a restaurant are splitting a bill, with a tip, between people who ordered different amounts.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -222,7 +222,7 @@
           "label": ""
         },
         "response": {
-          "output": "When the bill arrives and everyone at the table ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying."
+          "output": "When the bill arrives after a group meal where everyone ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying."
         },
         "score": 1,
         "success": true,
@@ -242,7 +242,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -287,11 +287,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
               "pass": true,
               "score": 1,
-              "reason": "The statement describes a need to verify that amounts add up and receipts are legitimate before approving an expense claim. This could be done entirely with paper receipts, a pen, and a person checking. It names no software, feature, control, or device interaction, and nothing in it implies software.",
+              "reason": "The sentence describes a need (checking that claimed amounts match receipts and add up before approving an expense claim) that would exist without any calculator. It names no app, screen, or button, and it uses everyday wording only. The need does not depend on a particular calculator feature.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -305,13 +305,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen a colleague submits an expense claim with a dozen receipts for my approval, I want to confirm that the amounts add up and each receipt is legitimate, so I can approve the claim knowing the company is paying exactly what was spent.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen a colleague submits an expense claim with many receipts for my approval, I want to confirm that the claimed amounts match the receipts and add up correctly, so I can approve the claim knowing the company is paying only what was actually spent.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "43019007-fc0a-4c1f-af92-aae909f2b0d7",
-        "latencyMs": 3514,
+        "id": "60c885ce-3920-44df-b928-815b9b4fe42b",
+        "latencyMs": 3712,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA manager is approving an expense claim of twelve receipts submitted by a colleague.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -327,7 +327,7 @@
           "label": ""
         },
         "response": {
-          "output": "When a colleague submits an expense claim with a dozen receipts for my approval, I want to confirm that the amounts add up and each receipt is legitimate, so I can approve the claim knowing the company is paying exactly what was spent."
+          "output": "When a colleague submits an expense claim with many receipts for my approval, I want to confirm that the claimed amounts match the receipts and add up correctly, so I can approve the claim knowing the company is paying only what was actually spent."
         },
         "score": 1,
         "success": true,
@@ -347,7 +347,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -392,11 +392,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
               "pass": true,
               "score": 1,
-              "reason": "The statement describes a need to verify a supplier invoice total so the right amount is paid. This could be met with paper, a calculator-free person checking a printed invoice. It names no feature, control, or device interaction, and does not name or imply software.",
+              "reason": "The job statement describes checking a supplier's invoice total so the right amount is paid. It names no app, screen or button, and uses only everyday words. The need (confirming that invoice amounts add up) would exist without the calculator, since people could check it by hand or with pen and paper. It does not depend on any particular calculator feature.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -410,13 +410,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen a supplier's invoice arrives for payment, I want to confirm that its total is correct, so I can pay the right amount and avoid overpaying or having to chase a correction later.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm checking a supplier's invoice total before paying it, I want to confirm that the amounts add up correctly, so I can pay the right amount and avoid overpaying or underpaying.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "80369cce-fa6c-47b6-9c66-8a6ce82a12cc",
-        "latencyMs": 3354,
+        "id": "647c7ee4-ec3a-4db5-8875-fff1805d7f30",
+        "latencyMs": 3946,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nAn accounts clerk is checking a supplier's invoice total before paying it.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -432,7 +432,7 @@
           "label": ""
         },
         "response": {
-          "output": "When a supplier's invoice arrives for payment, I want to confirm that its total is correct, so I can pay the right amount and avoid overpaying or having to chase a correction later."
+          "output": "When I'm checking a supplier's invoice total before paying it, I want to confirm that the amounts add up correctly, so I can pay the right amount and avoid overpaying or underpaying."
         },
         "score": 1,
         "success": true,
@@ -452,7 +452,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -497,11 +497,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
               "pass": true,
               "score": 1,
-              "reason": "The statement describes a parent's need to check their child's long-division homework answers and help fix mistakes. This need exists without any software: a parent could do it with paper, a pencil, or an answer key. It names no feature, control, or device interaction, and it does not mention or imply any software.",
+              "reason": "The sentence describes a parent's need to check which long-division answers are right or wrong so they can help fix mistakes and trust the work. It names no app, screen, or button, and it uses only everyday words. The need would exist without a calculator, since a parent could check homework by hand or with an answer key. It does not depend on any particular calculator feature.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -515,13 +515,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen my child hands me their finished long-division homework, I want to check whether each answer is right, so I can confirm what they got correct and help them fix what they got wrong.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen my child finishes a page of long-division homework, I want to confirm which answers are right and which are wrong, so I can help them fix mistakes and trust the work they hand in.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "ea623074-bd3f-47fb-b220-9797dd9e61c8",
-        "latencyMs": 3403,
+        "id": "ffef8e71-5c42-44db-9a8d-99c2c56f5f3c",
+        "latencyMs": 3579,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA parent is helping a child check the answers to long-division homework.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -537,7 +537,7 @@
           "label": ""
         },
         "response": {
-          "output": "When my child hands me their finished long-division homework, I want to check whether each answer is right, so I can confirm what they got correct and help them fix what they got wrong."
+          "output": "When my child finishes a page of long-division homework, I want to confirm which answers are right and which are wrong, so I can help them fix mistakes and trust the work they hand in."
         },
         "score": 1,
         "success": true,
@@ -557,7 +557,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -576,11 +576,10 @@
       },
       {
         "cost": 0,
-        "error": "The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device.",
         "gradingResult": {
-          "pass": false,
-          "score": 0.7333333333333334,
-          "reason": "The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device.",
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
           "namedScores": {},
           "tokensUsed": {
             "total": 0,
@@ -603,11 +602,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
-              "pass": false,
-              "score": 0.2,
-              "reason": "The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device.",
+              "pass": true,
+              "score": 1,
+              "reason": "The sentence describes a need (reusing a previously worked-out number in a new calculation without re-working it or risking a copying error) that exists with pen and paper or any tool. It names no app, screen or button. It uses everyday framing ('checking figures', 'carry on'), and doesn't depend on a particular calculator feature, such as a memory key or history panel.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -621,13 +620,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or retyping it by hand.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or risking a copying mistake.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "afce2aec-73ad-45f4-8dab-116093563675",
-        "latencyMs": 3665,
+        "id": "62758416-078b-4d50-a45b-38aad3b3ab1b",
+        "latencyMs": 3780,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA desk checker wants a history list of past calculations, so they can tap an old result and reuse it in a new sum.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -643,10 +642,10 @@
           "label": ""
         },
         "response": {
-          "output": "When I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or retyping it by hand."
+          "output": "When I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or risking a copying mistake."
         },
-        "score": 0.7333333333333334,
-        "success": false,
+        "score": 1,
+        "success": true,
         "testCase": {
           "description": "A6 awkward, a history list smuggled in",
           "vars": {
@@ -663,7 +662,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -678,15 +677,14 @@
         "metadata": {
           "_promptfooFileMetadata": {}
         },
-        "failureReason": 1
+        "failureReason": 0
       },
       {
         "cost": 0,
-        "error": "The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow.",
         "gradingResult": {
-          "pass": false,
-          "score": 0.7333333333333334,
-          "reason": "The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow.",
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
           "namedScores": {},
           "tokensUsed": {
             "total": 0,
@@ -709,11 +707,11 @@
             {
               "assertion": {
                 "type": "llm-rubric",
-                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+                "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
               },
-              "pass": false,
-              "score": 0.2,
-              "reason": "The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow.",
+              "pass": true,
+              "score": 1,
+              "reason": "The sentence describes a need (sharing a worked-out figure with a manager by email without retyping and risking a mistake) that would exist even without this calculator, since people copy numbers between tools or from paper. It names no app, screen, or button. 'Email' is an everyday communication word, not a named app or feature. It does not depend on a particular calculator feature existing.",
               "tokensUsed": {
                 "total": 0,
                 "prompt": 0,
@@ -727,13 +725,13 @@
                 }
               },
               "metadata": {
-                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I have worked out a figure that my manager needs to see, I want to get that exact number into my message to them without retyping it, so I can report it quickly and without transcription mistakes.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I have a figure I've worked out, I want to share it with my manager in an email, so I can report the result accurately without retyping it and risking a mistake.\\n</Output>\\n<Rubric>\\nThis matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists.\\n</Rubric>\"}]"
               }
             }
           ]
         },
-        "id": "572bd22b-a5c8-4fbe-b75d-060d71b46229",
-        "latencyMs": 3623,
+        "id": "4cf12f0b-b9a7-4a72-a57b-b7da0fd0d602",
+        "latencyMs": 4059,
         "namedScores": {},
         "prompt": {
           "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nSomeone wants a copy button next to the total, so they can paste the figure into an email to their manager.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
@@ -749,10 +747,10 @@
           "label": ""
         },
         "response": {
-          "output": "When I have worked out a figure that my manager needs to see, I want to get that exact number into my message to them without retyping it, so I can report it quickly and without transcription mistakes."
+          "output": "When I have a figure I've worked out, I want to share it with my manager in an email, so I can report the result accurately without retyping it and risking a mistake."
         },
-        "score": 0.7333333333333334,
-        "success": false,
+        "score": 1,
+        "success": true,
         "testCase": {
           "description": "A7 awkward, a copy button smuggled in",
           "vars": {
@@ -769,7 +767,7 @@
             },
             {
               "type": "llm-rubric",
-              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
             }
           ],
           "options": {
@@ -784,12 +782,12 @@
         "metadata": {
           "_promptfooFileMetadata": {}
         },
-        "failureReason": 1
+        "failureReason": 0
       }
     ],
     "stats": {
-      "successes": 5,
-      "failures": 2,
+      "successes": 7,
+      "failures": 0,
       "errors": 0,
       "tokenUsage": {
         "prompt": 0,
@@ -815,7 +813,7 @@
           }
         }
       },
-      "durationMs": 35931
+      "durationMs": 35337
     }
   },
   "config": {
@@ -891,7 +889,7 @@
         },
         {
           "type": "llm-rubric",
-          "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+          "value": "This matches the product-spec skill's rule that a job is writable without mentioning the app, a screen or a button. Pass it when the need would still exist if this calculator did not, and the sentence does not name an app, a screen or a button. Everyday words such as retype, message and write down are allowed. Fail it if it names an app, a screen or a button, or if the need only makes sense because a particular calculator feature exists."
         }
       ],
       "vars": {},
@@ -910,7 +908,7 @@
     "nodeVersion": "v20.20.2",
     "platform": "darwin",
     "arch": "arm64",
-    "exportedAt": "2026-10-07T11:06:03.437Z",
-    "evaluationCreatedAt": "2026-10-07T11:05:27.471Z"
+    "exportedAt": "2026-10-07T11:16:50.518Z",
+    "evaluationCreatedAt": "2026-10-07T11:16:15.148Z"
   }
 }

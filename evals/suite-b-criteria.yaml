@@ -16,10 +16,12 @@ defaultTest:
       value: file://assertions.mjs:hasBoundary
     - type: llm-rubric
       value: >-
-        A tester could run every criterion exactly as written, without a judgement call: each Given
-        sets up a specific state, each When names specific inputs, and each Then names an
-        observable result with exact values or exact text. Fail it if any criterion relies on words
-        such as appropriate, correct, sensible, clear or reasonable, or leaves a value unspecified.
+        This matches the product-spec skill and the decisions given with the story. Pass it when
+        each criterion has a Given, a When and a Then, and each Then says what is seen. A phrase the
+        decisions already define counts as exact, for example "a new calculation starts", "nothing
+        happens", "announced politely" or a message quoted from the decisions. Fail it if any Then
+        relies on words such as correct, appropriate or gracefully, or states a result whose wording
+        the decisions do not fix.
 tests:
   - description: B1 recall from the tape
     vars:

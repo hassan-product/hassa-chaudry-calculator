@@ -68,6 +68,7 @@ const lines = [
   `- **Model:** \`${MODEL}\`, through the Claude Code login (\`claude -p\`), for both the answers and the grading.`,
   `- **Run:** ${new Date().toISOString().slice(0, 10)}, with \`${PROMPTFOO}\`.`,
   '- **Threshold:** suites A and B pass with at most one failing case; suite C passes only with none.',
+  '- **Rubrics:** A passes a job when the need would still exist without this calculator and it names no app, screen or button (retype, message and write down are allowed). B passes criteria when each has a Given, a When and a Then that says what is seen, counting phrases the Decisions define as exact; correct, appropriate, gracefully, or wording the Decisions do not fix, still fail. C is unchanged.',
   '',
 ]
 for (const [key, suite] of Object.entries(SUITES)) {
