@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from './App'
@@ -445,5 +445,74 @@ describe('S-19 Keep a running total in memory (on screen)', () => {
     expect(screen.getByText('memory 330.47')).toBeInTheDocument()
     await user.click(key('memory recall'))
     expect(display()).toHaveTextContent('330.47')
+  })
+})
+
+describe('Criteria a browser shows, checked through the whole app', () => {
+  it('AC-10.10, AC-10.21: Tab reaches every key, the empty-tape control and the tape, then leaves; nothing traps focus', async () => {
+    const user = setup()
+    await user.keyboard('1+1=')
+    const reached: Element[] = []
+    for (let i = 0; i < 40; i++) {
+      await user.tab()
+      if (document.activeElement === document.body) break
+      reached.push(document.activeElement as Element)
+    }
+    expect(document.activeElement).toBe(document.body)
+    for (const b of within(keypad()).getAllByRole('button')) expect(reached).toContain(b)
+    expect(reached).toContain(key('Empty tape'))
+    expect(reached).toContain(tapeLines()[0])
+  })
+
+  it('AC-10.10: at 900px and below, Tab reaches the tape toggle and Enter opens it', async () => {
+    const user = setup(true)
+    await user.tab()
+    expect(document.activeElement).toBe(key('Show tape'))
+    await user.keyboard('{Enter}')
+    expect(key('Hide tape')).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('AC-10.18: holding 9 down adds digits up to 15, then shows "15 digits maximum"', () => {
+    setup()
+    for (let i = 0; i < 20; i++) fireEvent.keyDown(window, { key: '9', code: 'Digit9', repeat: i > 0 })
+    expect(display().querySelector('.sr-only')?.textContent).toBe('999999999999999')
+    expect(screen.getByText('15 digits maximum', { selector: '.sr-only' })).toBeInTheDocument()
+  })
+
+  it('AC-11.12: a refusal message goes on the next key press, click or paste', async () => {
+    const user = setup()
+    const message = () => screen.queryByText("Couldn't read that as a number", { selector: '.sr-only' })
+    paste('abc')
+    expect(message()).not.toBeNull()
+    await user.keyboard('{Shift}')
+    expect(message()).toBeNull()
+    paste('abc')
+    fireEvent.pointerDown(keypad())
+    expect(message()).toBeNull()
+    paste('abc')
+    paste('5')
+    expect(message()).toBeNull()
+  })
+
+  it('AC-12.12, AC-19.15: after a reload the tape and memory are empty, and nothing was stored', async () => {
+    const setItem = vi.spyOn(Storage.prototype, 'setItem')
+    const user = setup()
+    await user.keyboard('95')
+    await user.click(key('memory plus'))
+    await user.keyboard('1+1=')
+    expect(tapeLines()).toHaveLength(2)
+    cleanup()
+    render(<App />)
+    expect(tapeLines()).toHaveLength(0)
+    expect(screen.queryByText(/^memory /, { selector: '.sr-only' })).toBeNull()
+    expect(setItem).not.toHaveBeenCalled()
+  })
+
+  it('AC-13.13: behind the toggle, recall works the same', async () => {
+    const user = setup(true)
+    await user.keyboard('100/3={Escape}')
+    await user.click(key('Show tape'))
+    await user.click(tapeLines()[0] as HTMLElement)
+    expect(display()).toHaveTextContent('approximately 33.3333333333333')
   })
 })
