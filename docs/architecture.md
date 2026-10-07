@@ -310,19 +310,30 @@ decimal.js does throw on a malformed string. Because only `domain/decimal.ts` to
 - It receives only the view model in `shared/view.ts`. Every field there is a display string already produced by `format.ts`, or text looked up from `ERROR_TEXT` or `NOTICE_TEXT`.
 - There is no field of type `Error` or `unknown` anywhere in the view model.
 
-## Fitness functions to enforce
+## Fitness functions
 
-Each of these will be a test, so this document and the code cannot drift apart:
+These are tests on the code's shape, so this document and the code cannot drift apart. They run with `npm test`, and CI (`.github/workflows/ci.yml`) runs them on every push and pull request.
 
-1. **Layer imports.** Rules 1 to 7 above are checked by parsing every import in `src/`, test files excluded.
-2. **One door to decimal.js.** Only `domain/decimal.ts` imports `decimal.js`, and only it calls `Decimal.clone` or `Decimal.set`.
-3. **No native number maths on values.** Production files in `src/` contain no `parseFloat`, `parseInt`, `Number(`, `toFixed`, `toPrecision` or `Math.` calls. Operators on values cannot be grepped for, so this rule is backed by the domain tests and by values being typed as `Decimal`.
-4. **No throw in domain.** `domain/**` contains no `throw`.
-5. **No persistence and no network.** `src/**` references none of `localStorage`, `sessionStorage`, `indexedDB`, `document.cookie`, `fetch`, `XMLHttpRequest`, `WebSocket` or `sendBeacon`.
-6. **Messages are verbatim.** `ERROR_TEXT`, `NOTICE_TEXT` and `FAULT_TEXT` match the strings in Decisions 8 and 9 exactly.
-7. **No raw errors in the UI.** No type in `shared/view.ts` includes `Error`, `unknown` or `Decimal`.
-8. **Banned words.** No file in `src/ui/` and no rendered text contains "precision" or "floating point".
-9. **Exhaustive states.** The engine's `switch` on `state.kind` ends in an `assertNever`, so `npm run typecheck` fails when a state is added and not handled.
+| Check | Where | Status |
+|---|---|---|
+| Layer imports: rules 1 to 7 above, read from the import graph, test files excluded | `src/fitness.test.ts`, fitness 1 | Enforced |
+| One door to decimal.js: only `domain/decimal.ts` imports it | fitness 1 | Enforced. That only it calls `Decimal.clone` follows, but is not checked separately. |
+| No native arithmetic on values: in `src/domain` outside `decimal.ts`, no `parseFloat`, `Number`, `Math` or arithmetic operator on a number, read from the TypeScript AST. A use that is not a value carries a `fitness: not a value` comment, and the test lists every one. | fitness 2; `src/domain/boundaries.test.ts` for the number APIs across all of `src` | Enforced, with six listed uses, all string positions and digit counts |
+| No throw in domain | `src/domain/boundaries.test.ts` | Enforced |
+| Story traceability: a story marked Implemented needs a test citing it, and no test cites a story or criterion that does not exist | fitness 3 | Enforced. The first half passes only because no story is Implemented yet. |
+| Error surface: every error and notice code has a message, written as words | fitness 4 | Enforced |
+| Bundle budget: gzipped JavaScript under 150 kB | fitness 5 | Enforced (about 89 kB today) |
+| Messages verbatim: the texts match Decisions 8 and 9 | the arithmetic, paste and fault tests | Enforced in those tests |
+| Exhaustive states: every `switch` on `calc.kind` lists every state with no default, so `npm run typecheck` fails when a state is added and not handled | the type check, run in CI | Enforced |
+| No persistence and no network: `src/**` references no storage or network API | none yet | Not yet a test |
+| No raw errors in the UI: no type in `shared/view.ts` includes `Error`, `unknown` or `Decimal` | none yet | Not yet a test; the types keep it true today |
+| Banned words: no UI text says "precision" or "floating point" | none yet | Not yet a test |
+
+## Evals
+
+`evals/` holds promptfoo suites that test the written context, not the calculator: whether the product-spec skill produces jobs and criteria in the required shape, and whether the engine rules in `CLAUDE.md` and this document answer edge cases with one reading. They run through the Claude Code login of whoever runs them, are not part of `npm test` and are not run in CI (ADR 0010).
+
+The two exist for different reasons. Fitness functions guard the code: they are exact, free and run on every change. Evals guard the writing: whether a reader, here a model, takes the documents the way they were meant. That can only be judged by a reader, so it is slower, costs plan usage and can vary between runs.
 
 ## Gaps found in the Decisions
 
