@@ -68,6 +68,7 @@ const lines = [
   `- **Model:** \`${MODEL}\`, through the Claude Code login (\`claude -p\`), for both the answers and the grading.`,
   `- **Run:** ${new Date().toISOString().slice(0, 10)}, with \`${PROMPTFOO}\`.`,
   '- **Threshold:** suites A and B pass with at most one failing case; suite C passes only with none.',
+  '- **Skill change before the latest suite B run (2026-10-07):** the first B runs showed the product-spec skill never said each criterion needs all three parts, and the answers had criteria with no When. The skill now says every criterion has its own Given, When and Then; the rubric and the wrong-result check were not changed.',
   '- **Rubrics:** A passes a job when the need would still exist without this calculator and it names no app, screen or button (retype, message and write down are allowed). B passes criteria when each has a Given, a When and a Then that says what is seen, counting phrases the Decisions define as exact; correct, appropriate, gracefully, or wording the Decisions do not fix, still fail. C is unchanged.',
   '',
 ]

@@ -5,7 +5,7 @@ These test the **written context**, not the calculator. The calculator has no mo
 | Suite | Under test | Checks |
 |---|---|---|
 | A. Job statement quality | `.claude/skills/product-spec/SKILL.md` | A job written from the skill alone has the *When / I want to / so I can* shape and uses none of *button, screen, click, tap, keypad, field, display, app, press*. The rubric, matching the skill, passes it when the need would still exist if this calculator did not and it names no app, screen or button; everyday words such as *retype*, *message* and *write down* are allowed. Two of the seven cases are awkward: the obvious phrasing smuggles a feature in. |
-| B. Criteria coverage | the skill and the Decisions in `CLAUDE.md` | Criteria written for a story are Given / When / Then, with at least one invalid-input and one boundary case. The rubric passes them when every Then says what is seen; a phrase the Decisions define, such as *a new calculation starts*, *nothing happens* or *announced politely*, counts as exact. *Correct*, *appropriate*, *gracefully*, or a result whose wording the Decisions do not fix, still fails. |
+| B. Criteria coverage | the skill and the Decisions in `CLAUDE.md` | Criteria written for a story give every criterion its own Given, When and Then, with at least one invalid-input and one boundary case. The rubric passes them when every Then says what is seen; a phrase the Decisions define, such as *a new calculation starts*, *nothing happens* or *announced politely*, counts as exact. *Correct*, *appropriate*, *gracefully*, or a result whose wording the Decisions do not fix, still fails. |
 | C. Specification ambiguity | the Decisions in `CLAUDE.md`, and the Engine states and Memory sections of `docs/architecture.md` | Given only those, the model answers nine edge cases the way the documents mean. A failure here is fixed **in the document**, never by loosening the expected answer. |
 
 The JavaScript checks are exact. The rubric checks are graded by a model.
@@ -35,7 +35,7 @@ node evals/run.mjs c           # one suite
 
 - **Model:** `claude-sonnet-5-5` produced the saved answers and graded them.
 - **Threshold:** suites A and B pass with at most one failing case; suite C passes only with none.
-  - The A and B rubrics hold the output to what the skill and the Decisions actually require, no more. A first run with stricter rubrics (no word implying a device in A; exact values for every Then in B) failed both suites on standards the skill does not set, and they were loosened to match it on 2026-10-07. Suite C was not changed.
+  - The A and B rubrics hold the output to what the skill and the Decisions actually require, no more. A first run with stricter rubrics (no word implying a device in A; exact values for every Then in B) failed both suites on standards the skill does not set, and they were loosened to match it on 2026-10-07. Suite C was not changed. The same day, after suite B showed the skill never required all three parts in each criterion, the skill gained that line and suite B was run once more.
   - A and B judge generated writing, where one stray case is variance in the model rather than a fault in the skill.
   - C has one right reading per case, so any miss is a question about the documents.
 - **A later run can differ.** The model changes and its answers vary. A saved result is evidence about the documents as they stood, with the model and threshold named, not a guarantee.
