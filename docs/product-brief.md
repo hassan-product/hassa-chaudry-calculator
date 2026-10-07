@@ -54,18 +54,13 @@ Memory was first taken off the table for two reasons. Both are now answered:
 - **Currency or units mode.** Plain numbers only. A unit price like 0.0125 must not be forced to two places.
 - **European number formats and accounting brackets.** These are refused, not converted, because converting them would mean guessing.
 - **A hosted service or backend.** Nothing leaves the browser.
+- **Sound on key presses.** S-21 was retired on 2026-10-07, and J-10 with it. It would have had to be off by default in an office or beside a screen reader, so most people would never hear it; it competes with VoiceOver's speech; it behaves differently across devices, because the iPhone silent switch can mute it and browsers hold audio back until the first tap; it can only be checked by ear; and the display and the tape already confirm each key press. See ADR 0009.
 
 ## Roadmap for the cut stories, in build order
 
 1. **S-16 Edit an earlier tape line.** This comes first because it closes the gap S-7 admits, and serves J-4 directly. It also requires the tape to store operations rather than text, which the next item builds on.
 2. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16, and serves J-7.
 3. **S-17 Percent and tax.** It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others. There is no % key until then.
-4. **S-21 Sound on key presses.** This is conditional, not scheduled. It would be built only off by default, only once users ask for it, and only after testing alongside VoiceOver. The reasons:
-   - It would have to be off by default in an office or beside a screen reader, so most people would never hear it.
-   - It competes with VoiceOver's speech.
-   - It behaves differently across devices: the iPhone silent switch can mute it, and browsers hold audio back until the first tap. A feature that works on some devices and not others undermines trust.
-   - It can only be checked by ear, not by an automated test.
-   - The need it serves (J-10) is already met by the display and the tape.
 
 ## Open questions, and the assumption we are running on
 

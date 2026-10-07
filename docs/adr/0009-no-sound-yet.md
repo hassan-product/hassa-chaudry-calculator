@@ -1,6 +1,6 @@
-# 0009. No sound yet
+# 0009. No key-press sound
 
-- **Status:** Accepted
+- **Status:** Accepted. Amended 2026-10-07: the story was retired, not deferred.
 - **Date:** 2026-10-07
 
 ## Context
@@ -11,7 +11,7 @@ A desk checker entering figures from paper wants to keep their eyes on the page 
 - **It can only be checked by ear,** not by an automated test.
 
 ## Decision
-Do not build sound in this version. S-21 is written with full criteria, and its status is Not implemented. It will be built only when all three conditions hold: it is off by default, users have asked for it, and it has been tested alongside VoiceOver.
+Do not build sound. S-21 was first kept as a Not implemented story, to be built only once users asked for it, off by default and tested alongside VoiceOver. On 2026-10-07 it was retired instead: it will not be built, and J-10, which only it served, was retired with it. Both stay struck through with their IDs.
 
 ## Alternatives rejected
 - **Build it now, off by default.** It is cheap to add. It was rejected because a feature that most people never switch on, that behaves differently on different devices, and that no automated test can check undermines trust more than its absence does. The need is already met by the display and the tape.
@@ -20,4 +20,4 @@ Do not build sound in this version. S-21 is written with full criteria, and its 
 ## Consequences
 - Every behaviour the product promises can be checked by an automated test.
 - **Cost:** someone entering a long column of figures from paper has to glance up to confirm each key press. The display and the tape are the only feedback.
-- **Cost:** if users do ask for sound, the conditions above mean a round of manual testing with VoiceOver on real devices before it can ship.
+- **Cost:** if users do ask for sound, it starts again as a new story with a new ID, and needs a round of manual testing with VoiceOver on real devices before it can ship.
