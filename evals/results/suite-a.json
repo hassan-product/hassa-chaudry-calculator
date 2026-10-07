@@ -1,0 +1,916 @@
+{
+  "evalId": "eval-XwV-2026-10-07T11:05:27",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-10-07T11:05:27.471Z",
+    "prompts": [
+      {
+        "raw": "function ({ vars }) {\n  return `You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n${skill()}\n</skill>\n\n<situation>\n${vars.situation}\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.`\n}",
+        "label": "prompts/job.mjs",
+        "config": {},
+        "id": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "provider": "claude-code:claude-sonnet-5-5",
+        "metrics": {
+          "score": 6.466666666666667,
+          "testPassCount": 5,
+          "testFailCount": 2,
+          "testErrorCount": 0,
+          "assertPassCount": 19,
+          "assertFailCount": 2,
+          "totalLatencyMs": 28014,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "total": 0,
+            "numRequests": 7,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "The statement describes a shopper wanting to know whether a three-for-two offer is cheaper than buying single packs. This need exists without software: it could be met by mental arithmetic, a printed price-comparison chart, or a shelf label showing unit prices. It names no feature, control, or device interaction, and does not mention an app, calculator, screen, or any other software.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm standing in a supermarket aisle looking at a three-for-two offer, I want to know whether it works out cheaper than buying the single packs, so I can choose the better deal before the queue moves on.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "45d99d29-43b0-4c43-acb8-27bd5aa3cf9d",
+        "latencyMs": 3883,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA shopper in a supermarket wants to know whether a three-for-two offer is cheaper than buying the single packs, before the queue moves on.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When I'm standing in a supermarket aisle looking at a three-for-two offer, I want to know whether it works out cheaper than buying the single packs, so I can choose the better deal before the queue moves on."
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "A1 shopper weighing an offer",
+          "vars": {
+            "situation": "A shopper in a supermarket wants to know whether a three-for-two offer is cheaper than buying the single packs, before the queue moves on."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "situation": "A shopper in a supermarket wants to know whether a three-for-two offer is cheaper than buying the single packs, before the queue moves on."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "The statement describes a need to work out each person's share of a bill including tip, which could be met with paper, pen, or a person doing the arithmetic. It names no feature, control, device interaction, or software.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen the bill arrives and everyone at the table ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "f354c51a-5f3e-4192-8570-9dbf2c321e51",
+        "latencyMs": 6572,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nFriends at a restaurant are splitting a bill, with a tip, between people who ordered different amounts.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When the bill arrives and everyone at the table ordered different amounts, I want to work out what each person owes including their fair share of the tip, so I can settle up quickly without anyone overpaying or underpaying."
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "A2 splitting a bill",
+          "vars": {
+            "situation": "Friends at a restaurant are splitting a bill, with a tip, between people who ordered different amounts."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "situation": "Friends at a restaurant are splitting a bill, with a tip, between people who ordered different amounts."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "The statement describes a need to verify that amounts add up and receipts are legitimate before approving an expense claim. This could be done entirely with paper receipts, a pen, and a person checking. It names no software, feature, control, or device interaction, and nothing in it implies software.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen a colleague submits an expense claim with a dozen receipts for my approval, I want to confirm that the amounts add up and each receipt is legitimate, so I can approve the claim knowing the company is paying exactly what was spent.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "43019007-fc0a-4c1f-af92-aae909f2b0d7",
+        "latencyMs": 3514,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA manager is approving an expense claim of twelve receipts submitted by a colleague.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When a colleague submits an expense claim with a dozen receipts for my approval, I want to confirm that the amounts add up and each receipt is legitimate, so I can approve the claim knowing the company is paying exactly what was spent."
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "A3 approving an expense claim",
+          "vars": {
+            "situation": "A manager is approving an expense claim of twelve receipts submitted by a colleague."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "situation": "A manager is approving an expense claim of twelve receipts submitted by a colleague."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "The statement describes a need to verify a supplier invoice total so the right amount is paid. This could be met with paper, a calculator-free person checking a printed invoice. It names no feature, control, or device interaction, and does not name or imply software.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen a supplier's invoice arrives for payment, I want to confirm that its total is correct, so I can pay the right amount and avoid overpaying or having to chase a correction later.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "80369cce-fa6c-47b6-9c66-8a6ce82a12cc",
+        "latencyMs": 3354,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nAn accounts clerk is checking a supplier's invoice total before paying it.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When a supplier's invoice arrives for payment, I want to confirm that its total is correct, so I can pay the right amount and avoid overpaying or having to chase a correction later."
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "A4 checking a supplier invoice",
+          "vars": {
+            "situation": "An accounts clerk is checking a supplier's invoice total before paying it."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "vars": {
+          "situation": "An accounts clerk is checking a supplier's invoice total before paying it."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "The statement describes a parent's need to check their child's long-division homework answers and help fix mistakes. This need exists without any software: a parent could do it with paper, a pencil, or an answer key. It names no feature, control, or device interaction, and it does not mention or imply any software.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen my child hands me their finished long-division homework, I want to check whether each answer is right, so I can confirm what they got correct and help them fix what they got wrong.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "ea623074-bd3f-47fb-b220-9797dd9e61c8",
+        "latencyMs": 3403,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA parent is helping a child check the answers to long-division homework.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When my child hands me their finished long-division homework, I want to check whether each answer is right, so I can confirm what they got correct and help them fix what they got wrong."
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "A5 checking homework",
+          "vars": {
+            "situation": "A parent is helping a child check the answers to long-division homework."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 4,
+        "vars": {
+          "situation": "A parent is helping a child check the answers to long-division homework."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "error": "The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device.",
+        "gradingResult": {
+          "pass": false,
+          "score": 0.7333333333333334,
+          "reason": "The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device.",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": false,
+              "score": 0.2,
+              "reason": "The underlying need, reusing a figure worked out earlier, could be met on paper. But the statement says 'retyping it by hand' and 'bring that earlier result back into a new calculation'. That implies a keyboard and a device's recall or memory feature, so it implies software rather than a need independent of any device.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or retyping it by hand.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "afce2aec-73ad-45f4-8dab-116093563675",
+        "latencyMs": 3665,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nA desk checker wants a history list of past calculations, so they can tap an old result and reuse it in a new sum.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When I'm checking figures and need a number I worked out earlier, I want to bring that earlier result back into a new calculation, so I can carry on without re-working it or retyping it by hand."
+        },
+        "score": 0.7333333333333334,
+        "success": false,
+        "testCase": {
+          "description": "A6 awkward, a history list smuggled in",
+          "vars": {
+            "situation": "A desk checker wants a history list of past calculations, so they can tap an old result and reuse it in a new sum."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 5,
+        "vars": {
+          "situation": "A desk checker wants a history list of past calculations, so they can tap an old result and reuse it in a new sum."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 1
+      },
+      {
+        "cost": 0,
+        "error": "The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow.",
+        "gradingResult": {
+          "pass": false,
+          "score": 0.7333333333333334,
+          "reason": "The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow.",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "When / I want to / so I can"
+            },
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "No feature words"
+            },
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+              },
+              "pass": false,
+              "score": 0.2,
+              "reason": "The statement describes wanting to get an exact figure into a message to a manager without retyping, to avoid transcription mistakes. This implies copying and pasting between software (a calculator and a messaging app), so it implies a device-based interaction rather than a need that exists independent of software. 'Without retyping' and 'get that exact number into my message' presuppose a digital copy/transfer mechanism. A paper-based need would be simply writing the number down, and transcription errors could occur there too, but the phrasing is tied to a digital workflow.",
+              "tokensUsed": {
+                "total": 0,
+                "prompt": 0,
+                "completion": 0,
+                "cached": 0,
+                "numRequests": 0,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "acceptedPrediction": 0,
+                  "rejectedPrediction": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\nWhen I have worked out a figure that my manager needs to see, I want to get that exact number into my message to them without retyping it, so I can report it quickly and without transcription mistakes.\\n</Output>\\n<Rubric>\\nThe statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software.\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "572bd22b-a5c8-4fbe-b75d-060d71b46229",
+        "latencyMs": 3623,
+        "namedScores": {},
+        "prompt": {
+          "raw": "You are writing one entry for a jobs-to-be-done document. Follow this skill exactly.\n\n<skill>\n---\nname: product-spec\ndescription: Formats and rules for writing roles, jobs and user stories in docs/app-roles.md, docs/jobs-to-be-done.md and docs/user-stories.md. Use whenever adding or changing any of them.\n---\n\n# Product spec formats\n\nThree documents, three formats. Follow them exactly.\n\n## Roles: `docs/app-roles.md`, IDs `R-1`, `R-2`, …\n\n> A [role] is [who they are and their situation]. They can [what they see and do]. They must never [what the app prevents].\n\n- Include the \"must never\" sentence only where it applies.\n\n## Jobs: `docs/jobs-to-be-done.md`, IDs `J-1`, `J-2`, …\n\n> When [situation], I want to [motivation], so I can [outcome].\n\n- Each job names its role (`R-n`).\n- A job must be writable without mentioning the app, a screen or a button. If it cannot be, it is a feature, and it does not belong in the jobs doc.\n\n## Stories: `docs/user-stories.md`, IDs `S-1`, `S-2`, …\n\n> As a [role], I want [capability], so that [benefit].\n\nEvery story has:\n- **Job:** the `J-n` it serves.\n- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.\n- **Acceptance criteria** in Given / When / Then form, covering:\n  - the normal case\n  - invalid input\n  - boundaries\n  - very large and very small numbers\n  - what the user can do after a result, and after an error\n\nLeave out a category only if it genuinely cannot apply, and say why in one line.\n\n## IDs\n- Sequential, never reused, never renumbered. A dropped item is struck through, not deleted.\n- Cross-references use the ID (`S-4 serves J-2`), so links survive edits.\n- Test names cite the story ID they cover.\n\n</skill>\n\n<situation>\nSomeone wants a copy button next to the total, so they can paste the figure into an email to their manager.\n</situation>\n\nWrite the one job this situation describes, following the skill. Output only the job statement itself, as one sentence: no ID, no role line, no heading, no commentary.",
+          "label": "prompts/job.mjs",
+          "config": {
+            "provider": "file://claude-provider.mjs"
+          }
+        },
+        "promptId": "36c063570731951162699e1faeabbff6901c29f33d2197370fd87e7bfd759191",
+        "promptIdx": 0,
+        "provider": {
+          "id": "claude-code:claude-sonnet-5-5",
+          "label": ""
+        },
+        "response": {
+          "output": "When I have worked out a figure that my manager needs to see, I want to get that exact number into my message to them without retyping it, so I can report it quickly and without transcription mistakes."
+        },
+        "score": 0.7333333333333334,
+        "success": false,
+        "testCase": {
+          "description": "A7 awkward, a copy button smuggled in",
+          "vars": {
+            "situation": "Someone wants a copy button next to the total, so they can paste the figure into an email to their manager."
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:jobShape"
+            },
+            {
+              "type": "javascript",
+              "value": "file://assertions.mjs:noFeatureWords"
+            },
+            {
+              "type": "llm-rubric",
+              "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+            }
+          ],
+          "options": {
+            "provider": "file://claude-provider.mjs"
+          },
+          "metadata": {}
+        },
+        "testIdx": 6,
+        "vars": {
+          "situation": "Someone wants a copy button next to the total, so they can paste the figure into an email to their manager."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 1
+      }
+    ],
+    "stats": {
+      "successes": 5,
+      "failures": 2,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 0,
+        "total": 0,
+        "numRequests": 7,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0
+          }
+        }
+      },
+      "durationMs": 35931
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "A. Job statement quality",
+    "prompts": [
+      "file:///Users/chaudry/code/hassa-chaudry-calculator/evals/prompts/job.mjs"
+    ],
+    "providers": [
+      {
+        "id": "file://claude-provider.mjs"
+      }
+    ],
+    "tests": [
+      {
+        "description": "A1 shopper weighing an offer",
+        "vars": {
+          "situation": "A shopper in a supermarket wants to know whether a three-for-two offer is cheaper than buying the single packs, before the queue moves on."
+        }
+      },
+      {
+        "description": "A2 splitting a bill",
+        "vars": {
+          "situation": "Friends at a restaurant are splitting a bill, with a tip, between people who ordered different amounts."
+        }
+      },
+      {
+        "description": "A3 approving an expense claim",
+        "vars": {
+          "situation": "A manager is approving an expense claim of twelve receipts submitted by a colleague."
+        }
+      },
+      {
+        "description": "A4 checking a supplier invoice",
+        "vars": {
+          "situation": "An accounts clerk is checking a supplier's invoice total before paying it."
+        }
+      },
+      {
+        "description": "A5 checking homework",
+        "vars": {
+          "situation": "A parent is helping a child check the answers to long-division homework."
+        }
+      },
+      {
+        "description": "A6 awkward, a history list smuggled in",
+        "vars": {
+          "situation": "A desk checker wants a history list of past calculations, so they can tap an old result and reuse it in a new sum."
+        }
+      },
+      {
+        "description": "A7 awkward, a copy button smuggled in",
+        "vars": {
+          "situation": "Someone wants a copy button next to the total, so they can paste the figure into an email to their manager."
+        }
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "sharing": false,
+    "defaultTest": {
+      "options": {
+        "provider": "file://claude-provider.mjs"
+      },
+      "assert": [
+        {
+          "type": "javascript",
+          "value": "file://assertions.mjs:jobShape"
+        },
+        {
+          "type": "javascript",
+          "value": "file://assertions.mjs:noFeatureWords"
+        },
+        {
+          "type": "llm-rubric",
+          "value": "The statement describes a need that would exist even if no software existed: it could be met with paper, a person or a printed document. It does not describe a feature, a control, or an interaction with a device. Fail it if it names or implies a piece of software."
+        }
+      ],
+      "vars": {},
+      "metadata": {}
+    },
+    "outputPath": [
+      "/Users/chaudry/code/hassa-chaudry-calculator/evals/results/suite-a.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.120.19",
+    "nodeVersion": "v20.20.2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "exportedAt": "2026-10-07T11:06:03.437Z",
+    "evaluationCreatedAt": "2026-10-07T11:05:27.471Z"
+  }
+}
