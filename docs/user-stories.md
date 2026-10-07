@@ -638,7 +638,7 @@ As an Everyday Calculator User with weak eyesight, I want the figures and keys l
 
 ## Not implemented in this version
 
-These have full criteria so they are ready to build. For S-16 to S-18 the reason is scope, not importance. For S-21 the reason is the conditions under which it would be built.
+These have full criteria so they are ready to build. For S-16 to S-18 the reason is scope, not importance. S-21 is retired and kept struck through below.
 
 ## S-16 Correct an earlier step and have the rest recalculate
 
@@ -736,33 +736,35 @@ As a Desk Checker, I want to save the tape as a file, so that I can attach my wo
 
 ---
 
-## S-21 Hear each key press
+## ~~S-21 Hear each key press~~
 
-As a Desk Checker, I want a short sound when a key press registers, so that I can enter figures from paper without looking up to check each press.
+**Retired 2026-10-07.** It will not be built: its own reason said it would be built only once users asked for it. The ID is kept and not reused.
 
-- **Job:** J-10
-- **Status:** Not implemented
-- **Reason:** It would be built only off by default, only once users ask for it, and only after testing alongside VoiceOver. Sound would have to be off by default in an office or beside a screen reader, so most people would never hear it. It competes with VoiceOver's speech. It behaves differently across devices: the iPhone silent switch can mute it, and browsers hold audio back until the first tap, and a feature that works on some devices and not others undermines trust. It can only be checked by ear, not by an automated test. And the need is already met by the display and the tape. See ADR 0009.
+~~As a Desk Checker, I want a short sound when a key press registers, so that I can enter figures from paper without looking up to check each press.~~
 
-### Acceptance criteria
+- ~~**Job:** J-10~~
+- ~~**Status:** Not implemented~~
+- ~~**Reason:** It would be built only off by default, only once users ask for it, and only after testing alongside VoiceOver. Sound would have to be off by default in an office or beside a screen reader, so most people would never hear it. It competes with VoiceOver's speech. It behaves differently across devices: the iPhone silent switch can mute it, and browsers hold audio back until the first tap, and a feature that works on some devices and not others undermines trust. It can only be checked by ear, not by an automated test. And the need is already met by the display and the tape. See ADR 0009.~~
 
-**Normal case**
-- **AC-21.1** Given sound is switched on, when a key press changes the display, then one short click plays.
-- **AC-21.2** Given a fresh page, when it loads, then sound is off.
+### ~~Acceptance criteria~~
 
-**Invalid input**
-- **AC-21.3** Given sound is on, when I press a key that has no effect, then no sound plays.
-- **AC-21.4** Given sound is on, when a figure is refused ("15 digits maximum") or an error shows, then a different, lower tone plays once.
+~~**Normal case**~~
+- ~~**AC-21.1** Given sound is switched on, when a key press changes the display, then one short click plays.~~
+- ~~**AC-21.2** Given a fresh page, when it loads, then sound is off.~~
 
-**Boundaries**
-- **AC-21.5** Given a device whose silent switch is on, when I press keys with sound on, then nothing is heard and the calculator otherwise behaves exactly the same.
-- **AC-21.6** Given the browser holds audio until the first tap, when I switch sound on, then that switch counts as the first tap, so the next key press is heard.
-- **AC-21.7** Given VoiceOver is on, when a click plays, then it does not delay or cut off speech. Checked by ear only.
+~~**Invalid input**~~
+- ~~**AC-21.3** Given sound is on, when I press a key that has no effect, then no sound plays.~~
+- ~~**AC-21.4** Given sound is on, when a figure is refused ("15 digits maximum") or an error shows, then a different, lower tone plays once.~~
 
-**Very large and very small:** not applicable. Sound does not depend on the number.
+~~**Boundaries**~~
+- ~~**AC-21.5** Given a device whose silent switch is on, when I press keys with sound on, then nothing is heard and the calculator otherwise behaves exactly the same.~~
+- ~~**AC-21.6** Given the browser holds audio until the first tap, when I switch sound on, then that switch counts as the first tap, so the next key press is heard.~~
+- ~~**AC-21.7** Given VoiceOver is on, when a click plays, then it does not delay or cut off speech. Checked by ear only.~~
 
-**After a result or an error**
-- **AC-21.8** Given sound is on and an error shows, when I type a digit to leave it, then the normal click plays.
+~~**Very large and very small:** not applicable. Sound does not depend on the number.~~
+
+~~**After a result or an error**~~
+- ~~**AC-21.8** Given sound is on and an error shows, when I type a digit to leave it, then the normal click plays.~~
 
 ---
 
@@ -786,7 +788,7 @@ As a Desk Checker, I want a short sound when a key press registers, so that I ca
 | 14 Accessibility | S-10, S-15 |
 | 15 Layout | S-2, S-10, S-12, S-20 |
 | 15a Screen details | S-14, S-20 |
-| 16 Not implemented | S-16, S-17, S-18, S-21 |
+| 16 Not implemented | S-16, S-17, S-18. S-21 was retired on 2026-10-07. |
 | 17 Product promise | S-3, S-4, S-5, S-9 |
 | 18 Stack | Not behaviour. It is checked by running the README, not by a story. |
 | 19 Memory | S-9, S-10, S-12, S-13, S-14, S-15, S-19 |

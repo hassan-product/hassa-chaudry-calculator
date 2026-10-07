@@ -56,11 +56,13 @@ When I finish one check and start another, I want the previous working out of th
 
 When I need the sum of several figures that each take their own working out, I want to keep a running total aside while I work out the next one, so I can reach the overall figure without writing the part totals down and adding them up again.
 
-## J-10 Enter figures from paper without looking away from it
+## ~~J-10 Enter figures from paper without looking away from it~~
 
-**Role:** R-2 Desk Checker
+**Retired 2026-10-07.** Its only story, S-21, was retired, and a job with no story does not stay. The ID is kept and not reused.
 
-When I am entering figures from a paper document, I want to keep my eyes on the page, so I do not lose my place or skip a line.
+~~**Role:** R-2 Desk Checker~~
+
+~~When I am entering figures from a paper document, I want to keep my eyes on the page, so I do not lose my place or skip a line.~~
 
 ## J-11 Read figures without misreading a digit
 
