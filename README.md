@@ -8,6 +8,57 @@ The point is precision. The arithmetic is decimal, so ordinary sums come out exa
 
 A tape records every finished calculation, step by step, so a figure can be checked line by line and any result brought back. Memory holds one running total being built, such as three invoice totals added with M+ and read back with MR; every memory change is also written on the tape, so nothing is hidden.
 
+## Start here
+
+Every way to open the app, easiest first.
+
+### 1. The hosted copy
+
+1. Open https://hassa-chaudry-calculator.vercel.app/.
+
+Nothing to install.
+
+### 2. The terminal (recommended for running it locally)
+
+This works on Mac, Windows and Linux, and never triggers a security warning.
+
+1. Check Node: run `node -v`. It must print 20.19 or later, or 22.12 or later. If Node is missing or older, install the LTS version from https://nodejs.org, then open a new terminal.
+2. Get the code, either way:
+   - `git clone https://github.com/hassan-product/hassa-chaudry-calculator.git`, or
+   - on GitHub, choose Code, then Download ZIP, and unzip it. The unzipped folder is named `hassa-chaudry-calculator-main`.
+3. Go into that folder: `cd hassa-chaudry-calculator` (or `cd hassa-chaudry-calculator-main` for the zip).
+4. Run `npm install`. This is only needed the first time.
+5. Run `npm run dev`, then open the address it prints, usually http://localhost:5173/. If that port is busy, Vite picks the next one and prints it.
+6. Press Ctrl+C in the terminal to stop it.
+
+### 3. Double-click on a Mac, after a git clone
+
+1. Clone the code as in step 2 of the terminal way.
+2. Double-click `start.command` in the folder.
+
+A cloned file is not marked as downloaded, so macOS opens it straight away.
+
+### 4. Double-click on a Mac, after a zip download
+
+macOS blocks the file the first time.
+
+1. Double-click `start.command`. macOS shows "start.command Not Opened". Click Done. Do not choose Move to Bin, which deletes the file.
+2. Open System Settings, then Privacy & Security. Scroll down, click Open Anyway next to `start.command`, and confirm.
+3. If macOS then says the file cannot be run, open Terminal in that folder, run `chmod +x start.command`, and double-click it again.
+4. Or skip the file and use the terminal way above.
+
+### 5. Double-click on Windows
+
+1. Double-click `start.bat`.
+2. If Windows shows "Windows protected your PC", choose More info, then Run anyway.
+3. If it does not start, use the terminal way above.
+
+`start.bat` has not been run on Windows.
+
+### What the double-click scripts do
+
+`start.command` and `start.bat` check for Node and say what to install if it is missing. They install dependencies the first time, start the app, and open it in your browser. Leave the terminal window open while you use the app. Closing it stops the app.
+
 ## An example
 
 In JavaScript, `0.1 + 0.2` is `0.30000000000000004`. Here, `0.1 + 0.2 =` shows exactly `0.3`. `100 ÷ 3 =` shows `≈ 33.3333333333333`, and multiplying that by 3 shows `≈ 100`: the result is close to 100, and the mark says it may not be exactly 100.
@@ -20,23 +71,13 @@ In JavaScript, `0.1 + 0.2` is `0.30000000000000004`. Here, `0.1 + 0.2 =` shows e
 - **Not implemented (4):** S-15 (screen reader: only three criteria checked with VoiceOver), S-16 (edit an earlier tape line), S-17 (percent and tax), S-18 (export the tape as CSV).
 - **Retired:** ~~S-21 Hear each key press~~, on 2026-10-07. It will not be built.
 
-## Prerequisites
+## Running it
 
-Node 20.19 or later (or 22.12 or later). Nothing else: no accounts, no keys, no cloud services.
-
-## Run it
-
-```sh
-npm install
-npm run dev      # then open the address it prints, usually http://localhost:5173/
-npm test
-npm run build    # a static build in dist/
-```
-
-Optional double-click: `start.command` on a Mac or `start.bat` on Windows. Each checks for Node, installs dependencies on the first run, starts the app and opens it in your browser.
+See [Start here](#start-here). It needs Node 20.19 or later (or 22.12 or later) and nothing else: no accounts, no keys, no cloud services.
 
 ## Tests
 
+- `npm run build` makes the static build in `dist/`.
 - `npm test` runs every automated test: the domain, the app hooks, the screen through role and label queries, and the fitness functions. CI runs them and the build on every push.
 - `npx vitest run src/fitness.test.ts` runs the fitness functions on their own: layer boundaries, no native arithmetic on values, story traceability, the error messages, and the bundle budget.
 - `node evals/run.mjs` runs the evals. They are optional, test the written documents rather than the calculator, need Claude Code signed in, and need no API key. The results are already in [evals/results/summary.md](evals/results/summary.md); see [evals/README.md](evals/README.md).
@@ -113,4 +154,5 @@ Vercel settings:
 - **Only the browsers above have been checked.** [docs/test-plan.md](docs/test-plan.md) says where Safari and Firefox are most likely to differ, starting with Safari's Tab key skipping buttons by default.
 - **2 + 3 × 4 is 20, not 14.** Each operation runs as it is entered, like an adding machine, and the line above the display shows `5 ×` as soon as × is pressed. See [ADR 0004](docs/adr/0004-immediate-execution-over-precedence.md).
 - **≈ can appear on answers that look exact.** `100 ÷ 3 × 3 =` shows `≈ 100`, and `100 ÷ 3 × 0 =` shows `≈ 0`. Once a step has been rounded, the rest of that calculation stays marked, because its exactness can no longer be shown (Decision 3 in `CLAUDE.md`).
-- **`start.command` may be blocked on a Mac if the repository was downloaded as a zip.** macOS can refuse to open a downloaded script, or the download can drop its permission to run. Right-click it and choose Open, or run `npm install` and `npm run dev` instead. A `git clone` keeps it runnable.
+- **A zip download makes macOS block `start.command`.** Without a paid Apple signing account nothing in the repo can avoid it. [Start here](#start-here) gives the way round it.
+- **`start.bat` has not been run on Windows.**
