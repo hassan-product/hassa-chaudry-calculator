@@ -34,6 +34,8 @@ Every story has:
   - very large and very small numbers
   - what the user can do after a result, and after an error
 
+Every criterion has its own Given, When and Then.
+
 Leave out a category only if it genuinely cannot apply, and say why in one line.
 
 ## IDs
