@@ -696,8 +696,8 @@ As a Desk Checker, I want to add or take off a percentage and apply a set tax ra
 **Boundaries**
 - **AC-17.9** Given a tax rate of 20 and a display of `100`, when I use "Remove tax", then the display shows `≈ 83.3333333333333`.
 - **AC-17.10** Given a tax rate of 0, when I use "Add tax", then the value is unchanged.
-- **AC-17.11** Given `200 + 0 % =`, then the display shows `200`.
-- **AC-17.12** Given `200 + 100 % =`, then the display shows `400`.
+- **AC-17.11** Given a fresh calculator, when I enter `200 + 0 % =`, then the display shows `200`.
+- **AC-17.12** Given a fresh calculator, when I enter `200 + 100 % =`, then the display shows `400`.
 
 **Very large and very small**
 - **AC-17.13** Given a percentage pushes a result to ≥ 1e100, when it is applied, then the display shows "Number too large".
@@ -717,8 +717,8 @@ As a Desk Checker, I want to save the tape as a file, so that I can attach my wo
 
 **Normal case**
 - **AC-18.1** Given the tape has lines, when I use "Export CSV", then a file `tape.csv` downloads.
-- **AC-18.2** The file has columns Line, Working, Result and Approximate, with one row per tape line in tape order.
-- **AC-18.3** The file is UTF-8 with a byte-order mark, so ≈, × and ÷ survive opening in a spreadsheet.
+- **AC-18.2** Given the tape has lines, when I use "Export CSV", then the file has columns Line, Working, Result and Approximate, with one row per tape line in tape order.
+- **AC-18.3** Given the tape has lines, when I use "Export CSV", then the file is UTF-8 with a byte-order mark, so ≈, × and ÷ survive opening in a spreadsheet.
 
 **Invalid input**
 - **AC-18.4** Given the tape is empty, when I use "Export CSV", then nothing downloads and the control says nothing to export.
