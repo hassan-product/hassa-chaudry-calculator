@@ -1,0 +1,24 @@
+# Runs the full test suite, fitness functions included, and the build on every push and pull
+# request. No deploy, no secrets, no keys. The evals in evals/ are not run here (ADR 0010).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
