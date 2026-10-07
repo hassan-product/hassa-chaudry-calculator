@@ -1,0 +1,35 @@
+# Suite B: does the skill produce criteria a tester could run?
+description: B. Criteria coverage
+prompts:
+  - file://prompts/criteria.mjs
+providers:
+  - id: file://claude-provider.mjs
+defaultTest:
+  options:
+    provider: file://claude-provider.mjs
+  assert:
+    - type: javascript
+      value: file://assertions.mjs:givenWhenThen
+    - type: javascript
+      value: file://assertions.mjs:hasInvalidInput
+    - type: javascript
+      value: file://assertions.mjs:hasBoundary
+    - type: llm-rubric
+      value: >-
+        A tester could run every criterion exactly as written, without a judgement call: each Given
+        sets up a specific state, each When names specific inputs, and each Then names an
+        observable result with exact values or exact text. Fail it if any criterion relies on words
+        such as appropriate, correct, sensible, clear or reasonable, or leaves a value unspecified.
+tests:
+  - description: B1 recall from the tape
+    vars:
+      story: As a Desk Checker, I want to bring an earlier result back into the sum I am doing, with every digit it really has, so that I carry it forward without retyping it.
+  - description: B2 correct the figure being typed
+    vars:
+      story: As an Everyday Calculator User, I want to fix a slip in the figure I am typing, so that one wrong key does not cost me the whole calculation.
+  - description: B3 running total in memory
+    vars:
+      story: As a Desk Checker, I want to add each part total into memory as I work it out and read the sum back at the end, so that I reach the overall figure without retyping any part.
+  - description: B4 getting out of an error
+    vars:
+      story: As an Everyday Calculator User, I want a clear message when a sum cannot be done and an obvious way to carry on, so that I am never stuck.

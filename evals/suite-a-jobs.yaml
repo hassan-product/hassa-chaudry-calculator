@@ -1,0 +1,41 @@
+# Suite A: does the product-spec skill alone produce jobs, not features?
+description: A. Job statement quality
+prompts:
+  - file://prompts/job.mjs
+providers:
+  - id: file://claude-provider.mjs
+defaultTest:
+  options:
+    provider: file://claude-provider.mjs
+  assert:
+    - type: javascript
+      value: file://assertions.mjs:jobShape
+    - type: javascript
+      value: file://assertions.mjs:noFeatureWords
+    - type: llm-rubric
+      value: >-
+        The statement describes a need that would exist even if no software existed: it could be
+        met with paper, a person or a printed document. It does not describe a feature, a control,
+        or an interaction with a device. Fail it if it names or implies a piece of software.
+tests:
+  - description: A1 shopper weighing an offer
+    vars:
+      situation: A shopper in a supermarket wants to know whether a three-for-two offer is cheaper than buying the single packs, before the queue moves on.
+  - description: A2 splitting a bill
+    vars:
+      situation: Friends at a restaurant are splitting a bill, with a tip, between people who ordered different amounts.
+  - description: A3 approving an expense claim
+    vars:
+      situation: A manager is approving an expense claim of twelve receipts submitted by a colleague.
+  - description: A4 checking a supplier invoice
+    vars:
+      situation: An accounts clerk is checking a supplier's invoice total before paying it.
+  - description: A5 checking homework
+    vars:
+      situation: A parent is helping a child check the answers to long-division homework.
+  - description: A6 awkward, a history list smuggled in
+    vars:
+      situation: A desk checker wants a history list of past calculations, so they can tap an old result and reuse it in a new sum.
+  - description: A7 awkward, a copy button smuggled in
+    vars:
+      situation: Someone wants a copy button next to the total, so they can paste the figure into an email to their manager.

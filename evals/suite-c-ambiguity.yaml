@@ -1,0 +1,90 @@
+# Suite C: do the engine rules in CLAUDE.md and architecture.md give one answer to each edge case?
+# A failure here is fixed in the document first, never by loosening the expected answer.
+description: C. Specification ambiguity
+prompts:
+  - file://prompts/ambiguity.mjs
+providers:
+  - id: file://claude-provider.mjs
+defaultTest:
+  options:
+    provider: file://claude-provider.mjs
+tests:
+  - description: C1 an operator pressed twice
+    vars:
+      situation: The person types 2, presses +, then presses × straight away.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says the second operator replaces the first, so the pending operation becomes
+          2 ×; nothing is calculated, the display still shows 2, and no tape line is written. Fail
+          it if it says the operators are combined, that 2 + 2 or any result is calculated, or that
+          the rules do not settle it.
+  - description: C2 equals three times
+    vars:
+      situation: The person types 5 + 3 and then presses = three times.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says the first = gives 8 and each further = repeats + 3, giving 11 and then 14,
+          so the display ends on 14, and each of the three presses writes its own tape line. Fail it
+          if it says the later presses do nothing, or that only one tape line is written.
+  - description: C3 an operator during an error
+    vars:
+      situation: The display shows "Cannot divide by zero" and the person presses +.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says nothing happens: the error stays on the display and no tape line is
+          written. Fail it if it says + starts a calculation, clears the error or acts on 0.
+  - description: C4 a digit during an error
+    vars:
+      situation: The display shows "Cannot divide by zero" and the person types 7.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says the digit leaves the error and starts a new calculation, so the display
+          shows 7, and no tape line is written. Fail it if it says the digit is ignored.
+  - description: C5 a decimal point twice
+    vars:
+      situation: The person has typed 1.5 and presses the decimal point again.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says the second point does nothing and shows no message, so the display stays
+          1.5, and no tape line is written. Fail it if it says a message appears or the figure
+          changes.
+  - description: C6 backspace on the last digit
+    vars:
+      situation: The person is typing a figure that has one digit left, 7, and presses Backspace.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says the figure becomes 0, so the display shows 0, and no tape line is
+          written. Fail it if it says the display goes blank, shows nothing, or that Backspace
+          does nothing.
+  - description: C7 paste while an operator is pending
+    vars:
+      situation: The person types 5, presses +, and then pastes 2 from the clipboard.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says the pasted 2 becomes the next figure for the pending +, so the display
+          shows 2 with 5 + still pending (pressing = would give 7), and no tape line is written yet.
+          Fail it if it says the paste starts a new calculation, replaces the 5, or is refused.
+  - description: C8 MR during an error with memory held
+    vars:
+      situation: The display shows "Cannot divide by zero", memory holds 95, and the person presses MR.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says MR leaves the error and brings back 95 as the start of a new calculation,
+          so the display shows 95, and no tape line is written. Fail it if it says MR does nothing
+          during an error.
+  - description: C9 MR with memory empty
+    vars:
+      situation: Memory is empty (no M indicator is showing), the display shows 12 being typed, and the person presses MR.
+    assert:
+      - type: llm-rubric
+        value: >-
+          The answer says nothing happens: the display stays 12, no message appears, and no tape
+          line is written. Fail it if it says MR recalls 0, clears the figure, or shows a message.
