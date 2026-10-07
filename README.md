@@ -8,6 +8,8 @@ The point is precision. The arithmetic is decimal, so ordinary sums come out exa
 
 A tape records every finished calculation, step by step, so a figure can be checked line by line and any result brought back. Memory holds one running total being built, such as three invoice totals added with M+ and read back with MR; every memory change is also written on the tape, so nothing is hidden.
 
+**Transcripts:** [Session 1](transcripts/session-01.md) (agreeing what to build, and the product documents) and [Session 2](transcripts/session-02.md) (the build, the guardrails and the audit), exported from Claude Code without edits.
+
 ## Start here
 
 Every way to open the app, easiest first.
