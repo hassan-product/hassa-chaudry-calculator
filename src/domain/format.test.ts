@@ -45,7 +45,7 @@ describe('format: results to 15 significant digits', () => {
     ['1e90', '1 × 10⁹⁰'],
     ['1e-99', '1 × 10⁻⁹⁹'],
     ['1e-30', '1 × 10⁻³⁰'],
-  ])('AC-6: plain below 1e15 and from 1e-9, exponential outside: %s → %s', (a, out) => {
+  ])('S-6: plain below 1e15 and from 1e-9, exponential outside: %s → %s', (a, out) => {
     expect(shown(a)).toBe(out)
   })
 
@@ -66,7 +66,7 @@ describe('format: results to 15 significant digits', () => {
     ['0.6666666666666666666666666666666667', '≈ 0.666666666666667'],
     ['999999999999998000000000000001', '≈ 9.99999999999998 × 10²⁹'],
     ['3.333333333333333333333333333333333e-10', '≈ 3.33333333333333 × 10⁻¹⁰'],
-  ])('AC-5: ≈ when the display cuts digits, worked out from the full value: %s → %s', (a, out) => {
+  ])('S-5: ≈ when the display cuts digits, worked out from the full value: %s → %s', (a, out) => {
     expect(shown(a)).toBe(out)
   })
 
@@ -102,7 +102,7 @@ describe('format: a figure being typed is shown as typed', () => {
     [{ negative: true, text: '12' }, '−12'],
     [{ negative: false, text: '0.000000000000001' }, '0.000000000000001'],
     [{ negative: false, text: '999999999999999' }, '999999999999999'],
-  ])('AC-1: %o → %s, no commas, point and trailing zeros kept', (entry, out) => {
+  ])('S-1: %o → %s, no commas, point and trailing zeros kept', (entry, out) => {
     expect(formatEntry(entry)).toBe(out)
   })
 })

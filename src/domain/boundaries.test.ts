@@ -2,7 +2,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-// Fitness functions 2, 3 and 4 in docs/architecture.md, for the domain built so far.
+// Fitness functions 3 and 4 in docs/architecture.md: no native number APIs anywhere in src, and
+// nothing in domain throws. The import rules are in src/fitness.test.ts.
 const SRC = join(__dirname, '..')
 
 function sourceFiles(dir: string): string[] {
@@ -19,11 +20,6 @@ const files = sourceFiles(SRC).map((path) => ({
 }))
 
 describe('domain boundaries', () => {
-  it('only domain/decimal.ts imports decimal.js', () => {
-    const importers = files.filter((f) => /from ['"]decimal\.js['"]/.test(f.text)).map((f) => f.path)
-    expect(importers).toEqual(['domain/decimal.ts'])
-  })
-
   it('no production file uses native number parsing or rounding on values', () => {
     const banned = /\b(parseFloat|parseInt|Number\(|toFixed|toPrecision|Math\.)/
     expect(files.filter((f) => banned.test(f.text)).map((f) => f.path)).toEqual([])

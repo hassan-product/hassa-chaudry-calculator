@@ -116,7 +116,7 @@ describe('Decision 15a: the spoken forms', () => {
     ['2 + 3 = 5 → × 4 = 20', '2 plus 3 equals 5 then times 4 equals 20'],
     ['M+ 40, memory 95', 'memory plus 40, memory 95'],
     ['M− 20, memory 75', 'memory minus 20, memory 75'],
-  ])('AC-15: %j is read %j', (text, spoken) => {
+  ])('S-15: %j is read %j', (text, spoken) => {
     expect(speak(text)).toBe(spoken)
   })
 

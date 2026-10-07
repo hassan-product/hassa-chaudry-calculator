@@ -16,10 +16,13 @@ function isDigit(c: string | undefined): boolean {
 // follow, then the point, another comma or the end. Anything else might be a decimal comma.
 function commasAreThousands(body: string): boolean {
   const point = body.indexOf('.')
+  // fitness: not a value — position of a character in the pasted text
   for (let i = 0; i < body.length; i++) {
     if (body[i] !== ',') continue
     if (point !== -1 && i > point) return false
+    // fitness: not a value — the character after the three digits that follow a comma
     const next = body[i + 4]
+    // fitness: not a value — positions of the three digits after a comma
     const three = isDigit(body[i + 1]) && isDigit(body[i + 2]) && isDigit(body[i + 3])
     if (!three || (next !== undefined && next !== ',' && next !== '.')) return false
   }

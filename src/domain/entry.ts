@@ -8,6 +8,7 @@ export const DIGIT_LIMIT = 15
 // Every digit counts toward the 15, except a single 0 before the point (Decision 5, AC-1.6).
 export function countedDigits(text: string): number {
   const digits = text.replace(/[^0-9]/g, '').length
+  // fitness: not a value — the 0 before the point is not counted (a digit count)
   return text.startsWith('0.') ? digits - 1 : digits
 }
 

@@ -17,7 +17,9 @@ const SUPERSCRIPT: Readonly<Record<string, string>> = {
 function grouped(digits: string): string {
   const [whole = '', fraction] = digits.split('.')
   let out = ''
+  // fitness: not a value — position in the whole-number part, for commas
   for (let i = 0; i < whole.length; i++) {
+    // fitness: not a value — digits left of this position, for commas
     if (i > 0 && (whole.length - i) % 3 === 0) out += ','
     out += whole[i]
   }
