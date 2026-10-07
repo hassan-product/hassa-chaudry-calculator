@@ -255,11 +255,40 @@ describe('fitness 3: story traceability (docs/user-stories.md)', () => {
   })
 
   const implemented = stories.filter((s) => s.status === 'Implemented')
-  it(`every Implemented story has a test citing it (${implemented.length} Implemented, so this passes vacuously while none is)`, () => {
+  const vacuous = implemented.length === 0 ? ', so this passes vacuously' : ''
+  it(`every Implemented story has a test citing it (${implemented.length} Implemented${vacuous})`, () => {
     const untested = implemented.filter(
       (s) => !names.some((t) => cites(t.name).some((c) => c === s.id || c.startsWith(`AC-${s.id.slice(2)}.`))),
     )
     expect(untested.map((s) => s.id)).toEqual([])
+  })
+
+  // The status table at the top of user-stories.md is the one record of status.
+  const table = [...storiesText.matchAll(/^\| (S-\d+) \| ([^|]+) \| (Implemented|Not implemented) \| ([^|]*) \|$/gm)].map((m) => ({
+    id: m[1] ?? '',
+    status: m[3] ?? '',
+    reason: (m[4] ?? '').trim(),
+  }))
+
+  it('the status table and every story\'s Status line agree', () => {
+    const fromLines = Object.fromEntries(stories.map((s) => [s.id, s.status]))
+    const fromTable = Object.fromEntries(table.map((r) => [r.id, r.status]))
+    expect(fromTable).toEqual(fromLines)
+  })
+
+  it('every Not implemented story in the table gives its reason, and the counts sentence is right', () => {
+    expect(table.filter((r) => r.status === 'Not implemented' && r.reason === '').map((r) => r.id)).toEqual([])
+    const done = table.filter((r) => r.status === 'Implemented').length
+    expect(storiesText).toContain(`${done} Implemented, ${table.length - done} Not implemented.`)
+  })
+
+  it('no test cites a retired story or its criteria', () => {
+    const bad = names.flatMap((t) =>
+      cites(t.name)
+        .filter((c) => retired.some((r) => c === r || c.startsWith(`AC-${r.slice(2)}.`)))
+        .map((c) => `${t.file}:${t.line} cites retired ${c}`),
+    )
+    expect(bad).toEqual([])
   })
 
   it('no test cites a story or criterion that does not exist', () => {
