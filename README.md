@@ -1,6 +1,6 @@
 # Calculator
 
-[![CI](https://github.com/hassan-product/hassa-chaudry-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/hassan-product/hassa-chaudry-calculator/actions/workflows/ci.yml)
+[![CI](https://github.com/hassan-product/hassan-chaudry-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/hassan-product/hassan-chaudry-calculator/actions/workflows/ci.yml)
 
 A four-function calculator (+ − × ÷) for checking money figures. It is for two kinds of user: someone doing a quick sum who never thinks about how it works, and someone at a desk checking figures before approving them. I chose this kind of calculator because, for money, a number you cannot trust is worse than no number.
 
@@ -26,9 +26,9 @@ This works on Mac, Windows and Linux, and never triggers a security warning.
 
 1. Check Node: run `node -v`. It must print 20.19 or later, or 22.12 or later. If Node is missing or older, install the LTS version from https://nodejs.org, then open a new terminal.
 2. Get the code, either way:
-   - `git clone https://github.com/hassan-product/hassa-chaudry-calculator.git`, or
-   - on GitHub, choose Code, then Download ZIP, and unzip it. The unzipped folder is named `hassa-chaudry-calculator-main`.
-3. Go into that folder: `cd hassa-chaudry-calculator` (or `cd hassa-chaudry-calculator-main` for the zip).
+   - `git clone https://github.com/hassan-product/hassan-chaudry-calculator.git`, or
+   - on GitHub, choose Code, then Download ZIP, and unzip it. The unzipped folder is named `hassan-chaudry-calculator-main`.
+3. Go into that folder: `cd hassan-chaudry-calculator` (or `cd hassan-chaudry-calculator-main` for the zip).
 4. Run `npm install`. This is only needed the first time.
 5. Run `npm run dev`, then open the address it prints, usually http://localhost:5173/. If that port is busy, Vite picks the next one and prints it.
 6. Press Ctrl+C in the terminal to stop it.
