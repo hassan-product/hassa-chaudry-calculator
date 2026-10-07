@@ -320,7 +320,7 @@ These are tests on the code's shape, so this document and the code cannot drift 
 | One door to decimal.js: only `domain/decimal.ts` imports it | fitness 1 | Enforced. That only it calls `Decimal.clone` follows, but is not checked separately. |
 | No native arithmetic on values: in `src/domain` outside `decimal.ts`, no `parseFloat`, `Number`, `Math` or arithmetic operator on a number, read from the TypeScript AST. A use that is not a value carries a `fitness: not a value` comment, and the test lists every one. | fitness 2; `src/domain/boundaries.test.ts` for the number APIs across all of `src` | Enforced, with six listed uses, all string positions and digit counts |
 | No throw in domain | `src/domain/boundaries.test.ts` | Enforced |
-| Story traceability: a story marked Implemented needs a test citing it, and no test cites a story or criterion that does not exist | fitness 3 | Enforced. The first half passes only because no story is Implemented yet. |
+| Story traceability: a story marked Implemented needs a test citing it, and no test cites a story or criterion that does not exist | fitness 3 | Enforced. It also fails if the status table at the top of `docs/user-stories.md` and any story's Status line disagree, or if a test cites a retired story. |
 | Error surface: every error and notice code has a message, written as words | fitness 4 | Enforced |
 | Bundle budget: gzipped JavaScript under 150 kB | fitness 5 | Enforced (about 89 kB today) |
 | Messages verbatim: the texts match Decisions 8 and 9 | the arithmetic, paste and fault tests | Enforced in those tests |

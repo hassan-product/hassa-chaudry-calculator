@@ -26,7 +26,7 @@ Three documents, three formats. Follow them exactly.
 
 Every story has:
 - **Job:** the `J-n` it serves.
-- **Status:** `Implemented` or `Not implemented`. Implemented means its criteria pass in tests. Do not round up.
+- **Status:** `Implemented` or `Not implemented`. Implemented means every criterion is shown by a test, or by a recorded manual check where no test can reach. Do not round up.
 - **Acceptance criteria** in Given / When / Then form, covering:
   - the normal case
   - invalid input

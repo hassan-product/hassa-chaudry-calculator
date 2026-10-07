@@ -56,11 +56,14 @@ Memory was first taken off the table for two reasons. Both are now answered:
 - **A hosted service or backend.** Nothing leaves the browser.
 - **Sound on key presses.** S-21 was retired on 2026-10-07, and J-10 with it. It would have had to be off by default in an office or beside a screen reader, so most people would never hear it; it competes with VoiceOver's speech; it behaves differently across devices, because the iPhone silent switch can mute it and browsers hold audio back until the first tap; it can only be checked by ear; and the display and the tape already confirm each key press. See ADR 0009.
 
-## Roadmap for the cut stories, in build order
+## Roadmap for the four Not implemented stories, in build order
 
-1. **S-16 Edit an earlier tape line.** This comes first because it closes the gap S-7 admits, and serves J-4 directly. It also requires the tape to store operations rather than text, which the next item builds on.
-2. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16, and serves J-7.
-3. **S-17 Percent and tax.** It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others. There is no % key until then.
+The status of every story is recorded in one place, the table at the top of `user-stories.md`.
+
+1. **S-15 Use the calculator with a screen reader.** It is built; what is missing is the check. VoiceOver on macOS Safari has confirmed only AC-15.1 to AC-15.3 ("12", "12 plus", "15"). The rest, including the tape read as a list, needs a full pass before the story can be marked Implemented.
+2. **S-16 Edit an earlier tape line.** It closes the gap S-7 admits, and serves J-4 directly. It also requires the tape to store operations rather than text, which the next item builds on.
+3. **S-18 Export the tape as CSV.** It is small once the tape format is settled by S-16, and serves J-7.
+4. **S-17 Percent and tax.** It needs a fresh round of decisions on what percent means after each operator, and those decisions should not be rushed in alongside the others. There is no % key until then.
 
 ## Open questions, and the assumption we are running on
 

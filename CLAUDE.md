@@ -30,7 +30,7 @@ Top level is fixed: `README.md`, `src/`, `docs/` (app-roles, jobs-to-be-done, us
 
 ## Docs
 - Roles, jobs and stories follow `.claude/skills/product-spec`. ADRs follow `.claude/skills/adr` and live in `docs/adr/`.
-- The three required docs stay exactly where they are; extra files beside them are fine. Docs must be honest about what was built. A story is Implemented only if its criteria pass.
+- The three required docs stay exactly where they are; extra files beside them are fine. Docs must be honest about what was built. A story is Implemented only when every criterion is shown by a test or by the recorded manual check; the status table in `docs/user-stories.md` is the one record.
 
 ## Commits (standing rule)
 - Commit at the end of each unit of work, never in one lump at the end. Push after every commit.

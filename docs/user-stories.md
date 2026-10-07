@@ -1,6 +1,6 @@
 # User stories
 
-The behaviour these stories describe is fixed by the Decisions section of `CLAUDE.md`; the story says which decisions it covers. Every story is **Not implemented** until its criteria pass in the running app.
+The behaviour these stories describe is fixed by the Decisions section of `CLAUDE.md`; the story says which decisions it covers. A story is **Implemented** only when every one of its criteria is shown by an automated test or by the manual check recorded below; otherwise it is **Not implemented**.
 
 Notation:
 - Keys are written as pressed: `2 + 3 =`.
@@ -13,12 +13,45 @@ Notation:
 
 ---
 
+## Status
+
+This table is the one record of each story's status; the Status line on each story matches it, and a fitness test fails if they ever disagree. 16 Implemented, 4 Not implemented.
+
+Evidence, as of 2026-10-07: the automated tests (`npm test`), and a manual check by hand in Chrome on macOS, locally and on the hosted copy, and in a phone browser on the hosted copy. `docs/test-plan.md` writes that check up as steps anyone can repeat. A fault cannot be made by hand, so the fault criteria (AC-9.9 to AC-9.11, AC-19.8, AC-20.10) rest on the tests that run the whole app with a deliberately broken engine.
+
+| ID | Title | Status | Reason |
+|---|---|---|---|
+| S-1 | Type a figure | Implemented |  |
+| S-2 | Use the on-screen keys | Implemented |  |
+| S-3 | Get exact answers to ordinary sums | Implemented |  |
+| S-4 | See the order operations run in | Implemented |  |
+| S-5 | Know when a number is not exact | Implemented |  |
+| S-6 | Work with very large and very small numbers | Implemented |  |
+| S-7 | Correct the figure I am typing | Implemented |  |
+| S-8 | Keep going from a result | Implemented |  |
+| S-9 | Get out of an error | Implemented |  |
+| S-10 | Do everything from the keyboard | Implemented |  |
+| S-11 | Paste a figure from a spreadsheet or email | Implemented |  |
+| S-12 | See the working on a tape | Implemented |  |
+| S-13 | Recall a result from the tape | Implemented |  |
+| S-14 | Empty the tape | Implemented |  |
+| S-15 | Use the calculator with a screen reader | Not implemented | VoiceOver has been checked for only three of its criteria (AC-15.1 to AC-15.3). |
+| S-16 | Correct an earlier step and have the rest recalculate | Not implemented | It needs the tape to store operations instead of text, plus dependency tracking between lines: a second state machine that does not fit this version's time. |
+| S-17 | Add or remove a percentage or tax | Not implemented | Percent behaves differently from one calculator to the next, so it needs its own round of decisions before it can be built honestly. |
+| S-18 | Export the tape as a CSV file | Not implemented | A file download adds a second output format with its own quoting and number rules. It waits until the tape format has settled. |
+| S-19 | Keep a running total in memory | Implemented |  |
+| S-20 | Read the calculator at any size | Implemented |  |
+
+Retired: ~~S-21 Hear each key press~~, on 2026-10-07; it will not be built.
+
+---
+
 ## S-1 Type a figure
 
 As an Everyday Calculator User, I want to type a number and see exactly what I typed, so that I know the calculator has the figure I meant.
 
 - **Job:** J-1
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 2, 5, 12
 
 ### Acceptance criteria
@@ -52,7 +85,7 @@ As an Everyday Calculator User, I want to type a number and see exactly what I t
 As an Everyday Calculator User, I want every calculator action on a key I can tap or click, so that I can do a sum on a phone without a keyboard.
 
 - **Job:** J-1
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 6, 13, 15
 
 ### Acceptance criteria
@@ -91,7 +124,7 @@ As an Everyday Calculator User, I want every calculator action on a key I can ta
 As an Everyday Calculator User, I want decimal sums to come out exactly as they would on paper, so that I can trust the answer without checking it.
 
 - **Job:** J-1
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 1, 2, 17
 
 ### Acceptance criteria
@@ -124,7 +157,7 @@ As an Everyday Calculator User, I want decimal sums to come out exactly as they 
 As an Everyday Calculator User, I want to see the running result as soon as I press an operator, so that I understand the answer before I reach it.
 
 - **Job:** J-1
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 4, 6, 7, 17
 
 ### Acceptance criteria
@@ -154,7 +187,7 @@ As an Everyday Calculator User, I want to see the running result as soon as I pr
 As a Desk Checker, I want any number that is not the exact answer to carry a ≈, so that I never pass on a rounded figure believing it is exact.
 
 - **Job:** J-3
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 1, 2, 3, 17
 
 ### Acceptance criteria
@@ -189,7 +222,7 @@ As a Desk Checker, I want any number that is not the exact answer to carry a ≈
 As a Desk Checker, I want very large and very small results shown in a readable form or refused outright, so that I am never shown a number that has quietly lost its size.
 
 - **Job:** J-3
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 2, 8
 
 ### Acceptance criteria
@@ -222,7 +255,7 @@ As a Desk Checker, I want very large and very small results shown in a readable 
 As an Everyday Calculator User, I want to fix a slip in the figure I am typing without losing the rest of the sum, so that one wrong key does not cost me the whole calculation.
 
 - **Job:** J-2
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 5, 6
 
 **Limit in this version:** only the figure being typed can be corrected. Once a figure is followed by an operator it has been folded into the running result and cannot be changed. The only way back is to start again. S-16 exists to close this gap.
@@ -262,7 +295,7 @@ As an Everyday Calculator User, I want to fix a slip in the figure I am typing w
 As an Everyday Calculator User, I want to build on an answer I already have, so that I do not retype it to take the next step.
 
 - **Job:** J-1
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 7, 11
 
 ### Acceptance criteria
@@ -295,7 +328,7 @@ As an Everyday Calculator User, I want to build on an answer I already have, so 
 As an Everyday Calculator User, I want a clear message when a sum cannot be done and an obvious way to carry on, so that I am never stuck.
 
 - **Job:** J-1
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 8, 17, 19
 
 ### Acceptance criteria
@@ -335,7 +368,7 @@ As an Everyday Calculator User, I want a clear message when a sum cannot be done
 As a Desk Checker, I want to do every part of a calculation from the keyboard, so that I can check figures at speed without reaching for the mouse.
 
 - **Job:** J-3
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 13, 14, 19
 
 ### Acceptance criteria
@@ -383,7 +416,7 @@ As a Desk Checker, I want to do every part of a calculation from the keyboard, s
 As a Desk Checker, I want to paste a figure with its currency symbol and separators still attached, so that I use it exactly as sent without retyping it.
 
 - **Job:** J-5
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 5, 9, 12
 
 ### Acceptance criteria
@@ -428,7 +461,7 @@ As a Desk Checker, I want to paste a figure with its currency symbol and separat
 As a Desk Checker, I want every finished calculation written down with each step and its running result, so that I can find the step where a total went wrong.
 
 - **Job:** J-4
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 3, 7, 8, 11, 15, 19
 
 ### Acceptance criteria
@@ -465,7 +498,7 @@ As a Desk Checker, I want every finished calculation written down with each step
 As a Desk Checker, I want to bring an earlier result back into the sum I am doing, with every digit it really has, so that I carry it forward without retyping it or losing digits.
 
 - **Job:** J-6
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 1, 3, 10, 19
 
 ### Acceptance criteria
@@ -502,7 +535,7 @@ As a Desk Checker, I want to bring an earlier result back into the sum I am doin
 As a Desk Checker, I want to empty the tape when I move on to a new set of figures, so that the working in front of me belongs only to the check I am doing.
 
 - **Job:** J-8
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 11, 13, 15a, 19
 
 ### Acceptance criteria
@@ -532,6 +565,7 @@ As an Everyday Calculator User who uses a screen reader, I want to hear each fig
 
 - **Job:** J-1
 - **Status:** Not implemented
+- **Reason:** VoiceOver has been checked for only three of its criteria (AC-15.1 to AC-15.3).
 - **Decisions:** 2, 3, 12, 14, 19
 
 ### Acceptance criteria
@@ -567,7 +601,7 @@ Manual check: VoiceOver on macOS Safari only, including that the tape is still r
 As a Desk Checker, I want to add each part total into memory as I work it out and read the sum back at the end, so that I reach the overall figure without retyping any part.
 
 - **Job:** J-9
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 3, 8, 11, 19
 
 ### Acceptance criteria
@@ -609,7 +643,7 @@ As a Desk Checker, I want to add each part total into memory as I work it out an
 As an Everyday Calculator User with weak eyesight, I want the figures and keys large and clear at any zoom or text size, so that I do not misread a digit.
 
 - **Job:** J-11
-- **Status:** Not implemented
+- **Status:** Implemented
 - **Decisions:** 2, 15, 15a, 20
 
 ### Acceptance criteria
