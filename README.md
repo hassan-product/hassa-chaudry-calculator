@@ -1,5 +1,7 @@
 # Calculator
 
+[![CI](https://github.com/hassan-product/hassa-chaudry-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/hassan-product/hassa-chaudry-calculator/actions/workflows/ci.yml)
+
 A four-function calculator you can trust with money. It is exact where possible, marks a number with ≈ where it is not, and keeps a tape that shows the working.
 
 **Status:** built and running, with automated tests passing. Every story in `docs/user-stories.md` is still marked Not implemented: the VoiceOver check has not been done yet, and a story is marked Implemented only after it.
@@ -19,5 +21,5 @@ Or from a terminal:
 ```sh
 npm install
 npm run dev    # then open the address it prints, usually http://localhost:5173/
-npm test       # the automated tests
+npm test       # the automated tests, fitness functions included; CI runs these and the build
 ```
