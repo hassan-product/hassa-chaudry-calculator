@@ -213,6 +213,8 @@ function hatchLine(f: Finding): number {
 // 3. Story traceability
 
 const storiesText = readFileSync(join(ROOT, 'docs/user-stories.md'), 'utf8')
+// A retired story is struck through and keeps its ID (the product-spec skill's ID rule).
+const retired = [...storiesText.matchAll(/^## ~~(S-\d+) /gm)].map((m) => m[1] ?? '')
 const stories = [...storiesText.matchAll(/^## (S-\d+) .*\n(?:(?!^## ).*\n)*?- \*\*Status:\*\* (Implemented|Not implemented)/gm)].map(
   (m) => ({ id: m[1] ?? '', status: m[2] ?? '' }),
 )
@@ -248,8 +250,8 @@ const names = testPaths.flatMap((p) => testNames(p).map((t) => ({ ...t, file: re
 const cites = (name: string) => [...name.matchAll(/\b(S-\d+|AC-\d+(?:\.\d+)?)\b/g)].map((m) => m[1] ?? '')
 
 describe('fitness 3: story traceability (docs/user-stories.md)', () => {
-  it('finds every story and its status', () => {
-    expect(stories.length).toBe(21)
+  it('finds every story and its status, live or retired', () => {
+    expect(stories.length + retired.length).toBe(21)
   })
 
   const implemented = stories.filter((s) => s.status === 'Implemented')
